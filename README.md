@@ -48,6 +48,8 @@ Dans **Mes musiques**, crée un niveau à partir d'un **fichier audio** importé
 ## Réglages
 
 - **Volume** de la musique.
+- **Son des clics** : le son joué à chaque note touchée, au choix parmi 10 (Doux, Clap, Bois, Grosse caisse, Cristal, Pop, Charleston, Caisse claire, Pluck, Tok) ou aucun. Perdre un combo de 10 ou plus joue un son « combo cassé ».
+- **Sensibilité** (0,3× à 3×) : la vitesse du curseur en partie. Pendant la partie la souris est capturée et suit son déplacement brut, sans l'accélération de Windows ; Échap la libère et met en pause.
 - **Décalage** (−300 à +300 ms) : il se règle tout seul après chaque partie ; tu peux aussi le changer à la main.
 
 ## Données et synchronisation

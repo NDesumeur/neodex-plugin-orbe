@@ -9,7 +9,7 @@ const HTML = `<div class="appWrap wide">
       <div class="row"><button class="btn" id="rhTabSongs">CHANSONS</button><button class="btn" id="rhTabMine">MES MUSIQUES</button></div>
       <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
       <div id="rhSongs"></div>
-      <div class="sysCard rhOpts"><label>Volume <input type="range" id="rhVol" min="0" max="100" value="70"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
+      <div class="sysCard rhOpts"><label>Volume <input type="range" id="rhVol" min="0" max="100" value="70"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
       <div class="hint">Un cercle se resserre sur chaque orbe : vise-le avec la souris et clique (ou W / X) quand le cercle touche l'orbe. Touche-les dans l'ordre de leurs numéros.</div><div class="hint">Glissière : touche son orbe, puis garde le bouton enfoncé et suis la boule jusqu'au bout (et au retour). Toupie : garde appuyé et fais tourner la souris autour du centre avant que l'anneau se referme.</div><div class="hint">La difficulté de chaque niveau est calculée sur ses notes : de 1★ à 10★.</div>
     </div></div>
 </div>`;
@@ -916,14 +916,14 @@ $('rhFs').onclick = () => { rhFull(!document.fullscreenElement); $('rhFs').blur(
 $('rhOffset').addEventListener('change', () => { rhOffMs = +$('rhOffset').value; });
 $('rhClick').onchange = () => { rhAudio(); rhCtx.resume(); rhClick(); };  // le son choisi, pour l'entendre
 $('rhVol').oninput = () => { if (rhOut) rhOut.gain.value = +$('rhVol').value / 100 * .6; };
-for (const id of ['rhVol', 'rhClick', 'rhOffset']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
+for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
 setInterval(() => { if (rhCtx?.state === 'running' && (!view.classList.contains('on') || rh?.mode !== 'play')) rhCtx.suspend(); }, 200);  // la musique s'arrête avec la partie
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) rhPause(); });  // Échap sort du plein écran : on met en pause
 $('gNew').onclick = () => { if (rh) rhSelect(rh.song, rh.diff); $('gNew').blur(); };
 function rhInfo() { const res = games.rhythm || {}, all = Object.values(res); showStats([['Morceaux joués', all.length], ['Notes S', all.filter(r => r.grade === 'S').length], ['Meilleur combo', all.reduce((m, r) => Math.max(m, r.combo || 0), 0)]]); }
 function rhOpen() {
-  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset']) if (p[id] != null) $(id).value = p[id];
-  rhOffMs = +$('rhOffset').value; rhInfo();
+  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens']) if (p[id] != null) $(id).value = p[id];
+  rhOffMs = +$('rhOffset').value; obSensShow(); rhInfo();
   if (rh) { rhList(); return gameLoop(rh, RHG.key, RHG.update, rhDrawAll); }
   const last = games.rhythmLast || {song: 0, diff: 'normal'}; rhSelect(last.song, last.diff).catch(() => rhSelect(0, 'normal'));
 }
@@ -1147,6 +1147,7 @@ const OB_BG = cnv(W, H, b => {  // le fond : un ciel tramé, des étoiles, le te
   for (let y = OB.Y0 - 6; y <= OB.Y0 + OB.PH + 6; y += 4) { px(b, '#1a1438', OB.X0 - 6, y); px(b, '#1a1438', OB.X0 + OB.PW + 6, y); }
 });
 function obDraw() {
+  if (rh.mode !== 'play' && obLocked()) try { document.exitPointerLock(); } catch {}  // pause, fin de partie : la souris est rendue
   const live = rh.mode === 'play' || rh.mode === 'pause', now = live ? rhNow() : -2, r = rh.r, pre = rh.pre, X = OB.X0, Y = OB.Y0;
   g.drawImage(OB_BG, 0, 0);
   if (live) {
@@ -1198,14 +1199,25 @@ function obDrawSpin(n, now) {
   g.globalAlpha = 1;
 }
 // la souris vise partout (même hors du terrain, en plein écran) ; boutons et touches W / X / Z / C frappent
-document.addEventListener('pointermove', e => { if (!rh || !view.classList.contains('on')) return; const [x, y] = cpos(e); rh.cx = obClamp(x, 0, W); rh.cy = obClamp(y, 0, H); });
+// la visée : pendant la partie, la souris est capturée et le curseur avance du déplacement brut de la souris (sans l'accélération de Windows),
+// multiplié par la sensibilité (1 = la vitesse du curseur de Windows sans accélération) ; hors partie, ou si la capture est refusée, il suit la souris
+const obSensShow = () => { $('obSensV').textContent = (+$('obSens').value).toFixed(2) + '×'; };
+$('obSens').oninput = obSensShow;
+const obLocked = () => document.pointerLockElement === cv;
+const obLock = () => { if (obLocked()) return; try { const p = cv.requestPointerLock?.({unadjustedMovement: true}); p?.catch?.(() => { try { cv.requestPointerLock()?.catch?.(() => {}); } catch {} }); } catch { try { cv.requestPointerLock(); } catch {} } };
+document.addEventListener('pointermove', e => {
+  if (!rh || !view.classList.contains('on')) return;
+  if (obLocked()) { const k = +$('obSens').value * W / cv.getBoundingClientRect().width; rh.cx = obClamp(rh.cx + e.movementX * k, 0, W); rh.cy = obClamp(rh.cy + e.movementY * k, 0, H); return; }
+  const [x, y] = cpos(e); rh.cx = obClamp(x, 0, W); rh.cy = obClamp(y, 0, H);
+});
+document.addEventListener('pointerlockchange', () => { if (!obLocked() && rh?.mode === 'play') rhPause(); });  // Échap libère la souris : la partie se met en pause
 cv.oncontextmenu = e => e.preventDefault();
-cv.onpointerdown = e => { e.preventDefault(); if (!rh) return; const [x, y] = cpos(e); rh.cx = x; rh.cy = y; if (rh.mode !== 'play') return rhPress(); obPress('m' + e.button, true); };
+cv.onpointerdown = e => { e.preventDefault(); if (!rh) return; if (!obLocked()) { const [x, y] = cpos(e); rh.cx = x; rh.cy = y; } if (rh.mode !== 'play') { rhPress(); if (rh.mode === 'play') obLock(); return; } obPress('m' + e.button, true); };
 addEventListener('pointerup', e => { if (rh) obPress('m' + e.button, false); });
 document.addEventListener('keydown', e => {
   if (!keyOk(e) || !rh) return; const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   if (OB.KEYS.includes(k)) { e.preventDefault(); if (!e.repeat) obPress(k, true); }
-  if (k === ' ' || k === 'Enter') { e.preventDefault(); if (!e.repeat && rh.mode !== 'play') rhPress(); }
+  if (k === ' ' || k === 'Enter') { e.preventDefault(); if (!e.repeat && rh.mode !== 'play') { rhPress(); if (rh.mode === 'play') obLock(); } }
   if (k === 'p' || k === 'Escape') rhPause();
 });
 document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.length === 1 ? e.key.toLowerCase() : e.key; if (OB.KEYS.includes(k)) obPress(k, false); if (e.key === ' ' && keyOk(e)) e.preventDefault(); });
