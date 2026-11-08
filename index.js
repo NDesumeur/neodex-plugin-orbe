@@ -697,7 +697,7 @@ function rhStars(notes, len, factor = 1) {
 console.assert(rhStars([], 60) === 1 && rhStars(Array.from({length: 600}, (_, i) => ({t: i * .2, lane: i % 4})), 120) > rhStars(Array.from({length: 120}, (_, i) => ({t: i, lane: 0})), 120), 'rhStars');
 const rhStarCache = new Map();  // 'i:diff' -> étoiles (les morceaux du jeu donnent toujours les mêmes notes)
 function rhSongStars(i, diff) {
-  const k = i + ':' + diff; if (!rhStarCache.has(k)) { const c = rhCompose(RH_SONGS[i]); rhStarCache.set(k, rhStars(RHG.chart(rhChart(c, diff), c, diff), c.len, RHG.factor)); }
+  const k = i + ':' + diff; if (!rhStarCache.has(k)) { const c = rhCompose(RH_SONGS[i]); rhStarCache.set(k, (RHG.stars || rhStars)(RHG.chart(rhChart(c, diff), c, diff), c.len, RHG.factor)); }
   return rhStarCache.get(k);
 }
 const rhStarTxt = s => s.toFixed(1) + '★';
@@ -730,16 +730,16 @@ async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou iden
   if (rh) { try { rh.src?.stop(); } catch {} rh.mode = 'load'; }
   if (typeof i === 'number') {
     const song = RH_SONGS[i] || RH_SONGS[0]; i = RH_SONGS.indexOf(song); c = rhCompose(song); base = rhChart(c, diff); info = {name: song.name, bpm: song.bpm, key: 'rh' + i + diff};
-    const buffer = await rhRenderSong(i, c); c = {events: [], lead: c.lead, len: c.len, step: c.step, buffer, beat0: 0};
+    const buffer = await rhRenderSong(i, c); c = {events: c.events, lead: c.lead, len: c.len, step: c.step, buffer, beat0: 0};  // la batterie reste : Orbe y place ses streams
   } else {
     const imp = rhImports().find(x => x.id === i); if (!imp) return rhSelect(0, diff);
     const {a, buffer} = await rhLoadImport(imp);
-    c = {events: [], lead: [], len: a.len, step: a.beat / 4, buffer, beat0: a.beat0}; base = rhChartImport(a, diff); info = {name: imp.name, bpm: a.bpm, key: 'rhx' + imp.id + diff};
+    c = {events: [], lead: [], len: a.len, step: a.beat / 4, buffer, beat0: a.beat0, peaks: a.peaks}; base = rhChartImport(a, diff); info = {name: imp.name, bpm: a.bpm, key: 'rhx' + imp.id + diff};
   }
   if (tok !== rhTok) return;  // un autre niveau a été choisi entre-temps
   const notes = RHG.chart(base, c, diff).map(n => ({...n, judged: false}));
   rh = rh || {raf: 0, tick: 0};
-  Object.assign(rh, {mode: 'ready', song: i, diff, c, info, notes, stars: rhStars(notes, c.len, RHG.factor), src: null, t0: 0, score: 0, combo: 0, maxCombo: 0,
+  Object.assign(rh, {mode: 'ready', song: i, diff, c, info, notes, stars: (RHG.stars || rhStars)(notes, c.len, RHG.factor), src: null, t0: 0, score: 0, combo: 0, maxCombo: 0,
     counts: {PARFAIT: 0, BIEN: 0, OK: 0, RATÉ: 0}, dts: [], fx: [], sparks: [], record: false, grade: '', acc: 0, adj: 0, overAt: 0});
   RHG.reset(); games.rhythmLast = {song: i, diff}; saveGames(); rhList();
   gameLoop(rh, RHG.key, RHG.update, rhDrawAll);
@@ -818,7 +818,7 @@ function rhList() {
     const order = RH_SONGS.map((s, i) => i).sort((a, b) => RH_SONGS[a].bpm - RH_SONGS[b].bpm);
     $('rhSongs').replaceChildren(...order.map((i, rank) => {
       const s = RH_SONGS[i], c = el('div', 'sysCard rhSong' + (rh?.song === i ? ' on' : '')), mins = (RH_LEN[i] ??= s.len ?? rhCompose(s).len);
-      c.append(el('b', '', (rank + 1) + '. ' + s.name), el('span', 'hint', (s.style ? s.style + ' · ' : '') + s.bpm + ' BPM · ' + clock(mins)), rhDiffRow('rh' + i, rh?.song === i, d => rhSelect(i, d), null, i));
+      c.append(el('b', '', (rank + 1) + '. ' + s.name), el('span', 'hint', (RHG.tag ? RHG.tag(mins) + ' · ' : '') + (s.style ? s.style + ' · ' : '') + s.bpm + ' BPM · ' + clock(mins)), rhDiffRow('rh' + i, rh?.song === i, d => rhSelect(i, d), null, i));
       return c;
     }));
     return rhFillStars();
@@ -867,10 +867,24 @@ function rhOpen() {
    suis la boule des glissières bouton enfoncé, et fais tourner la souris sur les toupies. Les orbes d'un même combo sont numérotés. ---------- */
 const OB = {X0: 32, Y0: 28, PW: 256, PH: 192,  // le terrain (4:3) dans la toile de 320 × 240
   COLS: ['#ff4fa8', '#3fe0ff', '#ffd84a', '#7ee07a'], KEYS: ['w', 'x', 'z', 'c'], SPIN_R: 74};
-const OB_PK = .6;  // aussi indulgent que Prisme : PARFAIT à ±75 ms, BIEN à ±150 ms, OK à ±230 ms
-// le niveau (1 à 10) choisi : il règle l'écart entre les orbes, leur taille et le temps où on les voit venir
+// les réglages d'un niveau, comme dans les jeux du genre : CS (taille des orbes), AR (le temps où on les voit venir), OD (la précision demandée),
+// et le style de la map, tiré du morceau (le même à toutes ses difficultés) : il change les rythmes, le placement et ces réglages
+const OB_STYLES = [
+  {name: 'Sauts', cs: -.6, ar: .6, od: 0, sp: 1.5, fill: .4, stream: .2, slide: .7, sv: 1, pat: ['zig', 'tri', 'star', 'square']},
+  {name: 'Streams', cs: .3, ar: .2, od: 0, sp: .8, fill: 1.1, stream: 2.4, slide: .6, sv: 1, pat: ['flow', 'flow', 'zig']},
+  {name: 'Précision', cs: 1.8, ar: -.4, od: 1.2, sp: .85, fill: .6, stream: .4, slide: .9, sv: .9, pat: ['square', 'flow', 'tri']},
+  {name: 'Technique', cs: .5, ar: .5, od: .6, sp: 1, fill: 2, stream: .9, slide: 1.3, sv: 1.35, pat: ['flow', 'zig', 'tri', 'square']},
+  {name: 'Glissières', cs: 0, ar: 0, od: 0, sp: 1.1, fill: .6, stream: .5, slide: 2.2, sv: 1.6, pat: ['flow', 'flow', 'tri']},
+  {name: 'Mixte', cs: 0, ar: 0, od: .3, sp: 1, fill: 1, stream: 1, slide: 1, sv: 1.1, pat: ['flow', 'zig', 'tri', 'square', 'star']},
+];
+// le niveau (1 à 10) choisi : il règle tout le reste
 const obLevel = d => /^S\d+$/.test(d) ? +d.slice(1) : {facile: 2, normal: 4, difficile: 6, expert: 8}[d] || 4;
 const obClamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const obStyle = len => OB_STYLES[seeded(Math.round(len * 1000) ^ 0x51ed)() * OB_STYLES.length | 0];
+function obStats(diff, len) {  // r : le rayon des orbes ; pre : le temps où on les voit venir (s) ; pk : la sévérité (les fenêtres PARFAIT / BIEN / OK divisées par pk)
+  const lv = obLevel(diff), st = obStyle(len), cs = obClamp(2.6 + lv * .3 + st.cs, 2, 7), ar = obClamp(3.6 + lv * .6 + st.ar, 3, 10), od = obClamp(2.5 + lv * .55 + st.od, 2, 9.5);
+  return {lv, st, cs, ar, od, r: Math.round(27.2 - 2.24 * cs), pre: (ar < 5 ? 1800 - 120 * ar : 1200 - 150 * (ar - 5)) / 1000, pk: .045 / ((80 - 6 * od) / 1000)};
+}
 // une glissière : un arc (courbe de Bézier) échantillonné, avec la longueur parcourue à chaque point pour avancer la boule à vitesse constante
 function obPath(sx, sy, cx, cy, ex, ey) {
   const pts = []; let len = 0;
@@ -884,51 +898,116 @@ function obAt(pts, f) {  // le point à la fraction f (0..1) de la longueur
 // où est la boule d'une glissière à l'instant now : elle fait l'aller, puis le retour si la glissière se répète
 function obBall(n, now) { const f = obClamp((now - n.t) / n.len, 0, 1) * n.reps, pass = Math.min(n.reps - 1, Math.floor(f)), k = f - pass; return obAt(n.pts, pass % 2 ? 1 - k : k); }
 const obEnd = n => n.kind === 'slide' ? obAt(n.pts, n.reps % 2 ? 1 : 0) : [n.x, n.y];
-// les notes du morceau (les mêmes que Rythme) deviennent des orbes posés sur le terrain : même tirage sur tous les PC
+// les notes du morceau deviennent une map : même tirage sur tous les PC
 function obChart(base, c, diff) {
-  const lv = obLevel(diff), beat = c.step * 4, rnd = seeded(Math.round(c.len * 1000) + base.length * 7919), notes = [];
-  for (const n of base) { const p = notes.at(-1); if (p && Math.abs(p.t - n.t) < .01) { p.len = Math.max(p.len, n.len || 0); continue; } notes.push({t: n.t, len: n.len || 0}); }  // un accord = un seul orbe
-  const M = 16, inside = (x, y) => x >= M && x <= OB.PW - M && y >= M && y <= OB.PH - M, out = [];
-  let x = OB.PW / 2, y = OB.PH / 2, a = rnd() * 2 * Math.PI, lastSpin = -99, combo = 0, col = -1, bar = -99, last = -9;
-  for (const n of notes) {
+  const S = obStats(diff, c.len), {lv, r} = S, step = c.step, beat = step * 4, b0 = c.beat0 || 0, rnd = seeded(Math.round(c.len * 1000) + base.length * 7919);
+  const stAt = t => S.st.name !== 'Mixte' ? S.st : OB_STYLES[seeded(Math.floor((t - b0) / (beat * 32)) + 77)() * 5 | 0];  // Mixte : un autre style toutes les 8 mesures
+  const K = t => Math.round((t - b0) / step), T = k => b0 + k * step;
+  // 1. le rythme : un accord = un orbe, sur la grille des doubles-croches
+  let ns = [];
+  for (const n of base) { const p = ns.at(-1), k = K(n.t); if (p && p.k === k) { p.len = Math.max(p.len, n.len || 0); continue; } ns.push({k, t: n.t, len: n.len || 0}); }
+  // là où la musique est chargée (batterie, mélodie, attaques entendues) : les streams n'y vont que là
+  const hits = new Set([...(c.events || []).filter(e => e.k !== 'bass' && e.k !== 'arp'), ...(c.peaks || [])].map(e => K(e.t)));
+  const busy = t => { if (!hits.size) return 1; let m = 0; for (let k = K(t) - 4; k <= K(t) + 4; k++) m += hits.has(k); return m / 9; };
+  const med = ns.map(n => busy(n.t)).sort((a, b) => a - b)[ns.length >> 1] || 0;
+  // les glissières : les notes tenues, et d'autres suivies d'un blanc, selon le style
+  ns.forEach((a, i) => { const st = stAt(a.t), g = (ns[i + 1]?.k ?? a.k + 99) - a.k;
+    a.slide = a.len >= beat * .9 / (1 + st.slide);
+    if (!a.slide && g >= 4 && rnd() < (st.slide - .8) * .35 + (lv < 4 ? .15 : 0)) { a.len = (g - 2) * step; a.slide = true; }
+    if (a.slide) a.len = Math.max(1, Math.min(Math.round(a.len / step), g - (g > 4 ? 2 : 1))) * step; });  // calée sur la grille, finie au moins une double-croche avant la note suivante
+  // les doubles, triples et streams : des doubles-croches ajoutées entre deux notes, si le tempo le permet à ce niveau
+  const minStep = lv >= 8 ? .068 : lv >= 6 ? .085 : lv >= 4 ? .11 : 9, maxRun = lv < 6 ? 5 : lv < 8 ? 9 : 17, add = [];
+  let run = 1;  // la longueur de la suite de doubles-croches en cours
+  for (let i = 0; i + 1 < ns.length; i++) {
+    const a = ns[i], b = ns[i + 1], g = b.k - a.k, st = stAt(a.t);
+    if (step < minStep || a.slide) { run = 1; continue; }
+    if (g === 1) { run++; continue; }
+    if (g <= 8 && busy(a.t) >= Math.max(.3, med) && run + g <= maxRun + 1 && rnd() < obClamp((lv - 4.5) * .1 * st.stream, 0, .85)) {  // un stream jusqu'à la note suivante
+      for (let k = a.k + 1; k < b.k; k++) add.push({k, t: T(k), len: 0}); run += g - 1; continue;
+    }
+    if (lv >= 3.5 && g <= 8 && rnd() < obClamp((lv - 3) * .06 * st.fill, 0, .55)) {  // un double ou un triple qui mène à la note suivante
+      const m = g >= 3 && lv >= 5 && rnd() < .5 ? 2 : 1; for (let j = m; j >= 1; j--) add.push({k: b.k - j, t: T(b.k - j), len: 0}); run = m + 1; continue;
+    }
+    run = 1;
+  }
+  // une suite de doubles-croches trop longue pour le niveau (ou trop rapide) est coupée : une note sautée laisse respirer
+  ns = ns.concat(add).sort((a, b) => a.k - b.k); run = 1;
+  ns = ns.filter((n, i) => { const p = i && ns[i - 1]; if (!p || n.k - p.k > 1 || p.drop) return run = 1; run++;
+    const cap = step < minStep ? 1 : lv >= 8 && stAt(n.t).name === 'Streams' ? 33 : maxRun; return !(n.drop = run > cap); });
+  // 2. le placement : l'écart suit le temps (les streams serrés, les sauts larges), la direction suit un motif par combo
+  const M = r + 2, inside = (x, y) => x >= M && x <= OB.PW - M && y >= M && y <= OB.PH - M, out = [];
+  let prevSlide = false, x = OB.PW / 2, y = OB.PH / 2, a = rnd() * 2 * Math.PI, lastSpin = -99, combo = 0, col = -1, bar = -99, last = -9, pat = 'flow', turn = 1, curve = .2;
+  for (const n of ns) {
     if (n.t < last + .05) continue;  // tombe pendant la glissière ou la toupie d'avant : laissée de côté
-    // une toupie : une très longue note, au plus une toutes les 20 secondes
-    if (n.len >= beat * 3 && n.t - lastSpin > 20) {
-      lastSpin = n.t; out.push({t: n.t, len: n.len, kind: 'spin', x: OB.PW / 2, y: OB.PH / 2, combo: 0, col: Math.max(0, col), lane: 0});
+    const st = stAt(n.t);
+    if (n.len >= beat * 3 && n.t - lastSpin > 20) {  // une toupie : une très longue note, au plus une toutes les 20 secondes
+      lastSpin = n.t; out.push({t: n.t, len: n.len, kind: 'spin', x: OB.PW / 2, y: OB.PH / 2, combo: 0, col: Math.max(0, col), r});
       x = OB.PW / 2; y = OB.PH / 2; combo = 0; bar = -99; last = n.t + n.len; continue;
     }
-    // l'écart à l'orbe d'avant suit le temps qui les sépare (plus c'est rapide, plus c'est près), et grandit avec le niveau
-    const gap = n.t - last, d = out.length ? obClamp(gap * (60 + lv * 10), gap < .14 ? 10 : 24, 120) : 0;
-    a += gap < .2 ? .3 * (rnd() < .5 ? -1 : 1) : (.9 + rnd() * 1.7) * (rnd() < .5 ? -1 : 1);
+    const gap = n.t - last, inStream = gap < step * 1.5 && !prevSlide, gb = gap / beat, bb = Math.floor((n.t - b0) / (beat * 2));
+    if (!out.length || (!inStream && (bb !== bar || combo >= 8)) || combo >= 16) {  // un nouveau combo : toutes les deux mesures, jamais au milieu d'un stream
+      bar = bb; col = (col + 1) % OB.COLS.length; combo = 0; pat = st.pat[rnd() * st.pat.length | 0]; turn = rnd() < .5 ? 1 : -1; curve = (.1 + rnd() * .25) * turn;
+    }
+    const spB = (34 + lv * 8) * st.sp;  // l'écart pour un temps (en pixels), comme l'espacement réglé d'une map
+    let d = gb * spB;
+    if (inStream) d = (st.name === 'Précision' || st.name === 'Technique') && rnd() < .3 ? 0 : obClamp(d, r * .7, r * 1.9);  // en stream, serré (parfois un double empilé)
+    else if (gb <= 1.01 && lv >= 4.5) d = Math.max(d, (lv - 3) * 13 * st.sp);  // sur un temps ou un demi-temps : de vrais sauts
+    d = out.length ? obClamp(d, d && r * .7, 175) : 0;
+    if (inStream) a += curve;  // les streams font des courbes
+    else if (pat === 'zig') a += Math.PI - .45 * turn;
+    else if (pat === 'tri') a += turn * 2 * Math.PI / 3;
+    else if (pat === 'square') a += turn * Math.PI / 2;
+    else if (pat === 'star') a += turn * 4 * Math.PI / 5;
+    else { a += turn * (.4 + rnd() * .7); if (rnd() < .15) turn = -turn; }
     let nx = x + Math.cos(a) * d, ny = y + Math.sin(a) * d;
-    for (let k = 0; k < 12 && !inside(nx, ny); k++) { a += Math.PI / 5 + rnd() * .4; nx = x + Math.cos(a) * d; ny = y + Math.sin(a) * d; }
+    for (let k = 0; k < 12; k++) {  // contre les bords : la direction rebondit ; loin des orbes encore à l'écran (sauf en stream)
+      if (!inside(nx, ny)) { if (nx < M || nx > OB.PW - M) a = Math.PI - a; if (ny < M || ny > OB.PH - M) a = -a; if (k > 3) a += .7; }
+      else if (inStream || !d || !out.some((o, j) => j < out.length - 1 && n.t - o.t < S.pre && Math.hypot(o.x - nx, o.y - ny) < r * 1.8)) break;
+      else a += .7;
+      nx = x + Math.cos(a) * d; ny = y + Math.sin(a) * d;
+    }
     nx = obClamp(nx, M, OB.PW - M); ny = obClamp(ny, M, OB.PH - M);
-    const b = Math.floor((n.t - (c.beat0 || 0)) / (beat * 2)); if (b !== bar || combo >= 8) { bar = b; col = (col + 1) % OB.COLS.length; combo = 0; }  // un nouveau combo toutes les deux mesures
-    const o = {t: n.t, len: 0, kind: 'circle', x: nx, y: ny, combo: ++combo, col, lane: (out.length % 2) * (d > 60 ? 2 : 0)};  // lane : seulement pour le calcul des étoiles (les grands sauts comptent)
-    // une glissière : une note tenue devient un arc à suivre bouton enfoncé, en aller-retour si elle dure
-    if (n.len >= beat * .45) {
-      const L = obClamp(24 + n.len * 40, 28, 92);
+    if (!d && out.length) { nx -= 3; ny -= 3; }  // un orbe empilé : décalé de quelques pixels pour qu'on voie qu'il y en a deux
+    const o = {t: n.t, len: 0, kind: 'circle', x: nx, y: ny, combo: ++combo, col, r};
+    if (n.slide) {  // une glissière : à suivre bouton enfoncé, en aller-retour si elle est longue ; sa vitesse dépend du niveau et du style
+      const total = 50 * (.7 + lv * .09) * st.sv * n.len / beat, reps = Math.max(1, Math.ceil(total / 110)), L = obClamp(total / reps, r * 1.3, 110);
       for (let k = 0; k < 10; k++) {
-        const s = a + (rnd() - .5) * 1.2, ex = nx + Math.cos(s) * L, ey = ny + Math.sin(s) * L, bend = (rnd() - .5) * L * .7;
+        const s = a + (rnd() - .5) * .9, ex = nx + Math.cos(s) * L, ey = ny + Math.sin(s) * L, bend = rnd() < .3 ? 0 : (rnd() - .5) * L * (st.name === 'Glissières' ? 1.2 : .7);
         const cx = (nx + ex) / 2 - Math.sin(s) * bend, cy = (ny + ey) / 2 + Math.cos(s) * bend;
-        if (inside(ex, ey) && inside(cx, cy)) { Object.assign(o, {kind: 'slide', len: n.len, pts: obPath(nx, ny, cx, cy, ex, ey), reps: Math.max(1, Math.round(n.len * 95 / L))}); break; }
+        if (inside(ex, ey) && inside(cx, cy)) { Object.assign(o, {kind: 'slide', len: n.len, pts: obPath(nx, ny, cx, cy, ex, ey), reps}); a = reps % 2 ? Math.atan2(ey - cy, ex - cx) : Math.atan2(ny - cy, nx - cx); break; }
         a += Math.PI / 3;
       }
     }
-    out.push(o); [x, y] = obEnd(o); last = o.t + o.len;
+    out.push(o); [x, y] = obEnd(o); last = o.t + o.len; prevSlide = o.kind === 'slide';
   }
   return out;
 }
+// la difficulté en étoiles, à la manière des jeux du genre : la visée (l'écart entre orbes, en diamètres, rapporté au temps) et la vitesse (les clics par seconde),
+// en efforts qui s'accumulent et retombent, les passages les plus durs comptant le plus
+function obStars(ns) {
+  if (ns.length < 2) return 1;
+  let aim = 0, spd = 0, sec = ns[0].t + .4, ma = 0, ms = 0; const A = [], P = [];
+  for (let i = 1; i < ns.length; i++) {
+    const p = ns[i - 1], n = ns[i]; if (n.kind === 'spin' || p.kind === 'spin') continue;
+    const dt = Math.max(.05, n.t - p.t), [ex, ey] = obEnd(p), d = Math.hypot(n.x - ex, n.y - ey) / (2 * n.r) + (p.kind === 'slide' ? .5 : 0);
+    while (n.t > sec) { A.push(ma); P.push(ms); ma *= .15 ** .4; ms *= .3 ** .4; sec += .4; }
+    aim = aim * .15 ** dt + d / dt * .09; spd = spd * .3 ** dt + 1 / dt * .09; ma = Math.max(ma, aim); ms = Math.max(ms, spd);
+  }
+  A.push(ma); P.push(ms);
+  const top = v => v.sort((x, y) => y - x).reduce((s, x, i) => s + x * .9 ** i, 0);
+  const v = Math.sqrt(top(A)) * .62 + Math.sqrt(top(P)) * .52; return Math.max(1, Math.min(10, Math.round(.7 * v ** 1.1 * 10) / 10));
+}
 const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
-  help: [['Clique (ou W / X) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']],
-  chart: obChart,
+  get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1), '#3fe0ff']] : []),
+    ['Clique (ou W / X) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']]; },
+  chart: obChart, stars: obStars, tag: len => obStyle(len).name,
   reset() {
-    const lv = obLevel(rh.diff);
-    Object.assign(rh, {keys: new Set(), cx: rh.cx ?? W / 2, cy: rh.cy ?? H / 2, trail: [], pops: [], pre: 1.25 - lv * .065, r: Math.round(15 - lv * .45), shake: 0});
+    const o = obStats(rh.diff, rh.c.len);
+    Object.assign(rh, {keys: new Set(), cx: rh.cx ?? W / 2, cy: rh.cy ?? H / 2, trail: [], pops: [], ob: o, pre: o.pre, r: o.r, pk: o.pk, shake: 0});
     rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r);
   },
   update() {
-    const now = rhNow(), late = RH.WIN.at(-1)[0] / OB_PK;
+    const now = rhNow(), late = RH.WIN.at(-1)[0] / rh.pk;
     for (const n of rh.notes) {
       if (n.t > now + 1) break;
       if (n.kind === 'spin') { obSpin(n, now); continue; }
@@ -952,10 +1031,10 @@ function obPop(x, y, text, col) { rh.pops.push({x: OB.X0 + x, y: OB.Y0 + y, text
 function obJudge(n, w) { const [x, y] = n.kind === 'spin' ? [OB.PW / 2, OB.PH / 2 + 30] : [n.x, n.y]; obPop(x, y, w ? w[1] : 'RATÉ', w ? w[3] : '#ff4a5a'); if (w) obBurst(x, y, OB.COLS[n.col], 9); }
 // un clic (souris ou touche) : seulement sur le premier orbe pas encore touché, comme dans les jeux du genre (on ne saute pas un orbe)
 function obClick() {
-  const now = rhNow(), late = RH.WIN.at(-1)[0] / OB_PK, n = rh.notes.find(n => !n.judged && n.kind !== 'spin');
+  const now = rhNow(), late = RH.WIN.at(-1)[0] / rh.pk, n = rh.notes.find(n => !n.judged && n.kind !== 'spin');
   if (!n || n.t - now > rh.pre || Math.hypot(rh.cx - OB.X0 - n.x, rh.cy - OB.Y0 - n.y) > rh.r * 1.15) return;  // pas encore là, ou clic à côté : rien
   if (n.t - now > late) { rh.shake = 10; n.shake = 10; return; }  // beaucoup trop tôt : l'orbe tremble
-  const w = rhHit(n, (now - n.t) * OB_PK); obJudge(n, w); if (w && n.kind === 'slide') n.track = true;
+  const w = rhHit(n, (now - n.t) * rh.pk); obJudge(n, w); if (w) n.hitAt = now; if (w && n.kind === 'slide') n.track = true;
 }
 function obPress(src, down) {
   if (rh?.mode !== 'play') return;
@@ -1012,20 +1091,23 @@ function obDraw() {
     for (let i = 1; i < vis.length; i++) { const a = vis[i - 1], b = vis[i]; if (b.combo < 2 || a.kind === 'spin') continue; const [ax, ay] = obEnd(a), d = Math.hypot(b.x - ax, b.y - ay); if (d < r * 2.4) continue;
       for (let s = r + 4; s < d - r - 2; s += 7) { const f = s / d, t = a.t + a.len + (b.t - a.t - a.len) * f; if (t < now - .05) continue; g.globalAlpha = obClamp(1 - (b.t - now - pre * .2) / pre, 0, 1) * .7; px(g, '#c8c0f0', X + ax + (b.x - ax) * f - 1, Y + ay + (b.y - ay) * f - 1, 2, 2); } g.globalAlpha = 1; }
     for (let i = vis.length - 1; i >= 0; i--) {
-      const n = vis[i], col = OB.COLS[n.col], fade = obClamp((now - (n.t - pre)) / (pre * .4), 0, 1), jx = n.shake ? (n.shake-- % 2 ? 1 : -1) : 0;
+      const n = vis[i], col = OB.COLS[n.col], fade = obClamp((now - (n.t - pre)) / (.4 * Math.min(1, pre / .45)), 0, 1), jx = n.shake ? (n.shake-- % 2 ? 1 : -1) : 0;
       if (n.kind === 'spin') { obDrawSpin(n, now); continue; }
       const gone = n.judged && !n.missed, after = now - n.t;
       if (n.kind === 'slide' && !(n.done && !n.track && now > n.t + n.len)) {  // le tube, la boule, le cercle de suivi
-        const bd = obBody(n); g.globalAlpha = n.missed || n.broken ? .35 * fade : fade; g.drawImage(bd.c, Math.round(X + bd.x0), Math.round(Y + bd.y0));
+        const bd = obBody(n); g.globalAlpha = (n.missed || n.broken ? .3 : .62) * fade; g.drawImage(bd.c, Math.round(X + bd.x0), Math.round(Y + bd.y0));
         const passes = n.reps - Math.floor(obClamp(after / n.len, 0, .999) * n.reps); if (passes > 1) { const [ex, ey] = obEnd({...n, reps: (n.reps - passes) % 2 ? 2 : 1}); g.drawImage(obRing('#ffffff', r * .55), Math.round(X + ex - r * .55 - 1), Math.round(Y + ey - r * .55 - 1)); }  // un retour à faire : un anneau au bout
         g.globalAlpha = 1;
         if (after >= 0 && after <= n.len && !n.missed && !n.broken) { const [bx, by] = obBall(n, now); g.drawImage(rh.disc[n.col], Math.round(X + bx - r - 1), Math.round(Y + by - r - 1)); if (n.track) g.drawImage(obRing(rh.keys.size ? '#ffffff' : '#a8a0c8', r * 2.4), Math.round(X + bx - r * 2.4 - 1), Math.round(Y + by - r * 2.4 - 1)); }
       }
+      if (gone && n.hitAt != null && now - n.hitAt < .15) {  // touché : l'orbe grossit et s'efface
+        const k = (now - n.hitAt) / .15, rr = Math.round(r * (1 + .4 * k)); g.globalAlpha = .8 * (1 - k); g.drawImage(rh.disc[n.col], Math.round(X + n.x - rr - 1), Math.round(Y + n.y - rr - 1), 2 * rr + 3, 2 * rr + 3); g.globalAlpha = 1;
+      }
       if (gone || (n.missed && after > .3)) continue;
       // l'orbe et son numéro ; le cercle d'approche se resserre jusqu'à lui au bon moment
-      g.globalAlpha = n.missed ? .5 : fade; const x = Math.round(X + n.x) + jx, y = Math.round(Y + n.y);
+      g.globalAlpha = n.missed ? .45 : fade * .85; const x = Math.round(X + n.x) + jx, y = Math.round(Y + n.y);
       g.drawImage(n.missed ? rh.ghost : rh.disc[n.col], x - r - 1, y - r - 1); pxFont(g, String(n.combo), x, y + 4, '#ffffff', 8, 'center');
-      if (!n.missed && after < 0) { const ar = r * (1 + 2.2 * obClamp(-after / pre, 0, 1)); g.drawImage(obRing(col, ar), Math.round(x - ar - 1), Math.round(y - ar - 1)); }
+      if (!n.missed && after < 0) { const ar = r * (1 + 2 * obClamp(-after / pre, 0, 1)); g.globalAlpha = fade; g.drawImage(obRing(col, ar), Math.round(x - ar - 1), Math.round(y - ar - 1)); }
       g.globalAlpha = 1;
     }
   }
@@ -1062,14 +1144,16 @@ document.addEventListener('keydown', e => {
   if (k === 'p' || k === 'Escape') rhPause();
 });
 document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.length === 1 ? e.key.toLowerCase() : e.key; if (OB.KEYS.includes(k)) obPress(k, false); if (e.key === ' ' && keyOk(e)) e.preventDefault(); });
-{  // vérification : les orbes restent sur le terrain, dans l'ordre, avec des glissières et une toupie ; un clic au bon moment sur l'orbe le touche, à côté non
+{  // vérification : les orbes restent sur le terrain, dans l'ordre, avec des glissières, des streams et une toupie ; les orbes rapetissent avec le niveau ; un clic au bon moment sur l'orbe le touche, à côté non
   const c = rhCompose(RH_SONGS[7]), x = RHG.chart(rhChart(c, 'expert'), c, 'expert'), ok = x.every((o, i) => o.x >= 0 && o.x <= OB.PW && o.y >= 0 && o.y <= OB.PH && (!i || o.t > x[i - 1].t) && (o.kind !== 'slide' || o.pts.every(p => p[0] >= 0 && p[0] <= OB.PW && p[1] >= 0 && p[1] <= OB.PH)));
   const lens = rhChart(c, 'expert').map(n => ({...n, len: 9})), sp = RHG.chart(lens, c, 'expert').filter(o => o.kind === 'spin');
-  rhAudio(); const keep = rh; rh = {mode: 'play', t0: 0, diff: 'normal', sparks: [], combo: 0, maxCombo: 0, score: 0, dts: [], counts: {PARFAIT: 0, BIEN: 0, OK: 0, 'RATÉ': 0}, notes: []}; RHG.reset();
+  rhAudio(); const keep = rh; rh = {mode: 'play', t0: 0, diff: 'normal', c: {len: 60}, sparks: [], combo: 0, maxCombo: 0, score: 0, dts: [], counts: {PARFAIT: 0, BIEN: 0, OK: 0, 'RATÉ': 0}, notes: []}; RHG.reset();
   const t0 = rhNow(); rh.notes = [{t: t0, kind: 'circle', x: 50, y: 50, combo: 1, col: 0, len: 0}, {t: t0 + .5, kind: 'circle', x: 150, y: 90, combo: 2, col: 0, len: 0}];
   rh.cx = OB.X0 + 50; rh.cy = OB.Y0 + 50; obPress('w', true); obPress('w', false); const hit = rh.notes[0].judged && !rh.notes[0].missed;
   rh.cx = OB.X0 + 10; rh.cy = OB.Y0 + 10; obPress('x', true); const miss = !rh.notes[1].judged; rh = keep;
-  console.assert(ok && x.some(o => o.kind === 'slide') && sp.length >= 1 && sp.every((s, i) => !i || s.t - sp[i - 1].t > 20) && hit && miss, 'orbe', ok, hit, miss, sp.length);
+  const fast = RH_SONGS.map(rhCompose).find(c => c.step < .1), xs = RHG.chart(rhChart(fast, 'expert'), fast, 'expert'); let run = 1, best = 1; for (let i = 1; i < xs.length; i++) { run = xs[i - 1].kind === 'circle' && xs[i].t - xs[i - 1].t < fast.step * 1.5 ? run + 1 : 1; best = Math.max(best, run); }
+  const small = obStats('expert', 100).r < obStats('facile', 100).r;
+  console.assert(best >= 3 && best <= 33 && small && ok && x.some(o => o.kind === 'slide') && sp.length >= 1 && sp.every((s, i) => !i || s.t - sp[i - 1].t > 20) && hit && miss, 'orbe', ok, hit, miss, sp.length, best, small);
 }
 ctx.onOpen(() => rhOpen());
 

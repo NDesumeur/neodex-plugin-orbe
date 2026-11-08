@@ -18,13 +18,28 @@ Pick a level: a bar shows the loading (the music is read, decoded and analysed i
 
 ## Accuracy and points
 
-Each orb is judged by how far it is from the right moment: **Perfect** (about ±75 ms, 300 points), **Good** (±150 ms, 200 points), **OK** (±230 ms, 100 points), otherwise a miss. A slider followed to the end gives 150 more points per pass; letting go breaks the combo. A spinner is judged on how many turns you made.
+Each orb is judged by how far it is from the right moment: **Perfect** (300 points), **Good** (200 points), **OK** (100 points), otherwise a miss. The windows depend on the level's **OD**: from ±62 / ±124 / ±193 ms on the easiest levels to ±31 / ±62 / ±96 ms in Expert. A slider followed to the end gives 150 more points per pass; letting go breaks the combo. A spinner is judged on how many turns you made.
 
 Points rise by 1 % per orb of combo, up to double at 100 in a row. At the end, accuracy gives a grade: **S** from 95 %, **A** at 90 %, **B** at 80 %, **C** at 70 %, **D** below.
 
 ## Songs and difficulty
 
-The **Songs** tab offers the 200 Rythme tracks, rated from 1 to 10 stars. The higher the level, the smaller the orbs, the faster they come and the further apart they are.
+The **Songs** tab offers the 200 Rythme tracks. Each level has its own settings, shown before you play:
+
+- **CS**: orb size (the higher, the smaller).
+- **AR**: how early you see them coming (the higher, the faster the approach circle).
+- **OD**: how precise you must be.
+
+Each track also has a **map style**, the same at all its difficulties and shown in the list:
+
+- **Jumps** (Sauts): wide gaps in triangles, squares, stars and back-and-forths.
+- **Streams**: long runs of tight orbs, in curves, on the drums' sixteenth notes.
+- **Precision** (Précision): smaller orbs, stricter timing.
+- **Technical** (Technique): doubles, triples and changing rhythms, with stacked orbs.
+- **Sliders** (Glissières): lots of sliders, longer, more curved and faster.
+- **Mixed** (Mixte): a different style every 8 bars.
+
+Easy keeps to simple rhythms. Doubles and triples come in Normal, streams in Hard, and in Expert they go up to 17 orbs (33 in the Streams style). Stars (1 to 10) are computed from the map itself: aim (the gaps, relative to orb size and time) and speed (clicks per second).
 
 ## My music
 

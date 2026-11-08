@@ -5,6 +5,10 @@ module.exports = async ({ pj, sleep }) => {
   await pj(`window.__e = []; addEventListener('error', e => __e.push(e.message)); addEventListener('unhandledrejection', e => __e.push(String(e.reason))); 0`);
   for (let i = 0; i < 30 && await pj(`!document.querySelector('.rhBar') || !document.querySelector('.rhBar').hidden`) === false; i++) await sleep(500);
   await sleep(6000);  // le morceau intégré se prépare (rendu du son)
+  // un niveau dur et rapide (style Streams, 180 BPM, Expert) : streams, triples et sauts passent à l'écran
+  await pj(`[...document.querySelectorAll('.rhSong')].find(c => c.textContent.includes('Mercure stellaire'))?.querySelector('button')?.parentElement.querySelectorAll('button')[3]?.click(), 0`);
+  for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(500);
+  await sleep(1500); await shot('pret');
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(1800);
   const full = await pj(`!!document.fullscreenElement`), count = await pj(`document.querySelector('.rhCount')?.textContent || ''`); await shot('compte');
   // la souris tourne sur le terrain et clique souvent : tous les chemins du jeu passent (orbes, glissières, toupies), sans erreur

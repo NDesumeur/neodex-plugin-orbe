@@ -18,13 +18,28 @@ Choisis un niveau : une barre montre le chargement (la musique est lue, décodé
 
 ## Précision et points
 
-Chaque orbe est jugé selon l'écart avec le bon moment : **Parfait** (environ ±75 ms, 300 points), **Bien** (±150 ms, 200 points), **OK** (±230 ms, 100 points), sinon raté. Une glissière suivie jusqu'au bout rapporte 150 points de plus par passage ; la lâcher casse le combo. Une toupie est jugée sur le nombre de tours.
+Chaque orbe est jugé selon l'écart avec le bon moment : **Parfait** (300 points), **Bien** (200 points), **OK** (100 points), sinon raté. Les fenêtres dépendent de l'**OD** du niveau : de ±62 / ±124 / ±193 ms pour les plus faciles à ±31 / ±62 / ±96 ms en Expert. Une glissière suivie jusqu'au bout rapporte 150 points de plus par passage ; la lâcher casse le combo. Une toupie est jugée sur le nombre de tours.
 
 Les points augmentent de 1 % par orbe de combo, jusqu'au double à 100 de suite. À la fin, la précision donne une note : **S** à partir de 95 %, **A** à 90 %, **B** à 80 %, **C** à 70 %, **D** en dessous.
 
 ## Chansons et difficulté
 
-L'onglet **Chansons** reprend les 200 morceaux de Rythme, notés de 1 à 10 étoiles. Plus le niveau est haut, plus les orbes sont petits, arrivent vite et sont éloignés les uns des autres.
+L'onglet **Chansons** reprend les 200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :
+
+- **CS** : la taille des orbes (plus il est haut, plus ils sont petits).
+- **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide).
+- **OD** : la précision demandée.
+
+Chaque morceau a aussi un **style de map**, le même à toutes ses difficultés et affiché dans la liste :
+
+- **Sauts** : de grands écarts en triangles, carrés, étoiles et allers-retours.
+- **Streams** : de longues suites d'orbes serrés, en courbes, sur les doubles-croches de la batterie.
+- **Précision** : des orbes plus petits, une précision plus sévère.
+- **Technique** : des doubles, des triples et des rythmes qui changent, avec des orbes empilés.
+- **Glissières** : beaucoup de glissières, plus longues, plus courbées et plus rapides.
+- **Mixte** : un autre style toutes les 8 mesures.
+
+Facile reste sur des rythmes simples. Les doubles et triples arrivent en Normal, les streams en Difficile, et en Expert ils vont jusqu'à 17 orbes (33 en style Streams). Les étoiles (1 à 10) se calculent sur la map elle-même : la visée (les écarts, rapportés à la taille des orbes et au temps) et la vitesse (les clics par seconde).
 
 ## Mes musiques
 
