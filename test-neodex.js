@@ -9,6 +9,7 @@ module.exports = async ({ pj, sleep }) => {
   await pj(`[...document.querySelectorAll('.rhSong')].find(c => c.textContent.includes('Mercure stellaire'))?.querySelector('button')?.parentElement.querySelectorAll('button')[3]?.click(), 0`);
   for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(500);
   await sleep(1500); await shot('pret');
+  await pj(`window.__sons = 0; const st = AudioBufferSourceNode.prototype.start; AudioBufferSourceNode.prototype.start = function (...a) { __sons++; return st.apply(this, a); }; 0`);  // les sons joués : la musique, puis un clic par orbe touché
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(1800);
   const full = await pj(`!!document.fullscreenElement`), count = await pj(`document.querySelector('.rhCount')?.textContent || ''`); await shot('compte');
   // la souris tourne sur le terrain et clique souvent : tous les chemins du jeu passent (orbes, glissières, toupies), sans erreur
@@ -21,5 +22,6 @@ module.exports = async ({ pj, sleep }) => {
   if (errs.length) throw new Error(errs.join(' | '));
   if (!full) throw new Error('le plein écran ne s\'ouvre pas');
   if (1000 / avg < 50) throw new Error('saccades : ' + Math.round(1000 / avg) + ' i/s');
-  return 'plein écran ok, compte « ' + count + ' », ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
+  const sons = await pj(`__sons`);
+  return 'plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
 };
