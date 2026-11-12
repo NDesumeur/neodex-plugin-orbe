@@ -1,5 +1,12 @@
 // lancé par le test « local » de NeoDex : une partie jouée (plein écran, souris qui tourne, clics), captures du canevas, aucune erreur
 module.exports = async ({ pj, sleep }) => {
+  { // les touches réglables : la 1re case prend Q, puis reprend sa touche d'avant
+    const r = await pj(`(async () => { const b = document.querySelector('.rhKeys button'); if (!b) return 'pas de réglage des touches'; const old = b.textContent;
+      const press = k => dispatchEvent(new KeyboardEvent('keydown', {key: k, bubbles: true}));
+      b.click(); press('q'); await new Promise(r => setTimeout(r, 50)); if (b.textContent !== 'Q') return 'touche non prise : ' + b.textContent;
+      b.click(); press(old.toLowerCase()); await new Promise(r => setTimeout(r, 50)); return b.textContent === old ? '' : 'touche non rendue'; })()`);
+    if (r) throw new Error(r);
+  }
   const fs = require('fs'), dir = process.env.NEO_SHOTS;
   const shot = async n => { if (!dir) return; const u = await pj(`document.getElementById('gc').toDataURL('image/png')`); fs.writeFileSync(require('path').join(dir, 'orbe-' + n + '.png'), Buffer.from(u.split(',')[1], 'base64')); };
   await pj(`window.__e = []; addEventListener('error', e => __e.push(e.message)); addEventListener('unhandledrejection', e => __e.push(String(e.reason))); 0`);

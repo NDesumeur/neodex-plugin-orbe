@@ -988,8 +988,34 @@ setInterval(() => { if (rhCtx?.state === 'running' && (!view.classList.contains(
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) rhPause(); });  // Échap sort du plein écran : on met en pause
 $('gNew').onclick = () => { if (rh) rhSelect(rh.song, rh.diff); $('gNew').blur(); };
 function rhInfo() { const res = games.rhythm || {}, all = Object.values(res); showStats([['Morceaux joués', all.length], ['Notes S', all.filter(r => r.grade === 'S').length], ['Meilleur combo', all.reduce((m, r) => Math.max(m, r.combo || 0), 0)]]); }
+// les touches, réglables dans les options : clic sur une case, puis appui sur la nouvelle touche (Échap annule) ; une touche déjà prise échange sa place
+const KEY_NAME = k => k.length === 1 ? k.toUpperCase() : ({ArrowLeft: '←', ArrowRight: '→', ArrowUp: '↑', ArrowDown: '↓'})[k] || k;
+const KEYS_BAN = [' ', 'p', 'Escape', 'Tab', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];  // jouer, pause, et les flèches qui restent toujours actives
+function keysSet(ks) { ks.forEach((k, i) => { OB.KEYS[i] = k; }); document.querySelectorAll('.rhKeys button').forEach((b, i) => { b.textContent = KEY_NAME(OB.KEYS[i]); }); }
+function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont alors définis
+  if (document.querySelector('.rhKeys')) return;
+  const box = document.createElement('label'); box.className = 'rhKeys'; box.append('Touches ');
+  OB.KEYS.forEach((_, i) => {
+    const b = document.createElement('button'); b.className = 'btn px'; b.style.cssText = 'width:auto;min-width:30px;margin:0 2px;padding:2px 6px'; b.textContent = KEY_NAME(OB.KEYS[i]); b.dataset.key = i;
+    b.onclick = e => {
+      e.preventDefault(); b.textContent = '?';
+      const on = ev => {
+        ev.preventDefault(); ev.stopPropagation(); removeEventListener('keydown', on, true);
+        const k = ev.key.length === 1 ? ev.key.toLowerCase() : ev.key, ks = [...OB.KEYS];
+        if (ev.key !== 'Escape' && !KEYS_BAN.includes(k) && k.length === 1) { const j = ks.indexOf(k); if (j >= 0) ks[j] = ks[i]; ks[i] = k; gstore('rhythmPrefs', {}).keys = ks; saveGames(); }
+        keysSet(ks); b.blur();
+      };
+      addEventListener('keydown', on, true);
+    };
+    box.append(b);
+  });
+  $('rhOffset').closest('.rhOpts').append(box);
+}
+
 function rhOpen() {
   const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens']) if (p[id] != null) $(id).value = p[id];
+  keysUi();
+  if (Array.isArray(p.keys) && p.keys.length === OB.KEYS.length) keysSet(p.keys);
   rhOffMs = +$('rhOffset').value; obSensShow(); rhInfo();
   if (rh) { rhList(); return gameLoop(rh, RHG.key, RHG.update, rhDrawAll); }
   const last = games.rhythmLast || {song: 0, diff: 'normal'}; rhSelect(last.song, last.diff).catch(() => rhSelect(0, 'normal'));
@@ -1131,7 +1157,7 @@ function obStars(ns) {
 }
 const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
   get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1), '#3fe0ff']] : []),
-    ['Clique (ou W / X) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']]; },
+    ['Clique (ou une de tes touches) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']]; },
   chart: obChart, stars: obStars, tag: len => obStyle(len).name,
   reset() {
     const o = obStats(rh.diff, rh.c.len);
