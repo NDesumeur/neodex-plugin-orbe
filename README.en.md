@@ -1,6 +1,6 @@
 # Orbe (Orb)
 
-A mouse rhythm game: numbered orbs appear on the field, and a circle closes in on each one. Aim at the orb and click when the circle touches it. Follow the sliders with the button held, spin the spinners. Play the 200 tracks from the Rythme plugin, or your own music.
+A mouse rhythm game: numbered orbs appear on the field, and a circle closes in on each one. Aim at the orb and click when the circle touches it. Follow the sliders with the button held, spin the spinners. Play the 1200 tracks from the Rythme plugin, or your own music.
 
 *Version française : [README.md](README.md)*
 
@@ -24,7 +24,7 @@ Points rise by 1 % per orb of combo, up to double at 100 in a row. At the end, a
 
 ## Songs and difficulty
 
-The **Songs** tab offers the 200 Rythme tracks. Each level has its own settings, shown before you play:
+The **Songs** tab offers the 1200 Rythme tracks. Each level has its own settings, shown before you play:
 
 - **CS**: orb size (the higher, the smaller).
 - **AR**: how early you see them coming (the higher, the faster the approach circle).

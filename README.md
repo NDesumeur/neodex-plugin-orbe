@@ -1,6 +1,6 @@
 # Orbe
 
-Un jeu de rythme à la souris : des orbes numérotés apparaissent sur le terrain, et un cercle se resserre sur chacun. Vise l'orbe et clique au moment où le cercle le touche. Suis les glissières bouton enfoncé, fais tourner les toupies. Joue les 200 morceaux du plugin Rythme, ou ta propre musique.
+Un jeu de rythme à la souris : des orbes numérotés apparaissent sur le terrain, et un cercle se resserre sur chacun. Vise l'orbe et clique au moment où le cercle le touche. Suis les glissières bouton enfoncé, fais tourner les toupies. Joue les 1200 morceaux du plugin Rythme, ou ta propre musique.
 
 *English version: [README.en.md](README.en.md)*
 
@@ -24,7 +24,7 @@ Les points augmentent de 1 % par orbe de combo, jusqu'au double à 100 de suite.
 
 ## Chansons et difficulté
 
-L'onglet **Chansons** reprend les 200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :
+L'onglet **Chansons** reprend les 1200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :
 
 - **CS** : la taille des orbes (plus il est haut, plus ils sont petits).
 - **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide).
