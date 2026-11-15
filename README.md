@@ -22,6 +22,14 @@ Chaque orbe est jugé selon l'écart avec le bon moment : **Parfait** (300 point
 
 Les points augmentent de 1 % par orbe de combo, jusqu'au double à 100 de suite. À la fin, la précision donne une note : **S** à partir de 95 %, **A** à 90 %, **B** à 80 %, **C** à 70 %, **D** en dessous.
 
+## Thèmes du terrain
+
+Chaque morceau a son thème, le même à toutes ses difficultés : **Nuit**, **Océan**, **Braise**, **Forêt**, **Bonbon** ou **Glace**. Le thème change les couleurs des orbes et le fond tramé (anneaux, vagues, diagonales ou damier) ; son nom s'affiche avant de jouer.
+
+## Écran de fin
+
+Sous la note, la **courbe de précision** montre ta justesse le long du morceau : en vert quand tu es presque toujours Parfait, en jaune quand ça baisse, en rouge dans les passages difficiles. Chaque petit trait rouge en dessous est une note ratée, à sa place dans le morceau.
+
 ## Chansons et difficulté
 
 L'onglet **Chansons** reprend les 1200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :

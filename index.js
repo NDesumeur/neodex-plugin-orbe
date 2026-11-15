@@ -867,7 +867,7 @@ async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou iden
 }
 const rhFull = on => { try { if (on && !document.fullscreenElement) cv.parentElement.requestFullscreen?.().catch(() => {}); if (!on && document.fullscreenElement) document.exitFullscreen(); } catch {} };
 function rhBegin() {  // plein écran (par-dessus la barre de NeoDex), puis le morceau part dans 2 secondes
-  rhFull(true); rhAudio(); rhCtx.resume(); rh.t0 = rhCtx.currentTime + 4; rhCount(); rh.mode = 'play';
+  rhFull(true); rhAudio(); rhCtx.resume(); rh.t0 = rhCtx.currentTime + 4; rh.hist = []; rhCount(); rh.mode = 'play';
   try { rh.src?.stop(); } catch {} rh.src = rhCtx.createBufferSource(); rh.src.buffer = rh.c.buffer; rh.src.connect(rhOut); rh.src.start(rh.t0);
 }
 function rhPress() {  // espace ou clic hors partie : jouer, reprendre, rejouer
@@ -881,10 +881,10 @@ function rhPause() { if (rh?.mode === 'play') { rh.mode = 'pause'; rhCtx?.suspen
 const rhWin = dt => RH.WIN.find(w => Math.abs(dt) <= w[0]);
 function rhHit(n, dt) {  // -> la fenêtre atteinte (PARFAIT, BIEN, OK), ou rien si la note est ratée
   const w = rhWin(dt); n.judged = true; if (!w) { rhMissed(n); return null; }
-  rh.dts.push(dt); rh.combo++; rh.maxCombo = Math.max(rh.maxCombo, rh.combo); rh.counts[w[1]]++; rh.score += Math.round(w[2] * (1 + Math.min(rh.combo, 100) / 100));
+  (rh.hist ??= []).push([n.t, {PARFAIT: 3, BIEN: 2, OK: 1}[w[1]] || 1]); rh.dts.push(dt); rh.combo++; rh.maxCombo = Math.max(rh.maxCombo, rh.combo); rh.counts[w[1]]++; rh.score += Math.round(w[2] * (1 + Math.min(rh.combo, 100) / 100));
   return w;
 }
-function rhMissed(n) { n.judged = true; n.missed = true; rh.combo = 0; rh.counts['RATÉ']++; }
+function rhMissed(n) { (rh.hist ??= []).push([n.t, 0]); n.judged = true; n.missed = true; rh.combo = 0; rh.counts['RATÉ']++; }
 function rhCheckEnd(now) {
   if (now <= rh.c.len + 1.5) return false;
   rh.mode = 'over'; rh.overAt = rh.tick; try { rh.src?.stop(); } catch {} rhFull(false);
@@ -910,6 +910,28 @@ function rhScreens(y0 = 90) {
   if (rh.mode === 'pause') gameText(g, W, [['PAUSE', '#ffffff', 12], ['Espace : reprendre', '#e8e0ff']], y0 + 20);
   if (rh.mode === 'over' && rh.tick - rh.overAt > 20) gameText(g, W, [['NOTE ' + rh.grade, rh.grade === 'S' ? '#ffd84a' : RHG.color, 14], [rh.score + ' points · ' + (rh.acc * 100).toFixed(1) + ' %', '#ffffff'], ['Combo max ' + rh.maxCombo + ' · ' + rhStarTxt(rh.stars), '#e8e0ff'],
     ['Parfait ' + rh.counts.PARFAIT + ' · Bien ' + rh.counts.BIEN + ' · OK ' + rh.counts.OK + ' · Raté ' + rh.counts['RATÉ'], '#a8a0c8'], [rh.record ? 'NOUVEAU RECORD !' : 'Espace : rejouer', '#ffd84a'], ...(rh.adj ? [['Décalage ajusté : ' + (rh.adj > 0 ? '+' : '') + rh.adj + ' ms', '#7ee07a']] : [])], y0 - 10);
+  if (rh.mode === 'over' && rh.tick - rh.overAt > 20) rhCurve(Math.min(g.canvas.height - 50, y0 - 10 + (rh.adj ? 6 : 5) * 14 + 16));
+}
+// la courbe de précision de l'écran de fin : la justesse le long du morceau (24 tranches ; 100 % = tout en PARFAIT), les notes ratées en rouge dessous
+function rhCurveData(hist, len, N = 24) {
+  const b = Array.from({length: N}, () => [0, 0]);
+  for (const [t, s] of hist) { const k = Math.min(N - 1, Math.max(0, Math.floor(t / len * N))); b[k][0] += s; b[k][1]++; }
+  return b.map(([s, n]) => n ? s / (n * 3) : null);
+}
+console.assert(rhCurveData([[0, 3], [1, 3], [9, 0], [9.5, 3]], 10, 2).join() === '1,0.5', 'rhCurveData');
+function rhCurve(y) {
+  const cw = g.canvas.width, N = 24, x0 = 22, w = cw - 64, h = 30, acc = rhCurveData(rh.hist || [], rh.c.len || 1, N), Y = a => Math.round(y + 6 + (1 - Math.max(0, Math.min(1, (a - .5) / .5))) * h);
+  g.fillStyle = 'rgba(7,3,20,.9)'; g.fillRect(x0 - 8, y - 9, w + 16, h + 22); px(g, RHG.color, x0 - 8, y - 9, w + 16, 1);
+  pxFont(g, 'PRÉCISION LE LONG DU MORCEAU', x0, y, '#a8a0c8', 6);
+  for (const [f, t] of [[1, '100'], [.75, '75']]) { for (let x = x0; x < x0 + w; x += 3) px(g, '#2a2050', x, Y(f), 1, 1); pxFont(g, t, x0 + w + 6, Y(f) + 3, '#5a4a8a', 5); }
+  let prev = null;
+  acc.forEach((a, k) => {
+    if (a == null) { prev = null; return; }
+    const xa = x0 + Math.round(k * w / N), xb = x0 + Math.round((k + 1) * w / N), yy = Y(a), col = a >= .9 ? '#7ee07a' : a >= .7 ? '#ffd84a' : '#ff4a5a';
+    if (prev != null) px(g, col, xa, Math.min(prev, yy), 1, Math.abs(prev - yy) + 2);
+    px(g, col, xa, yy, xb - xa, 2); prev = yy;
+  });
+  for (const [t, s] of rh.hist || []) if (!s) px(g, '#ff4a5a', x0 + Math.round(Math.min(1, t / (rh.c.len || 1)) * (w - 1)), y + h + 9, 1, 3);
 }
 const rhProgress = (now, col) => { px(g, '#1a1430', 0, 0, W, 2); px(g, col, 0, 0, Math.max(0, Math.min(1, now / rh.c.len)) * W, 2); };
 // la liste des morceaux, les imports, les réglages (le panneau de droite)
@@ -1158,11 +1180,11 @@ function obStars(ns) {
   const v = Math.sqrt(top(A)) * .62 + Math.sqrt(top(P)) * .52; return Math.max(1, Math.min(10, Math.round(.7 * v ** 1.1 * 10) / 10));
 }
 const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
-  get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1), '#3fe0ff']] : []),
+  get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · ' + (rh.theme?.name || '') + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1), '#3fe0ff']] : []),
     ['Clique (ou une de tes touches) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']]; },
   chart: obChart, stars: obStars, tag: len => obStyle(len).name,
   reset() {
-    const o = obStats(rh.diff, rh.c.len);
+    const o = obStats(rh.diff, rh.c.len); rh.theme = obTheme(rh.c.len); OB.COLS = rh.theme.cols;
     Object.assign(rh, {keys: new Set(), cx: rh.cx ?? W / 2, cy: rh.cy ?? H / 2, trail: [], pops: [], ob: o, pre: o.pre, r: o.r, pk: o.pk, shake: 0});
     rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r);
   },
@@ -1234,17 +1256,30 @@ function obBody(n) {  // le corps d'une glissière : un tube sombre bordé de bl
   });
   return n.body = {c, x0, y0};
 }
-const OB_BG = cnv(W, H, b => {  // le fond : un ciel tramé, des étoiles, le terrain à peine marqué
-  px(b, '#05030d', 0, 0, W, H);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const d = Math.hypot(x - W / 2, y - H / 2); if ((x + y) % 2 === 0 && Math.floor(d / 14) % 2 === 0 && d < 150) px(b, '#0b0820', x, y); }
-  const r = seeded(31); for (let i = 0; i < 120; i++) px(b, r() < .25 ? '#5a4a8a' : '#221a44', Math.floor(r() * W), Math.floor(r() * H));
-  for (let x = OB.X0 - 6; x <= OB.X0 + OB.PW + 6; x += 4) { px(b, '#1a1438', x, OB.Y0 - 6); px(b, '#1a1438', x, OB.Y0 + OB.PH + 6); }
-  for (let y = OB.Y0 - 6; y <= OB.Y0 + OB.PH + 6; y += 4) { px(b, '#1a1438', OB.X0 - 6, y); px(b, '#1a1438', OB.X0 + OB.PW + 6, y); }
-});
+// les thèmes du terrain, tirés du morceau (le même à toutes ses difficultés) : couleurs des orbes, fond tramé, étoiles, cadre
+const OB_THEMES = [
+  {name: 'Nuit', bg: '#05030d', dot: '#0b0820', stars: ['#5a4a8a', '#221a44'], frame: '#1a1438', pat: 'rings', cols: ['#ff4fa8', '#3fe0ff', '#ffd84a', '#7ee07a']},
+  {name: 'Océan', bg: '#020a14', dot: '#06182a', stars: ['#3a8ab0', '#0e2a40'], frame: '#0e3050', pat: 'waves', cols: ['#3fe0ff', '#5affc8', '#ffffff', '#4a8aff']},
+  {name: 'Braise', bg: '#120404', dot: '#220a06', stars: ['#c8641a', '#3a140a'], frame: '#3a140a', pat: 'diag', cols: ['#ff8a3a', '#ffd84a', '#ff4a5a', '#fff4a0']},
+  {name: 'Forêt', bg: '#030d06', dot: '#08200e', stars: ['#5aff9a', '#14361e'], frame: '#14361e', pat: 'grid', cols: ['#7ee07a', '#d8ff6a', '#3fe0c8', '#ffd84a']},
+  {name: 'Bonbon', bg: '#12040e', dot: '#24081c', stars: ['#ff8ad8', '#3a1030'], frame: '#3a1030', pat: 'rings', cols: ['#ff4fa8', '#ffb0d8', '#b46aee', '#ffffff']},
+  {name: 'Glace', bg: '#0a0e18', dot: '#141c2c', stars: ['#c8d8ff', '#283450'], frame: '#283450', pat: 'diag', cols: ['#c8f8ff', '#9db4ff', '#ffffff', '#7fe0ee']},
+];
+const obTheme = len => OB_THEMES[seeded(Math.round(len * 1000) ^ 0x7a31)() * OB_THEMES.length | 0];
+const obBgs = new Map();
+const obBg = T => obBgs.get(T) || obBgs.set(T, cnv(W, H, b => {  // le fond : un ciel tramé (anneaux, vagues, diagonales ou quadrillage), des étoiles, le terrain à peine marqué
+  px(b, T.bg, 0, 0, W, H);
+  const on = {rings: (x, y) => Math.floor(Math.hypot(x - W / 2, y - H / 2) / 14) % 2 === 0 && Math.hypot(x - W / 2, y - H / 2) < 150,
+    waves: (x, y) => Math.floor((y + Math.round(Math.sin(x / 16) * 6)) / 12) % 2 === 0, diag: (x, y) => Math.floor((x + y) / 16) % 2 === 0, grid: (x, y) => x % 32 < 16 !== y % 32 < 16}[T.pat];
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if ((x + y) % 2 === 0 && on(x, y)) px(b, T.dot, x, y);
+  const r = seeded(31); for (let i = 0; i < 120; i++) px(b, r() < .25 ? T.stars[0] : T.stars[1], Math.floor(r() * W), Math.floor(r() * H));
+  for (let x = OB.X0 - 6; x <= OB.X0 + OB.PW + 6; x += 4) { px(b, T.frame, x, OB.Y0 - 6); px(b, T.frame, x, OB.Y0 + OB.PH + 6); }
+  for (let y = OB.Y0 - 6; y <= OB.Y0 + OB.PH + 6; y += 4) { px(b, T.frame, OB.X0 - 6, y); px(b, T.frame, OB.X0 + OB.PW + 6, y); }
+})).get(T);
 function obDraw() {
   if (rh.mode !== 'play' && obLocked()) try { document.exitPointerLock(); } catch {}  // pause, fin de partie : la souris est rendue
   const live = rh.mode === 'play' || rh.mode === 'pause', now = live ? rhNow() : -2, r = rh.r, pre = rh.pre, X = OB.X0, Y = OB.Y0;
-  g.drawImage(OB_BG, 0, 0);
+  g.drawImage(obBg(rh.theme || OB_THEMES[0]), 0, 0);
   if (live) {
     // les orbes visibles, du plus lointain au plus proche (le prochain à toucher passe dessus)
     const vis = []; for (const n of rh.notes) { if (n.t - now > pre) break; if (n.t + (n.len || 0) + .3 < now) continue; vis.push(n); }
@@ -1327,6 +1362,8 @@ document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.lengt
   const small = obStats('expert', 100).r < obStats('facile', 100).r;
   console.assert(best >= 3 && best <= 33 && small && ok && x.some(o => o.kind === 'slide') && sp.length >= 1 && sp.every((s, i) => !i || s.t - sp[i - 1].t > 20) && hit && miss, 'orbe', ok, hit, miss, sp.length, best, small);
 }
+cv.__rh = {st: () => rh, themes: () => OB_THEMES.map(t => t.name), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
+console.assert(new Set(RH_SONGS.slice(0, 60).map(s => obTheme(rhCompose(s).len).name)).size >= 4, 'orbe : thèmes variés');
 ctx.onOpen(() => rhOpen());
 
 }

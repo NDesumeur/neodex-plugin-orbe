@@ -22,6 +22,14 @@ Each orb is judged by how far it is from the right moment: **Perfect** (300 poin
 
 Points rise by 1 % per orb of combo, up to double at 100 in a row. At the end, accuracy gives a grade: **S** from 95 %, **A** at 90 %, **B** at 80 %, **C** at 70 %, **D** below.
 
+## Playfield themes
+
+Each song has its theme, the same at all its difficulties: **Night**, **Ocean**, **Embers**, **Forest**, **Candy** or **Ice**. The theme changes the orb colours and the dotted background (rings, waves, diagonals or checks); its name shows before you play.
+
+## End screen
+
+Under the grade, the **accuracy curve** shows how precise you were along the song: green when you are almost always Perfect, yellow when it drops, red in the hard parts. Each small red tick below is a missed note, at its place in the song.
+
 ## Songs and difficulty
 
 The **Songs** tab offers the 1200 Rythme tracks. Each level has its own settings, shown before you play:

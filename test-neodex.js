@@ -30,5 +30,10 @@ module.exports = async ({ pj, sleep }) => {
   if (!full) throw new Error('le plein écran ne s\'ouvre pas');
   if (1000 / avg < 50) throw new Error('saccades : ' + Math.round(1000 / avg) + ' i/s');
   const sons = await pj(`__sons`);
+  // l'écran de fin et sa courbe de précision (une partie inventée : juste au début, des ratés au milieu, juste à la fin), et le thème du terrain
+  await pj(`(() => { const T = document.getElementById('gc').__rh, rh = T.st(), L = rh.c.len, h = []; for (let i = 0; i < 200; i++) { const t = i / 200 * L, mid = t > L * .4 && t < L * .6; h.push([t, mid ? (i % 3 ? 1 : 0) : (i % 7 ? 3 : 2)]); } T.finish(h); return 0; })()`);
+  await sleep(800); await shot('fin');
+  const end = await pj(`(() => { const rh = document.getElementById('gc').__rh.st(); return [rh.mode, rh.hist.length, rh.theme?.name || ''].join(','); })()`);
+  if (!/^over,200,\S/.test(end)) throw new Error('écran de fin : ' + end);
   return 'plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
 };
