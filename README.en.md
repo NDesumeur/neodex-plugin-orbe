@@ -46,11 +46,11 @@ More mods: **SD** (a single miss and you fail), **PF** (anything but a 300 makes
 
 ## pp and statistics
 
-Each finished game gives **pp** (performance points), computed as in osu!: aim, speed and accuracy, depending on the level's difficulty and your mods. A miss or a broken combo takes some away. Your **profile** adds up your best game on each level (the 1st counts in full, then 95 %, 90 %…).
+Each finished game gives **pp** (performance points), computed with osu!'s formulas (the 2023 ones): aim, speed and accuracy, depending on the level's stars, its OD, its AR and your mods. Values are very close to osu!'s, without being guaranteed identical (Flashlight counts as an aim bonus). A miss or a broken combo takes some away. Your **profile** adds up your best game on each level (the 1st counts in full, then 95 %, 90 %…).
 
 Your **rank** follows your total pp: Beginner, Bronze (50 pp), Silver (200), Gold (500), Platinum (1000), Diamond (2000), Master (4000) and Legend (7000). **Medals** have three tiers, **bronze**, **silver** and **gold**: Great grades (A, S, SS), Full combo (1, 10, 50 levels), Stars (3, 5, 7★), Accuracy (95, 98, 99.5 %), Combo (500, 1000, 2000), Performance (50, 100, 200 pp in one game), Hidden, Hard Rock, Double Time and Flashlight (finish a 2, 4, 6★ level with HD, HR, DT or FL), Explorer (1, 5, 20 other variants), Traveller (10, 50, 200 different levels), Regular (50, 200, 1000 games) and Endurance (1, 5, 20 h of play); plus First step. Each new tier is announced at the end of the game.
 
-The **STATS** tab starts with your **player card**: an image of your profile (rank, pp, accuracy, games, top performances, medals) to **save** (in Downloads) or **copy** to share it. Then it shows your rank with your pp curve, your medals, your profile (pp, accuracy, games, play time, best UR and combo), curves of your accuracy and UR over your games, your games per day, your top performances and your favourite levels.
+The **STATS** tab starts with your **player card**: an image of your profile (rank, pp, accuracy, games, top performances, medals) to **save** (in Downloads) or **copy** to share it. Then it shows your rank with your pp curve, your medals, your profile, your **top performances** like an osu! profile (the first 15, with what each counts after weighting, the stars, the mods and the grade), **over time** (your pp, accuracy and rank at the end of each day over 30 days, what you gained this week and your best progress of the week), curves of your accuracy and UR over your games, your results **by map style and by stars** (games, average accuracy and pp), **play time and activity** (a calendar of your games over 13 weeks, days played, clicks, best combo, favourite mods) and your favourite levels.
 
 ## During the game
 
@@ -73,7 +73,7 @@ Further down, the **accuracy curve** shows how precise you were along the song: 
 The **Songs** tab offers the 1200 Rythme tracks. Each level has its own settings, shown before you play:
 
 - **CS**: orb size (the higher, the smaller).
-- **AR**: how early you see them coming (the higher, the faster the approach circle). As in osu!, it is 8 around 4 stars and at least 9 from 5 stars.
+- **AR**: how early you see them coming (the higher, the faster the approach circle). As in osu!'s ranked maps, it follows the map's stars: 7.5 at 3 stars, 8.5 at 4, 9 at 5, then up to 10.
 - **OD**: how precise you must be.
 
 Each track also has a **map style**, the same at all its difficulties and shown in the list:
@@ -95,18 +95,21 @@ Like a mapper, the game **spots the choruses**: when 4 bars of a chorus come bac
 
 The music drives the map: streams on drum rolls, sliders on held notes, the finish on accents, new combos more often in the chorus.
 
-A level always gives the same map. **ANOTHER VARIANT** makes a different one, with its own leaderboard; **THE FIRST ONE** goes back to the original map.
+A level always gives the same map. **ANOTHER VARIANT** makes a different one, with its own leaderboard; **THE FIRST ONE** goes back to the original map. A variant can also use **another map style** (Jumps, Streams, Accuracy…) than the song's.
 
-Stars are closer to osu!'s: aim also counts slider travel, angles and speed changes, speed counts rhythm changes.
+Stars are computed with osu!'s formulas (the 2023 ones): aim (with slider travel, angles and speed changes), speed (with rhythm changes), on the same scale as osu!.
 
 ## My music
 
 In **My music**, create a level from an imported **audio file** or a track from your **NeoMusic** library: the game finds its tempo and strong beats and places the orbs on them (it also follows a changing tempo, and separates the bass, the snare and the highs), at the chosen **difficulty** (1 to 10 stars). Orbs are placed the same way on all your PCs.
 
+**osu! maps**: download a map from the osu! website (**OSU! CATALOGUE** opens it in a tab; an osu! account is needed), then **IMPORT AN OSU! MAP** or drop the **.osz** file on the game. Each difficulty (standard mode) keeps its own circles, sliders, spinners, hit sounds, background and CS, AR, OD and HP; its stars and pp are computed as in osu!. The music, difficulties and background are kept in the game's data (15 MB at most for the music) and follow sync.
+
 ## Settings
 
 - Separate **volumes**: the **music**, the **hits** (hitsounds, sliders, spinners) and the **menu** (changing song or difficulty, the end grade, medals).
 - **Hitsounds**: osu!-style hit sounds in four sets (Normal, Soft, Drum and **8-bit**, with old-console sounds), with the whistle on sliders, the finish on accents and the clap on beats 2 and 4; plus the slider tick and spinner sounds. Or **Hit sound**: a single sound on each note you hit, one of 10 (Soft, Clap, Wood, Kick, Crystal, Pop, Hi-hat, Snare, Pluck, Tock) or none. Losing a combo of 10 or more plays a « combo break » sound.
+- **osu! skin**: **IMPORT AN OSU! SKIN** (or drop an **.osk** file on the game): its circles, approach circle, numbers, sliders, cursor, combo colours and hit sounds replace Orbe's, drawn sharp (the rest of the game stays pixel art). It shows in the Skin and Hitsounds menus; **REMOVE THE SKIN** removes it. One skin at a time.
 - **Background dim** (0 to 100 %): the background darkens while playing so the orbs stand out (less during breaks in the song).
 - **Cursor**: its size (1× to 3×), its trail (the skin's, long or none) and **pointing**: mouse (captured) or **tablet** (the cursor goes where the pen points).
 - **Sensitivity** (0.3× to 3×): cursor speed in game. While playing, the mouse is captured and follows its raw movement, without Windows acceleration; Esc releases it and pauses.

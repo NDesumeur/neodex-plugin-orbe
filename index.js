@@ -14,11 +14,11 @@ const HTML = `<div class="appWrap wide">
         <select class="f gSel" id="obFBpm" aria-label="Tempo"><option value="">Tous les tempos</option><option value="0-100">Lent (moins de 100 BPM)</option><option value="100-140">Moyen (100 à 140 BPM)</option><option value="140-999">Rapide (140 BPM et plus)</option></select>
         <select class="f gSel" id="obFLen" aria-label="Durée"><option value="">Toutes les durées</option><option value="0-2">Moins de 2 min</option><option value="2-4">2 à 4 min</option><option value="4-99">4 min et plus</option></select>
         <select class="f gSel" id="obSort" aria-label="Ordre"><option value="">Ordre du jeu</option><option value="name">Titre</option><option value="bpm">Tempo</option><option value="len">Durée</option><option value="grade">Meilleure note</option></select></div>
-      <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
+      <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="obOszBtn">IMPORTER UNE MAP OSU!</button><input type="file" id="obOsz" accept=".osz" hidden><button class="btn" id="obOsuWeb">CATALOGUE OSU!</button></div><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
       <div class="hint obScan" id="obScanMsg" hidden></div>
       <div id="rhSongs"></div>
       <div class="obBottom"><button class="btn main" id="gNew">JOUER</button><button class="btn" id="obOptBtn">OPTIONS</button><button class="btn" id="obHelpBtn">AIDE</button></div>
-      <div class="sysCard rhOpts" id="obOpts" hidden><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="-1">Son des clics</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
+      <div class="sysCard rhOpts" id="obOpts" hidden><div class="row"><button class="btn" id="obOskBtn">IMPORTER UN SKIN OSU!</button><input type="file" id="obOsk" accept=".osk" hidden><button class="btn" id="obOskDel" hidden>RETIRER LE SKIN</button><span class="hint" id="obOskMsg">Un skin osu! (.osk) : ses cercles, son curseur, ses chiffres, ses couleurs et ses sons.</span></div><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="-1">Son des clics</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
       <div class="obHelp" id="obHelp" hidden><div class="hint">Un cercle se resserre sur chaque orbe : vise-le avec la souris et clique (ou W / X) quand le cercle touche l'orbe. Touche-les dans l'ordre de leurs numéros.</div><div class="hint">Glissière : touche son orbe, puis garde le bouton enfoncé et suis la boule jusqu'au bout (et au retour). Toupie : garde appuyé et fais tourner la souris autour du centre avant que l'anneau se referme.</div><div class="hint">Comme dans osu! : une barre de vie (le mod NF empêche de perdre), des mods (EZ, NF, HT, HR, DT, HD, FL), les notes SS à D et le classement de chaque niveau. Garde ² appuyé pour recommencer tout de suite ; Espace passe une longue intro.</div><div class="hint">La difficulté de chaque niveau est calculée sur ses notes : de 1★ à 10★.</div></div>
     </div></div>
 </div>`;
@@ -1011,18 +1011,20 @@ function rhCount() {  // 3, 2, 1 jusqu'au départ de la musique (l'horloge audio
 let rhTok = 0;
 async function rhSelect(i, diff) { const me = rhTok + 1; rhBar(.03); try { return await rhPrepare(i, diff); } finally { if (me === rhTok) rhBar(null); } }
 async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou identifiant d'une musique importée
-  let info, c, base; const tok = ++rhTok;
+  let info, c, base, ready = null; const tok = ++rhTok;
   if (rh) { try { rh.src?.stop(); } catch {} rh.mode = 'load'; }
   if (typeof i === 'number') {
     const song = RH_SONGS[i] || RH_SONGS[0]; i = RH_SONGS.indexOf(song); c = rhCompose(song); base = rhChart(c, diff); info = {name: song.name, bpm: song.bpm, key: 'rh' + i + diff};
     const buffer = await rhRenderSong(i, c, tok); if (tok !== rhTok) return; c = {events: c.events, lead: c.lead, len: c.len, step: c.step, buffer, beat0: 0};  // la batterie reste : Orbe y place ses streams
+  } else if (/^o\w+$/.test(i) && obOsuSets().some(x => x.id === i)) {
+    const L = await obOsuLoad(i, diff); if (!L) return rhSelect(0, 'normal'); ({c, info, notes: ready} = L);
   } else {
-    const imp = rhImports().find(x => x.id === i); if (!imp) return rhSelect(0, diff);
+    const imp = rhImports().find(x => x.id === i); if (!imp) return rhSelect(0, typeof diff === 'string' && diff[0] === 'O' ? 'normal' : diff);
     const {a, buffer} = await rhLoadImport(imp);
     c = {events: [], lead: [], len: a.len, step: a.beat / 4, buffer, beat0: a.beat0, peaks: a.peaks, rms: a.rms, fps: a.fps, ...rhBeatMap(a)}; base = rhChartImport(a, diff); info = {name: imp.name, bpm: a.bpm, key: 'rhx' + imp.id + diff};
   }
   if (tok !== rhTok) return;  // un autre niveau a été choisi entre-temps
-  const notes = RHG.chart(base, c, diff, info).map(n => ({...n, judged: false}));
+  const notes = (ready || RHG.chart(base, c, diff, info)).map(n => ({...n, judged: false}));
   rh = rhHook(rh || {raf: 0, tick: 0});
   Object.assign(rh, {mode: 'ready', song: i, diff, c, info, notes, stars: (RHG.stars || rhStars)(notes, c.len, RHG.factor), src: null, t0: 0, score: 0, combo: 0, maxCombo: 0,
     counts: {PARFAIT: 0, BIEN: 0, OK: 0, RATÉ: 0}, dts: [], fx: [], sparks: [], record: false, grade: '', acc: 0, adj: 0, overAt: 0});
@@ -1073,7 +1075,7 @@ function rhAutoOffset(dts) { const d = rhOffsetStep(dts); if (!d) return 0; rhOf
 // les textes communs dessinés dans le canevas : départ, chargement, pause, résultats
 function rhScreens(y0 = 90) {
   if (RHG.screens?.(y0)) return;
-  const title = rh.info.name.length > 26 ? rh.info.name.slice(0, 25) + '…' : rh.info.name, diff = RH_DIFFS[rh.diff] || (String(rh.diff).startsWith('S') ? 'Perso' : rh.diff);
+  const title = rh.info.name.length > 26 ? rh.info.name.slice(0, 25) + '…' : rh.info.name, diff = obDfName();
   if (rh.mode === 'ready') gameText(g, W, [[title.toUpperCase(), RHG.color, 10], [diff + ' · ' + rhStarTxt(rh.stars) + ' · ' + rh.notes.length + ' notes · ' + Math.round(rh.info.bpm) + ' BPM', '#e8e0ff'], ...RHG.help, ['Espace ou clic : jouer (plein écran)', '#ffd84a']], y0);
   if (rh.mode === 'load') gameText(g, W, [['CHARGEMENT…', '#ffd84a', 10], ['La musique se prépare', '#e8e0ff']], y0 + 20);
   if (rh.mode === 'pause') gameText(g, W, [['PAUSE', '#ffffff', 12], ['Espace : reprendre', '#e8e0ff']], y0 + 20);
@@ -1134,7 +1136,7 @@ function rhPager(order) {  // 1200 chansons : 50 par page (sinon la liste est tr
 }
 function rhList() {
   $('rhTabSongs').classList.toggle('main', rhTab === 'songs'); $('rhTabMine').classList.toggle('main', rhTab === 'mine'); $('rhTabStats')?.classList.toggle('main', rhTab === 'stats');
-  $('rhTabMine').textContent = 'MES MUSIQUES · ' + rhImports().length; $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
+  $('rhTabMine').textContent = 'MES MUSIQUES · ' + (rhImports().length + obOsuSets().length); $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
   $('obFilter').hidden = rhTab !== 'songs'; $('rhSongs').classList.toggle('obCar', rhTab === 'songs'); if (rhTab !== 'songs') $('obScanMsg').hidden = true;
   if (rhTab === 'stats') return void $('rhSongs').replaceChildren(...obStatsPage());
   if (rhTab === 'mine' && !$('rhMuList').options.length) rhFillNeoMusic();
@@ -1146,8 +1148,8 @@ function rhList() {
     if (pending) obStarScan();
     return obCarousel(order);
   }
-  const list = rhImports();
-  $('rhSongs').replaceChildren(...(list.length ? list.map(imp => {
+  const list = rhImports(), osu = obOsuCards();
+  $('rhSongs').replaceChildren(...osu, ...(list.length || osu.length ? list.map(imp => {
     const c = el('div', 'sysCard rhSong' + (rh?.song === imp.id ? ' on' : '')), x = el('button', 'rhDel', '×');
     x.title = 'Retirer ce niveau (la musique reste dans NeoMusic)';
     x.onclick = () => { games.rhythmImports = list.filter(o => o !== imp); rhAnalysed.delete(imp.id); saveGames(); rhList(); };
@@ -1165,6 +1167,19 @@ async function rhFillNeoMusic() {
 $('rhTabSongs').onclick = () => { rhTab = 'songs'; rhList(); };
 $('rhTabMine').onclick = () => { rhTab = 'mine'; rhList(); rhFillNeoMusic(); };
 $('rhFileBtn').onclick = () => $('rhFile').click();
+const obOszTry = f => obOszImport(f).catch(err => { $('rhImpMsg').textContent = 'Import impossible : ' + err.message; });
+$('obOszBtn').onclick = () => $('obOsz').click();
+$('obOsz').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) obOszTry(f); };
+$('obOsuWeb').onclick = () => host.newTab('https://osu.ppy.sh/beatmapsets');  // le catalogue d'osu! : télécharge une map (.osz), puis importe-la ici
+view.addEventListener('dragover', e => { if ([...(e.dataTransfer?.items || [])].some(i => i.kind === 'file')) e.preventDefault(); });
+view.addEventListener('drop', e => { const all = [...(e.dataTransfer?.files || [])], fs = all.filter(f => /\.osz$/i.test(f.name)), sk = all.find(f => /\.osk$/i.test(f.name)); if (!fs.length && !sk) return; e.preventDefault();
+  if (sk) obOskTry(sk); if (fs.length) { rhTab = 'mine'; rhList(); fs.reduce((p, f) => p.then(() => obOszTry(f)), Promise.resolve()); } });
+const obOskTry = f => obOskImport(f).catch(err => { $('obOskMsg').textContent = 'Skin impossible à lire : ' + err.message; });
+$('obOskBtn').onclick = () => $('obOsk').click();
+$('obOsk').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) obOskTry(f); };
+$('obOskDel').onclick = async () => { $('obOskDel').blur(); try { for (const n of await folder.listFiles()) if (n.startsWith('osk-')) await folder.removeFile(n); } catch {} delete games.orbeSkin; saveGames();
+  if ($('obSkin').value === 'osk') { $('obSkin').value = '0'; $('obSkin').dispatchEvent(new Event('change')); } if ($('obHs').value === '4') { $('obHs').value = '0'; $('obHs').dispatchEvent(new Event('change')); }
+  await obOskLoad(); $('obOskMsg').textContent = 'Skin retiré.'; };
 $('rhFile').onchange = async e => {
   const f = e.target.files[0]; e.target.value = ''; if (!f) return;
   try { const file = await neo.musicAddFile(await neo.pathOf(f)); rhAddImport({id: 'f:' + file, name: f.name.replace(/\.[^.]+$/, ''), file, stars: +$('rhStars').value}); }
@@ -1232,9 +1247,14 @@ const OB_STYLES = [
 // le niveau (1 à 10) choisi : il règle tout le reste
 const obLevel = d => /^S\d+$/.test(d) ? +d.slice(1) : {facile: 2, normal: 4, difficile: 6, expert: 8}[d] || 4;
 const obClamp = (v, a, b) => Math.max(a, Math.min(b, v));
-const obStyle = len => { let v = seeded(Math.round(len * 1000) ^ 0x51ed)() * OB_STYLES.reduce((a, x) => a + x.w, 0); return OB_STYLES.find(x => (v -= x.w) < 0) || OB_STYLES[0]; };  // les Sauts plus souvent, les Streams plus rares
-function obStats(diff, len) {  // r : le rayon des orbes ; pre : le temps où on les voit venir (s) ; pk : la sévérité (les fenêtres PARFAIT / BIEN / OK divisées par pk)
-  const lv = obLevel(diff), st = obStyle(len), cs = obClamp(2.6 + lv * .3 + st.cs, 2, 7), ar = obClamp((lv <= 5 ? 4 + lv : 9 + (lv - 5) * .2) + st.ar, 3, 10), od = obClamp(2.5 + lv * .55 + st.od, 2, 9.5);
+const obStyle = (len, name) => { if (name) { const f = OB_STYLES.find(x => x.name === name); if (f) return f; } let v = seeded(Math.round(len * 1000) ^ 0x51ed)() * OB_STYLES.reduce((a, x) => a + x.w, 0); return OB_STYLES.find(x => (v -= x.w) < 0) || OB_STYLES[0]; };  // les Sauts plus souvent, les Streams plus rares
+const obVarStyle = key => (games.orbeVar || {})[key] ? (games.orbeVarSt || {})[key] || null : null;  // le style choisi pour la variante d'un niveau
+// l'AR selon les étoiles de la map (comme les maps classées d'osu!) : 7,5 à 3 étoiles, 8,5 à 4, 9 à 5, puis jusqu'à 10
+const OB_ARS = [[0, 5], [2, 6.5], [3, 7.5], [4, 8.5], [5, 9], [6, 9.3], [7, 9.6], [8, 10]];
+const obArStars = v => { for (let i = 1; i < OB_ARS.length; i++) if (v <= OB_ARS[i][0]) { const [a, x] = OB_ARS[i - 1], [b, y] = OB_ARS[i]; return x + (y - x) * (v - a) / (b - a); } return 10; };
+console.assert(obArStars(5) === 9 && obArStars(4.5) === 8.75 && obArStars(12) === 10, 'obArStars');
+function obStats(diff, len, sty, stars) {  // r : le rayon des orbes ; pre : le temps où on les voit venir (s) ; pk : la sévérité (les fenêtres PARFAIT / BIEN / OK divisées par pk)
+  const lv = obLevel(diff), st = obStyle(len, sty), cs = obClamp(2.6 + lv * .3 + st.cs, 2, 7), ar = obClamp((stars != null ? obArStars(stars) : lv <= 5 ? 4 + lv : 9 + (lv - 5) * .2) + st.ar, 3, 10), od = obClamp(2.5 + lv * .55 + st.od, 2, 9.5);
   return {lv, st, cs, ar, od, r: Math.round(27.2 - 2.24 * cs), pre: (ar < 5 ? 1800 - 120 * ar : 1200 - 150 * (ar - 5)) / 1000, pk: .045 / ((80 - 6 * od) / 1000)};
 }
 // une glissière : un arc (courbe de Bézier) échantillonné, avec la longueur parcourue à chaque point pour avancer la boule à vitesse constante
@@ -1311,7 +1331,7 @@ function obFmtW(type, st, lv, kiai) {
   return w;
 }
 function obChart(base, c, diff, info) {
-  const S = obStats(diff, c.len), {lv, r} = S, step = c.step, beat = step * 4, vr = info ? (games.orbeVar || {})[info.key] || 0 : 0;
+  const S = obStats(diff, c.len, info && obVarStyle(info.key)), {lv, r} = S, step = c.step, beat = step * 4, vr = info ? (games.orbeVar || {})[info.key] || 0 : 0;
   const rnd = seeded(Math.round(c.len * 1000) + base.length * 7919 + vr * 15485863), en = obEnergy(c, base);
   const stAt = t => S.st.name !== 'Mixte' ? S.st : OB_STYLES[seeded(Math.floor(obToB(c, t) / 32) + 77 + vr * 31)() * 5 | 0];  // Mixte : un autre style toutes les 8 mesures
   const K = t => Math.round(obToB(c, t) * 4), T = k => obToT(c, k / 4);
@@ -1532,34 +1552,129 @@ function obChart(base, c, diff, info) {
   const o = obChart(ns, {len: 40, step: .125, beat0: 1}, 'S6'), at = t => o.some(n => Math.abs(n.t - t) < 1e-6);
   console.assert(at(1 + .5 / 3) && at(1 + 1 / 3) && obChart.copies > 0, 'obChart triolets/refrain', obChart.copies);
 }
-// la difficulté en étoiles, à la manière d'osu! : la visée (l'écart entre orbes en diamètres et le trajet des glissières, rapportés au temps, plus dur sur un
-// aller-retour rapide, un saut en angle, un changement brusque de vitesse) et la vitesse (les clics par seconde, plus dure quand le rythme change),
-// en efforts qui s'accumulent et retombent, les passages les plus durs comptant le plus. -> {aim, speed} (à la façon d'osu!) et les étoiles (1 à 10)
-function obStarsX(ns) {
-  if (ns.length < 2) return {aim: 0, speed: 0, stars: 1};
-  let aim = 0, spd = 0, sec = ns[0].t + .4, ma = 0, ms = 0, pv = 0, pa = null, pdt = 0; const A = [], P = [];
-  for (let i = 1; i < ns.length; i++) {
-    const p = ns[i - 1], n = ns[i]; if (n.kind === 'spin' || p.kind === 'spin') { pa = null; pv = 0; continue; }
-    const dt = Math.max(.04, n.t - p.t), [ex, ey] = obEnd(p), vx = n.x - ex, vy = n.y - ey, dd = Math.hypot(vx, vy) / (2 * n.r), sl = p.kind === 'slide' ? p.pts.at(-1)[2] * p.reps / (2 * n.r) : 0;
-    let v = (dd + sl * .45) / dt;
-    if (pa && dd > .3) {
-      const ang = Math.acos(obClamp((pa[0] * vx + pa[1] * vy) / (Math.hypot(pa[0], pa[1]) * Math.hypot(vx, vy) || 1), -1, 1));  // 0 : tout droit, π : demi-tour
-      const acute = obClamp((ang - Math.PI / 2) / (Math.PI / 2), 0, 1) * obClamp(.3 / dt, 0, 1), wide = Math.sin(ang) ** 2;
-      v *= 1 + .5 * acute * Math.min(1, dd) + .15 * wide * Math.min(1, dd);
+// la difficulté en étoiles, calculée comme osu! (osu!standard, version de 2023) : chaque objet devient un « objet de difficulté » (positions en pixels osu!,
+// le double de ceux d'Orbe, distances ramenées à un rayon de 50, temps en ms, curseur « paresseux » dans les glissières), puis la visée (avec et sans
+// glissières) et la vitesse (avec la complexité du rythme) accumulent un effort qui retombe ; les pics par tranche de 400 ms donnent les étoiles.
+// -> {aim, speed} (les notes de visée et de vitesse), stars, et ce qu'il faut aux pp : sf (part des glissières dans la visée), sn (notes « de vitesse »), nC, nS, nSp
+const OB_NR = 50;  // le rayon normalisé d'osu!
+function obDiffObjs(ns, od, rate) {
+  const great = (80 - 6 * od) * 2 / rate, D = [];  // la fenêtre du 300, en entier (ms)
+  const H = ns.map(n => {
+    const o = {t: n.t * 1000, kind: n.kind, x: n.x * 2, y: n.y * 2, r: (n.r || 16) * 2};
+    o.end = [o.x, o.y]; o.travel = 0; o.travelT = 0;
+    if (n.kind === 'slide' && n.pts) {  // le curseur paresseux : il ne suit la boule que quand elle sort d'un cercle de 1,8 rayon (1 rayon sur un retour)
+      const dur = n.len * 1000, reps = n.reps || 1, span = dur / reps, sf = OB_NR / o.r, at = ms => { let f = ms / span, p = Math.floor(f); f -= p; if (p >= reps) { p = reps - 1; f = 1; } const [x, y] = obAt(n.pts, p % 2 ? 1 - f : f); return [x * 2, y * 2]; };
+      const trackEnd = Math.max(dur - 36, dur / 2), nest = [];
+      for (let s = 0; s < reps; s++) { for (let q = 1; q < 4; q++) nest.push({t: (s + q / 4) * span}); if (s < reps - 1) nest.push({t: (s + 1) * span, rep: 1}); }
+      nest.push({t: trackEnd, tail: 1}); nest.sort((a, b) => a.t - b.t);
+      let cx = o.x, cy = o.y, dist = 0; const lazyEnd = at(trackEnd);
+      nest.forEach((p, i) => {
+        let [px, py] = at(p.t), mx = px - cx, my = py - cy;
+        if (p.tail) { const lx = lazyEnd[0] - cx, ly = lazyEnd[1] - cy; if (Math.hypot(lx, ly) < Math.hypot(mx, my)) { mx = lx; my = ly; } }
+        const L = sf * Math.hypot(mx, my), need = p.rep ? OB_NR : OB_NR * 1.8;
+        if (L > need) { const k = (L - need) / L; cx += mx * k; cy += my * k; dist += L - need; }
+      });
+      o.end = [cx, cy]; o.tail = at(dur); o.travel = dist * Math.pow(1 + (reps - 1) / 2.5, 1 / 2.5); o.travelT = Math.max(trackEnd / rate, 25);
     }
-    if (pv) v += .3 * Math.abs(v - pv) / Math.max(v, pv) * Math.min(v, pv);
-    pv = v; pa = dd > .3 ? [vx, vy] : null;
-    const rc = pdt ? 1 + .25 * Math.min(1, Math.abs(Math.log2(dt / pdt))) : 1; pdt = dt;
-    while (n.t > sec) { A.push(ma); P.push(ms); ma *= .15 ** .4; ms *= .3 ** .4; sec += .4; }
-    aim = aim * .15 ** dt + v * .09; spd = spd * .3 ** dt + rc / dt * .09; ma = Math.max(ma, aim); ms = Math.max(ms, spd);
+    return o;
+  });
+  for (let i = 1; i < H.length; i++) {
+    const c = H[i], l = H[i - 1], ll = H[i - 2], dt = (c.t - l.t) / rate, d = {i: D.length, o: c, last: l, dt, st: Math.max(dt, 25), great, jump: 0, minD: 0, minT: Math.max(dt, 25), angle: null, travel: c.travel, travelT: c.travelT, t: c.t / rate};
+    let sf = OB_NR / c.r; if (c.r < 30) sf *= 1 + Math.min(30 - c.r, 5) / 50;
+    if (c.kind !== 'spin' && l.kind !== 'spin') {
+      const lc = l.end; d.jump = Math.hypot(c.x - lc[0], c.y - lc[1]) * sf; d.minD = d.jump;
+      if (l.kind === 'slide') { d.minT = Math.max(d.st - l.travelT, 25); const tj = Math.hypot(c.x - l.tail[0], c.y - l.tail[1]) * sf; d.minD = Math.max(0, Math.min(d.jump - (OB_NR * 2.4 - OB_NR * 1.8), tj - OB_NR * 2.4)); }
+      if (ll && ll.kind !== 'spin') { const llc = ll.end, v1 = [llc[0] - l.x, llc[1] - l.y], v2 = [c.x - lc[0], c.y - lc[1]]; d.angle = Math.abs(Math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])); }
+    }
+    D.push(d);
   }
-  A.push(ma); P.push(ms);
-  const top = v => v.sort((x, y) => y - x).reduce((s, x, i) => s + x * .9 ** i, 0), ar = Math.sqrt(top(A)) * .62, sr = Math.sqrt(top(P)) * .52;
-  const raw = ar + sr + Math.abs(ar - sr) / 2, stars = Math.max(1, Math.min(10, Math.round(OB_STAR_K * raw ** 1.1 * 10) / 10)), k = OB_STAR_K * raw ** 1.1 / (raw || 1);
-  return {aim: ar * k, speed: sr * k, stars};
+  return D;
 }
-const OB_STAR_K = .62;
+const obWideB = a => Math.sin(.75 * (Math.min(5 / 6 * Math.PI, Math.max(Math.PI / 6, a)) - Math.PI / 6)) ** 2, obAcuteB = a => 1 - obWideB(a);
+function obAimEval(D, i, sl) {
+  const c = D[i], l = D[i - 1], ll = D[i - 2];
+  if (c.o.kind === 'spin' || i <= 1 || l.o.kind === 'spin') return 0;
+  let cv = c.jump / c.st;
+  if (l.o.kind === 'slide' && sl) cv = Math.max(cv, l.travel / l.travelT + c.minD / c.minT);
+  let pv = l.jump / l.st;
+  if (ll.o.kind === 'slide' && sl) pv = Math.max(pv, ll.travel / ll.travelT + l.minD / l.minT);
+  let wide = 0, acute = 0, vel = 0, slider = 0, strain = cv;
+  if (Math.max(c.st, l.st) < 1.25 * Math.min(c.st, l.st) && c.angle != null && l.angle != null && ll.angle != null) {
+    const ab = Math.min(cv, pv); wide = obWideB(c.angle); acute = obAcuteB(c.angle);
+    if (c.st > 100) acute = 0;
+    else acute *= obAcuteB(l.angle) * Math.min(ab, 125 / c.st) * Math.sin(Math.PI / 2 * Math.min(1, (100 - c.st) / 25)) ** 2 * Math.sin(Math.PI / 2 * (obClamp(c.jump, 50, 100) - 50) / 50) ** 2;
+    wide *= ab * (1 - Math.min(wide, obWideB(l.angle) ** 3)); acute *= .5 + .5 * (1 - Math.min(acute, obAcuteB(ll.angle) ** 3));
+  }
+  if (Math.max(pv, cv)) {
+    const p2 = (l.jump + ll.travel) / l.st, c2 = (c.jump + l.travel) / c.st, ratio = Math.sin(Math.PI / 2 * Math.abs(p2 - c2) / Math.max(p2, c2, 1e-9)) ** 2;
+    vel = Math.min(125 / Math.min(c.st, l.st), Math.abs(p2 - c2)) * ratio * (Math.min(c.st, l.st) / Math.max(c.st, l.st)) ** 2;
+  }
+  if (l.o.kind === 'slide') slider = l.travel / l.travelT;
+  strain += Math.max(acute * 1.95, wide * 1.5 + vel * .75);
+  if (sl) strain += slider * 1.35;
+  return strain;
+}
+function obSpeedEval(D, i) {
+  const c = D[i], nx = D[i + 1], prev = D[i - 1]; if (c.o.kind === 'spin') return 0;
+  let st = c.st, dbl = 1;
+  if (nx) { const cd = Math.max(1, c.dt), nd = Math.max(1, nx.dt), diff = Math.abs(nd - cd), sr = cd / Math.max(cd, diff), wr = Math.min(1, cd / c.great) ** 2; dbl = sr ** (1 - wr); }
+  st /= obClamp(st / c.great / .93, .92, 1);
+  const sb = st < 75 ? 1 + .75 * ((75 - st) / 40) ** 2 : 1, dist = Math.min(125, (prev ? prev.travel : 0) + c.minD);
+  return (sb + sb * (dist / 125) ** 3.5) * dbl / st;
+}
+function obRhythmEval(D, i) {
+  const c = D[i]; if (c.o.kind === 'spin') return 0;
+  const P = k => D[i - k - 1], hist = Math.min(i, 32); let prevIsland = 0, sum = 0, island = 1, startR = 0, first = false, start = 0;
+  while (start < hist - 2 && c.t - P(start).t < 5000) start++;
+  for (let k = start; k > 0; k--) {
+    const co = P(k - 1), po = P(k), lo = P(k + 1); if (!lo) continue;
+    const decay = Math.min((hist - k) / hist, (5000 - (c.t - co.t)) / 5000), cd = co.st, pd = po.st, ld = lo.st;
+    const cr = 1 + 6 * Math.min(.5, Math.sin(Math.PI / (Math.min(pd, cd) / Math.max(pd, cd))) ** 2), wp = Math.min(1, Math.max(0, Math.abs(pd - cd) - co.great * .3) / (co.great * .3));
+    let er = wp * cr;
+    if (first) {
+      if (!(pd > 1.25 * cd || pd * 1.25 < cd)) { if (island < 7) island++; }
+      else {
+        if (co.o.kind === 'slide') er *= .125; if (po.o.kind === 'slide') er *= .25; if (prevIsland === island) er *= .25; if (prevIsland % 2 === island % 2) er *= .5;
+        if (ld > pd + 10 && pd > cd + 10) er *= .125;
+        sum += Math.sqrt(er * startR) * decay * Math.sqrt(4 + island) / 2 * Math.sqrt(4 + prevIsland) / 2;
+        startR = er; prevIsland = island; if (pd * 1.25 < cd) first = false; island = 1;
+      }
+    } else if (pd > 1.25 * cd) { first = true; startR = er; island = 1; }
+  }
+  return Math.sqrt(4 + sum * .75) / 2;
+}
+function obSkill(D, mult, decay, ev, rhythm) {  // les pics d'effort par tranche de 400 ms, les 10 plus forts atténués, puis une somme pondérée (×0,9 à chaque rang)
+  const peaks = [], strains = []; let cur = 0, rh = 1, peak = 0, end = D.length ? Math.ceil(D[0].t / 400) * 400 : 0;
+  const dec = ms => decay ** (ms / 1000);
+  D.forEach((d, i) => {
+    while (d.t > end) { peaks.push(peak); peak = (rhythm ? cur * rh : cur) * dec(end - (D[i - 1]?.t ?? d.t - d.dt)); end += 400; }
+    cur *= dec(rhythm ? d.st : d.dt); cur += ev(D, i) * mult;
+    let v = cur; if (rhythm) { rh = obRhythmEval(D, i); v = cur * rh; }
+    strains.push(v); peak = Math.max(peak, v);
+  });
+  peaks.push(peak);
+  const s = peaks.filter(v => v > 0).sort((a, b) => b - a);
+  for (let i = 0; i < Math.min(s.length, 10); i++) s[i] *= .75 + .25 * Math.log10(1 + 9 * obClamp(i / 10, 0, 1));
+  s.sort((a, b) => b - a);
+  return {v: s.reduce((t, v, i) => t + v * .9 ** i, 0) * 1.06, strains};
+}
+const obBasePerf = r => (5 * Math.max(1, r / .0675) - 4) ** 3 / 1e5;
+function obStarsX(ns, od = 8, rate = 1) {
+  const nC = ns.filter(n => n.kind !== 'slide' && n.kind !== 'spin').length, nS = ns.filter(n => n.kind === 'slide').length, nSp = ns.filter(n => n.kind === 'spin').length;
+  if (ns.length < 2) return {aim: 0, speed: 0, stars: 0, sf: 1, sn: 0, nC, nS, nSp};
+  const D = obDiffObjs(ns, od, rate), A = obSkill(D, 23.55, .15, (D, i) => obAimEval(D, i, true)), A0 = obSkill(D, 23.55, .15, (D, i) => obAimEval(D, i, false)), S = obSkill(D, 1375, .3, obSpeedEval, true);
+  const aim = Math.sqrt(A.v) * .0675, aimNS = Math.sqrt(A0.v) * .0675, speed = Math.sqrt(S.v) * .0675, mx = Math.max(...S.strains, 1e-9);
+  const sn = S.strains.reduce((t, v) => t + 1 / (1 + Math.exp(-(v / mx * 12 - 6))), 0);
+  const base = (obBasePerf(aim) ** 1.1 + obBasePerf(speed) ** 1.1) ** (1 / 1.1);
+  const stars = base > 1e-5 ? Math.cbrt(1.14) * .027 * (Math.cbrt(1e5 / 2 ** (1 / 1.1) * base) + 4) : 0;
+  return {aim, speed, stars: Math.round(stars * 100) / 100, sf: aim > 0 ? aimNS / aim : 1, sn, nC, nS, nSp};
+}
 const obStars = ns => obStarsX(ns).stars;
+{ // contrôle : des sauts au demi-temps à 180 BPM, larges de 4 diamètres, font plus d'étoiles que les mêmes sauts serrés ; un stream de doubles-croches donne de la vitesse
+  const mk = (n, gap, d) => Array.from({length: n}, (_, i) => ({t: 1 + i * gap, kind: 'circle', x: 128 + (i % 2 ? d : -d) / 2, y: 96 + (i % 4 < 2 ? 0 : 20), r: 16}));
+  const wide = obStarsX(mk(200, 60 / 180 / 2, 128)), tight = obStarsX(mk(200, 60 / 180 / 2, 30)), st = obStarsX(mk(200, 60 / 180 / 4, 12));
+  console.assert(wide.stars > tight.stars + 1 && wide.stars > 3 && wide.stars < 9 && st.speed > tight.speed && st.stars > 2, 'obStarsX', wide.stars, tight.stars, st.stars);
+}
 // les mods, comme dans osu! : [nom, effet, multiplicateur des points]
 const OB_MODS = [['EZ', 'Facile : orbes plus grands et plus lents, précision et vie plus douces', .5], ['NF', 'Sans échec : la vie vide ne fait pas perdre', .5],
   ['HT', 'Ralenti : le morceau à 75 %', .3], ['HR', 'Dur : orbes plus petits et plus rapides, précision et vie plus sévères, terrain retourné', 1.06],
@@ -1572,8 +1687,8 @@ const OB_EXCL = {EZ: ['HR'], HR: ['EZ'], HT: ['DT'], DT: ['HT'], NF: ['SD', 'PF'
 let obModSet = new Set();
 const obMod = m => obModSet.has(m), obModTxt = () => OB_MODS.map(m => m[0]).filter(obMod).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obMod(m[0]) ? m[2] : 1), 1);
 function obStatsM(diff, len) {  // les réglages du niveau avec les mods : EZ les divise par deux, HR les multiplie par 1,4 (la taille par 1,3), jamais plus de 10
-  const s = obStats(diff, len), f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
-  const ar = obClamp(s.ar * f, 0, 10), od = obClamp(s.od * f, 0, 10), hp = obClamp(obClamp(2 + s.lv * .55 + s.st.od, 2, 9) * f, 0, 10);
+  const O = rh?.info?.osu, s0 = obStats(diff, len, rh?.info && obVarStyle(rh.info.key), rh?.notes && rh.diff === diff ? rh.baseStars : null), s = O ? {...s0, ...O, st: {...s0.st, name: 'osu!'}} : s0, f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
+  const ar = obClamp(s.ar * f, 0, 10), od = obClamp(s.od * f, 0, 10), hp = obClamp((O ? O.hp : obClamp(2 + s.lv * .55 + s.st.od, 2, 9)) * f, 0, 10);
   return {...s, cs, ar, od, hp, r: Math.max(6, Math.round(27.2 - 2.24 * cs)), pre: (ar < 5 ? 1800 - 120 * ar : 1200 - 150 * (ar - 5)) / 1000, pk: .045 / ((80 - 6 * od) / 1000)};
 }
 console.assert(obStatsM('normal', 100).r === obStats('normal', 100).r, 'obStatsM');
@@ -1583,18 +1698,310 @@ function obGrade(c, n, acc) {  // les notes d'osu! : SS sans faute, S au-dessus 
 }
 console.assert(obGrade({PARFAIT: 10, BIEN: 0, OK: 0, 'RATÉ': 0}, 10, 1) === 'SS' && obGrade({PARFAIT: 95, BIEN: 5, OK: 0, 'RATÉ': 0}, 100, .96) === 'S'
   && obGrade({PARFAIT: 95, BIEN: 4, OK: 0, 'RATÉ': 1}, 100, .96) === 'A' && obGrade({PARFAIT: 50, BIEN: 50, OK: 0, 'RATÉ': 0}, 100, .67) === 'D', 'obGrade');
+// les maps osu! (.osz) : un zip avec la musique, les difficultés (.osu, du texte), l'image de fond. Seulement le mode standard (les cercles).
+function obUnzip(buf) {  // -> Map nom -> {m, raw} : la méthode (0 stocké, 8 deflate) et les octets, décompressés plus tard (on saute la vidéo)
+  const u = new Uint8Array(buf), dv = new DataView(u.buffer, u.byteOffset, u.byteLength), out = new Map(), dec = new TextDecoder();
+  let e = u.length - 22; while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+  if (e < 0) throw new Error('ce n\'est pas un fichier .osz');
+  let p = dv.getUint32(e + 16, true);
+  for (let i = dv.getUint16(e + 10, true); i > 0 && dv.getUint32(p, true) === 0x02014b50; i--) {
+    const m = dv.getUint16(p + 10, true), cs = dv.getUint32(p + 20, true), nl = dv.getUint16(p + 28, true), lo = dv.getUint32(p + 42, true);
+    const name = dec.decode(u.subarray(p + 46, p + 46 + nl)); p += 46 + nl + dv.getUint16(p + 30, true) + dv.getUint16(p + 32, true);
+    const d0 = lo + 30 + dv.getUint16(lo + 26, true) + dv.getUint16(lo + 28, true);
+    if (!name.endsWith('/')) out.set(name, {m, raw: u.subarray(d0, d0 + cs)});
+  }
+  return out;
+}
+async function obInflate(f) {
+  if (f.m === 0) return f.raw;
+  if (f.m !== 8) throw new Error('compression inconnue');
+  return new Uint8Array(await new Response(new Blob([f.raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+}
+// le chemin d'une glissière osu! (en pixels osu!) : ligne (L), arc de cercle (P), Bézier (B, les points doublés coupent la courbe), Catmull (C)
+function obOsuCurve(type, P) {
+  const out = [], lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const bez = c => { const n = Math.max(8, c.length * 12); for (let i = 0; i <= n; i++) { let q = c.slice(); while (q.length > 1) q = q.slice(1).map((b, j) => lerp(q[j], b, i / n)); out.push(q[0]); } };
+  if (type === 'L') return P.slice();
+  if (type === 'P' && P.length === 3) {
+    const [a, b, c] = P, d = 2 * (a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1] - b[1]));
+    if (Math.abs(d) > 1e-3) {
+      const s = q => q[0] * q[0] + q[1] * q[1], ux = (s(a) * (b[1] - c[1]) + s(b) * (c[1] - a[1]) + s(c) * (a[1] - b[1])) / d, uy = (s(a) * (c[0] - b[0]) + s(b) * (a[0] - c[0]) + s(c) * (b[0] - a[0])) / d;
+      const R = Math.hypot(a[0] - ux, a[1] - uy), t0 = Math.atan2(a[1] - uy, a[0] - ux), t2 = Math.atan2(c[1] - uy, c[0] - ux), cw = (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0;
+      let sweep = t2 - t0; if (cw && sweep < 0) sweep += 2 * Math.PI; if (!cw && sweep > 0) sweep -= 2 * Math.PI;
+      const n = Math.max(8, Math.ceil(Math.abs(sweep) * R / 4)); for (let i = 0; i <= n; i++) { const t = t0 + sweep * i / n; out.push([ux + Math.cos(t) * R, uy + Math.sin(t) * R]); }
+      return out;
+    }
+  }
+  if (type === 'C') {
+    for (let i = 0; i < P.length - 1; i++) {
+      const p0 = P[i - 1] || P[i], p1 = P[i], p2 = P[i + 1], p3 = P[i + 2] || lerp(p1, p2, 2);
+      for (let k = 0; k <= 24; k++) { const t = k / 24, t2 = t * t, t3 = t2 * t, f = j => .5 * (2 * p1[j] + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2 + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3); out.push([f(0), f(1)]); }
+    }
+    return out;
+  }
+  let seg = [P[0]];  // Bézier (et un arc à trois points alignés)
+  for (let i = 1; i < P.length; i++) { seg.push(P[i]); if (i < P.length - 1 && P[i][0] === P[i + 1][0] && P[i][1] === P[i + 1][1]) { bez(seg); seg = []; } }
+  if (seg.length > 1) bez(seg);
+  return out;
+}
+// le chemin coupé (ou prolongé) à sa longueur, ramené au terrain d'Orbe (÷ 2), avec la longueur parcourue : le format des glissières d'Orbe
+function obOsuPts(raw, len) {
+  const L = len / 2, pts = [[raw[0][0] / 2, raw[0][1] / 2, 0]];
+  for (let i = 1; i < raw.length && pts.at(-1)[2] < L; i++) {
+    const p = pts.at(-1), x = raw[i][0] / 2, y = raw[i][1] / 2, d = Math.hypot(x - p[0], y - p[1]); if (d < 1e-6) continue;
+    const k = Math.min(1, (L - p[2]) / d); pts.push([p[0] + (x - p[0]) * k, p[1] + (y - p[1]) * k, p[2] + d * k]);
+  }
+  const p = pts.at(-1);
+  if (p[2] < L - .5 && pts.length > 1) { const q = pts.at(-2), d = p[2] - q[2] || 1, k = (L - q[2]) / d; pts[pts.length - 1] = [q[0] + (p[0] - q[0]) * k, q[1] + (p[1] - q[1]) * k, L]; }
+  if (pts.length === 1) pts.push([p[0] + .01, p[1], .01]);
+  return pts;
+}
+// un fichier .osu -> {meta, cs, ar, od, hp, notes (au format d'Orbe), bg, audio, step, beat0} ; null si ce n'est pas le mode standard
+function obOsuParse(txt) {
+  const S = {}; let sec = '';
+  for (const l of txt.replace(/^﻿/, '').split(/\r?\n/)) { const t = l.trim(); if (!t || t.startsWith('//')) continue; const h = /^\[(\w+)\]$/.exec(t); if (h) S[sec = h[1]] = []; else S[sec]?.push(t); }
+  const kv = s => Object.fromEntries((S[s] || []).map(l => { const i = l.indexOf(':'); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
+  const G = kv('General'), M = kv('Metadata'), D = kv('Difficulty');
+  if ((+G.Mode || 0) !== 0) return null;
+  const num = (v, d) => v == null || v === '' || isNaN(+v) ? d : +v;
+  const od = num(D.OverallDifficulty, 5), cs = num(D.CircleSize, 5), ar = num(D.ApproachRate, od), hp = num(D.HPDrainRate, 5), svm = num(D.SliderMultiplier, 1.4);
+  const tps = (S.TimingPoints || []).map(l => l.split(',').map(Number)).filter(p => p.length >= 2 && isFinite(p[0]) && isFinite(p[1]))
+    .map(p => ({t: p[0], bl: p[1], red: p[6] == null || p[6] === 1, kiai: ((p[7] || 0) & 1) === 1})).sort((a, b) => a.t - b.t || b.red - a.red);
+  const reds = tps.filter(p => p.red && p.bl > 0); if (!reds.length) throw new Error('pas de tempo dans la map');
+  const bgm = (S.Events || []).map(l => /^0\s*,\s*0\s*,\s*"([^"]+)"/.exec(l) || /^0\s*,\s*0\s*,\s*([^,]+)/.exec(l)).find(Boolean);
+  const notes = []; let ti = -1, bl = reds[0].bl, sv = 1, kiai = false, combo = 0, col = -1, prevSpin = true;
+  for (const l of S.HitObjects || []) {
+    const f = l.split(','), x = +f[0], y = +f[1], t = +f[2], type = +f[3], hs = +f[4] || 0; if (!isFinite(t)) continue;
+    while (ti + 1 < tps.length && tps[ti + 1].t <= t + .5) { const p = tps[++ti]; if (p.red) { if (p.bl > 0) bl = p.bl; sv = 1; } else sv = p.bl < 0 ? obClamp(-100 / p.bl, .1, 10) : 1; kiai = p.kiai; }
+    if (type & 8) { notes.push({t: t / 1000, len: Math.max(.05, (+f[5] - t) / 1000), kind: 'spin', x: 128, y: 96, combo: 0, col: Math.max(0, col), hs, kiai}); prevSpin = true; continue; }
+    if (type & 4 || prevSpin) { combo = 0; col += 1 + ((type >> 4) & 7); } prevSpin = false;
+    const o = {t: t / 1000, len: 0, kind: 'circle', x: x / 2, y: y / 2, combo: ++combo, col, hs, kiai};
+    if (type & 2) {
+      const [ct, ...cp] = f[5].split('|'), P = [[x, y], ...cp.map(s => s.split(':').map(Number))], reps = Math.max(1, +f[6] || 1), len = +f[7] || 0;
+      const raw = obOsuCurve(ct, P), pts = obOsuPts(raw.length > 1 ? raw : [[x, y], [x + 1, y]], len || 1);
+      Object.assign(o, {kind: 'slide', len: Math.max(.03, (pts.at(-1)[2] * 2) / (svm * 100 * sv) * bl * reps / 1000), pts, reps, shape: 'osu'});
+    }
+    notes.push(o);
+  }
+  if (!notes.length) throw new Error('la map est vide');
+  const main = reds.map((p, i) => [p, (reds[i + 1]?.t ?? notes.at(-1).t * 1000) - p.t]).sort((a, b) => b[1] - a[1])[0][0];  // le tempo qui dure le plus
+  return {src: txt, title: M.Title || M.TitleUnicode || '?', artist: M.Artist || '', creator: M.Creator || '', version: M.Version || '?', set: +M.BeatmapSetID > 0 ? +M.BeatmapSetID : 0,
+    audio: G.AudioFilename || '', bg: bgm ? bgm[1].trim() : '', preview: num(G.PreviewTime, -1) / 1000, cs, ar, od, hp, notes, step: main.bl / 4000, beat0: main.t / 1000, bpm: Math.round(60000 / main.bl)};
+}
+{ // contrôle : une petite map (cercle, glissière en arc, Bézier coupée, toupie), les combos, la durée des glissières, la longueur à ÷ 2
+  const m = obOsuParse('osu file format v14\n[General]\nAudioFilename: a.mp3\nMode: 0\n[Metadata]\nTitle:T\nVersion:Hard\nBeatmapSetID:7\n[Difficulty]\nHPDrainRate:5\nCircleSize:4\nOverallDifficulty:8\nApproachRate:9\nSliderMultiplier:1.4\n'
+    + '[Events]\n0,0,"bg.jpg",0,0\n[TimingPoints]\n0,500,4,2,0,50,1,0\n1000,-50,4,2,0,50,0,1\n[HitObjects]\n100,100,500,5,0\n200,200,1000,2,0,P|250:150|300:200,1,140\n'
+    + '50,50,2000,6,0,B|100:50|100:50|150:100,2,100\n256,192,3000,12,0,4000\n10,10,5000,1,8\n');
+  const [a, b, c, s, e] = m.notes, L = p => p.pts.at(-1)[2];
+  console.assert(m && m.notes.length === 5 && m.bg === 'bg.jpg' && m.ar === 9 && m.set === 7 && m.bpm === 120 && a.combo === 1 && b.combo === 2 && c.combo === 1 && c.col === 1 && s.kind === 'spin' && e.combo === 1 && e.col === 2
+    && b.kind === 'slide' && Math.abs(L(b) - 70) < .6 && Math.abs(b.len - 140 / (1.4 * 100 * 2) * .5) < .01 && Math.abs(L(c) - 50) < .6 && c.reps === 2 && Math.abs(c.len - 100 / 280 * .5 * 2) < .01
+    && b.kiai && Math.abs(s.len - 1) < 1e-9 && e.hs === 8, 'obOsuParse', m.notes);
+  const arc = obOsuPts(obOsuCurve('P', [[0, 0], [100, 100], [200, 0]]), 300), mid = arc.find(q => q[2] >= 75);  // un demi-cercle de rayon 100 (50 dans Orbe), coupé à 150
+  console.assert(Math.abs(arc.at(-1)[2] - 150) < .01 && Math.abs(Math.hypot(mid[0] - 50, mid[1]) - 50) < .5, 'arc', arc.at(-1));
+}
+// les maps osu! importées : la liste (dans les données du jeu), les fichiers (musique, fond, difficultés) dans le dossier du plugin, synchronisés avec les autres PC
+const obDfName = () => RH_DIFFS[rh.diff] || (rh.info?.ver ? (rh.info.ver.length > 14 ? rh.info.ver.slice(0, 13) + '…' : rh.info.ver) : 'Perso');  // le nom du niveau (celui du mappeur pour une map osu!)
+const obOsuSets = () => gstore('orbeOsu', []);
+const obOsuCache = new Map();  // id -> {buffer, bg}, pour cette session
+const obB64 = u => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(String(fr.result).split(',')[1] || ''); fr.onerror = () => ko(fr.error); fr.readAsDataURL(new Blob([u])); });
+const obHash = s => [...s].reduce((h, c) => (Math.imul(h, 33) + c.charCodeAt(0)) >>> 0, 5381).toString(36);
+async function obFileBytes(n) { const b = await folder.readFile(n); if (b == null) throw new Error('les fichiers de cette map ne sont pas sur ce PC'); const t = atob(b), u = new Uint8Array(t.length); for (let i = 0; i < t.length; i++) u[i] = t.charCodeAt(i); return u.buffer; }
+async function obOszImport(f) {
+  const msg = t => { $('rhImpMsg').textContent = t; };
+  msg('Lecture de « ' + f.name + ' »…');
+  const z = obUnzip(await f.arrayBuffer()), get = n => [...z.keys()].find(k => k.toLowerCase() === String(n).toLowerCase()), maps = [];
+  for (const n of z.keys()) if (/\.osu$/i.test(n)) { try { const m = obOsuParse(new TextDecoder().decode(await obInflate(z.get(n)))); if (m) maps.push(m); } catch {} }
+  if (!maps.length) throw new Error('aucune difficulté osu! standard dans ce fichier');
+  const m0 = maps[0], id = 'o' + (m0.set || obHash(m0.artist + '|' + m0.title + '|' + m0.creator)), an = get(m0.audio);
+  if (!an) throw new Error('la musique de la map manque dans le fichier');
+  const audio = await obInflate(z.get(an)); if (audio.length > 15e6) throw new Error('la musique fait plus de 15 Mo');
+  const ext = (/\.(mp3|ogg|wav|m4a|flac)$/i.exec(an)?.[1] || 'mp3').toLowerCase();
+  await obOsuDrop(id, true);
+  msg('Copie de la musique…'); await folder.writeFile(id + '-audio.' + ext, await obB64(audio));
+  let bg = false; const bn = get(m0.bg);
+  if (bn) try {  // le fond, réduit (Orbe l'affiche en 320 × 240)
+    const im = await createImageBitmap(new Blob([await obInflate(z.get(bn))])), c = document.createElement('canvas'), k = Math.max(640 / im.width, 480 / im.height); c.width = 640; c.height = 480;
+    c.getContext('2d').drawImage(im, (640 - im.width * k) / 2, (480 - im.height * k) / 2, im.width * k, im.height * k);
+    await folder.writeFile(id + '-bg.jpg', c.toDataURL('image/jpeg', .85).split(',')[1]); bg = true;
+  } catch {}
+  const diffs = [];
+  for (const m of maps) {
+    const k = diffs.length, r = Math.round(27.2 - 2.24 * m.cs), st = obStarsX(m.notes.filter(n => n.kind !== 'spin').map(n => ({...n, r})), m.od).stars;
+    await folder.writeFile(id + '-' + k + '.osu', await obB64(new TextEncoder().encode(m.src)));
+    diffs.push({v: m.version, f: id + '-' + k + '.osu', st: Math.round(st * 100) / 100, cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, n: m.notes.length, len: Math.round(m.notes.at(-1).t + (m.notes.at(-1).len || 0))});
+  }
+  diffs.sort((a, b) => a.st - b.st);
+  const L = obOsuSets(), e = {id, name: (m0.artist ? m0.artist + ' - ' : '') + m0.title, creator: m0.creator, set: m0.set, audio: id + '-audio.' + ext, bg, bpm: m0.bpm, preview: m0.preview, diffs, d: Date.now()};
+  const old = L.findIndex(x => x.id === id); if (old >= 0) L[old] = e; else L.push(e);
+  obOsuCache.delete(id); saveGames(); rhTab = 'mine'; rhList();
+  msg('« ' + e.name + ' » : ' + diffs.length + ' difficulté' + (diffs.length > 1 ? 's' : '') + ' importée' + (diffs.length > 1 ? 's' : '') + '.');
+  await rhSelect(id, 'O' + Math.max(0, diffs.findLastIndex(d => d.st < 6)));
+}
+async function obOsuDrop(id, keepEntry) {  // les fichiers d'une map (et sa ligne dans la liste, sauf keepEntry)
+  const L = obOsuSets(), s = L.find(x => x.id === id); obOsuCache.delete(id);
+  try { for (const n of await folder.listFiles()) if (n.startsWith(id + '-')) await folder.removeFile(n); } catch {}
+  if (s && !keepEntry) { L.splice(L.indexOf(s), 1); saveGames(); }
+}
+async function obOsuLoad(id, diff) {  // -> {c, info, notes} pour rhPrepare
+  const s = obOsuSets().find(x => x.id === id), d = s && (s.diffs[+String(diff).slice(1)] || s.diffs[0]); if (!d) return null;
+  let C = obOsuCache.get(id);
+  if (!C) {
+    rhAudio(); toast('Chargement de la map…'); C = {buffer: await rhCtx.decodeAudioData(await obFileBytes(s.audio)), bg: null};
+    if (s.bg) try {
+      const im = await createImageBitmap(new Blob([await obFileBytes(id + '-bg.jpg')])), c = cnv(W, H, () => {}), k = Math.max(W / im.width, H / im.height), b = c.getContext('2d');
+      b.imageSmoothingEnabled = true; b.drawImage(im, (W - im.width * k) / 2, (H - im.height * k) / 2, im.width * k, im.height * k); C.bg = c;
+    } catch {}
+    obOsuCache.set(id, C);
+  }
+  const m = obOsuParse(new TextDecoder().decode(await obFileBytes(d.f))), r = Math.round(27.2 - 2.24 * m.cs), end = Math.max(...m.notes.map(n => n.t + (n.len || 0)));
+  for (const n of m.notes) { n.r = r; n.col %= OB.COLS.length; }
+  return {notes: m.notes, c: {events: [], lead: [], len: Math.min(C.buffer.duration, end + 1), step: m.step, beat0: m.beat0, buffer: C.buffer},
+    info: {name: s.name + ' [' + d.v + ']', ver: d.v, bpm: m.bpm, key: 'osu' + id + '|' + d.v, preview: s.preview, bg: C.bg, osu: {cs: m.cs, ar: m.ar, od: m.od, hp: m.hp}}};
+}
+function obOsuCards() {  // les maps osu! dans MES MUSIQUES : une carte par map, un bouton par difficulté (avec ses étoiles)
+  const res = games.rhythm || {};
+  return obOsuSets().map(s => {
+    const c = el('div', 'sysCard rhSong' + (rh?.song === s.id ? ' on' : '')), x = el('button', 'rhDel', '×'), row = el('div', 'row');
+    x.title = 'Retirer cette map osu! (ses fichiers sont effacés)';
+    x.onclick = async () => { await obOsuDrop(s.id); rhList(); };
+    s.diffs.forEach((d, k) => {
+      const r = res['osu' + s.id + '|' + d.v], b = el('button', 'btn obDiff' + (rh?.song === s.id && rh.diff === 'O' + k ? ' main' : ''), d.v + ' ' + rhStarTxt(d.st) + (r ? ' · ' + r.grade : ''));
+      b.style.cssText = 'width:auto;margin:2px'; b.onclick = () => { b.blur(); rhSelect(s.id, 'O' + k).catch(e => { $('rhImpMsg').textContent = 'Impossible : ' + e.message; }); };
+      row.append(b);
+    });
+    c.append(x, el('b', '', s.name), el('span', 'hint', 'osu! · ' + (s.creator ? 'map de ' + s.creator + ' · ' : '') + s.bpm + ' BPM · ' + clock(Math.max(...s.diffs.map(d => d.len || 0)))), row);
+    return c;
+  });
+}
+// les skins osu! (.osk) : cercles, chiffres, cercle d'approche, glissières, curseur, couleurs de combo et sons, dessinés nets (en HD) par-dessus le terrain en pixels.
+// shortcut: un seul skin à la fois (le nouveau remplace l'ancien), sans les animations à plusieurs images ; à revoir si on veut en garder plusieurs
+const OSK_IMG = ['hitcircle', 'hitcircleoverlay', 'approachcircle', 'cursor', 'cursortrail', 'cursormiddle', 'sliderb0', 'sliderb', 'sliderfollowcircle', 'sliderfollowcircle-0', 'reversearrow', 'sliderscorepoint'];
+const OSK_SND = ['hitnormal', 'hitwhistle', 'hitfinish', 'hitclap'];
+const OSK_COLS = ['#ffc000', '#00ca00', '#127cff', '#f21839'];  // les couleurs de combo d'osu! quand le skin n'en donne pas
+let obOsk = null;  // {name, img: {clé: {bm, x2}}, cols, border, track, overlap, snd, kit}
+function obIni(t) {  // skin.ini : le nom, les couleurs (combos, bord et fond des glissières), le préfixe et le chevauchement des chiffres
+  const o = {cols: []}; let sec = '';
+  for (const l of String(t).split(/\r?\n/)) {
+    const s = l.replace(/\/\/.*$/, '').trim(), h = /^\[(\w+)\]/.exec(s); if (h) { sec = h[1].toLowerCase(); continue; }
+    const i = s.indexOf(':'); if (i < 0) continue; const k = s.slice(0, i).trim().toLowerCase(), v = s.slice(i + 1).trim();
+    const rgb = () => { const p = v.split(',').map(Number); return p.length >= 3 && p.slice(0, 3).every(x => x >= 0 && x <= 255) ? '#' + p.slice(0, 3).map(x => Math.round(x).toString(16).padStart(2, '0')).join('') : null; };
+    if (sec === 'general' && k === 'name') o.name = v;
+    if (sec === 'colours') { const m = /^combo(\d)$/.exec(k); if (m) o.cols[+m[1] - 1] = rgb(); if (k === 'sliderborder') o.border = rgb(); if (k === 'slidertrackoverride') o.track = rgb(); }
+    if (sec === 'fonts') { if (k === 'hitcircleprefix') o.prefix = v.replace(/\\/g, '/'); if (k === 'hitcircleoverlap') o.overlap = +v || 0; }
+  }
+  o.cols = o.cols.filter(Boolean); return o;
+}
+{ const o = obIni('[General]\nName: Bleu // le nom\n[Colours]\nCombo2 : 0,0,255\nCombo1: 255,128,0\nSliderBorder: 255,255,255\n[Fonts]\nHitCirclePrefix: score/num\nHitCircleOverlap: 3');
+  console.assert(o.name === 'Bleu' && o.cols.join() === '#ff8000,#0000ff' && o.border === '#ffffff' && o.prefix === 'score/num' && o.overlap === 3, 'obIni', o); }
+async function obOskImport(f) {
+  const msg = t => { const m = $('obOskMsg'); if (m) m.textContent = t; }, z = obUnzip(await f.arrayBuffer()), keys = [...z.keys()], norm = k => k.replace(/\\/g, '/').toLowerCase();
+  const find = (base, exts) => { base = norm(base); for (const e of exts) { const h = keys.find(k => { const n = norm(k); return n === base + e || n.endsWith('/' + base + e); }); if (h) return [h, e.startsWith('@2x')]; } return null; };
+  const iniK = find('skin', ['.ini']), ini = obIni(iniK ? new TextDecoder().decode(await obInflate(z.get(iniK[0]))) : ''), pre = ini.prefix || 'default';
+  if (!find('hitcircle', ['@2x.png', '.png'])) throw new Error('ce skin n\'a pas d\'image de cercle (hitcircle.png)');
+  msg('Lecture du skin…');
+  try { for (const n of await folder.listFiles()) if (n.startsWith('osk-')) await folder.removeFile(n); } catch {}
+  const imgs = {}, want = [...OSK_IMG.map(k => [k, k]), ...[...'0123456789'].map(d => ['d' + d, pre + '-' + d])];
+  for (const [k, base] of want) { const h = find(base, ['@2x.png', '.png']); if (!h) continue; const file = 'osk-' + k + '.png'; await folder.writeFile(file, await obB64(await obInflate(z.get(h[0])))); imgs[k] = [file, h[1]]; }
+  const snd = []; for (const s of OSK_SND) { const h = find('normal-' + s, ['.wav', '.ogg', '.mp3']) || find('soft-' + s, ['.wav', '.ogg', '.mp3']); let file = null;
+    if (h) { const b = await obInflate(z.get(h[0])); if (b.length > 100) { file = 'osk-' + s + h[0].slice(h[0].lastIndexOf('.')).toLowerCase(); await folder.writeFile(file, await obB64(b)); } } snd.push(file); }
+  games.orbeSkin = {name: ini.name || f.name.replace(/\.osk$/i, ''), imgs, snd, cols: ini.cols, border: ini.border, track: ini.track, overlap: ini.overlap ?? -2};
+  saveGames(); await obOskLoad(); $('obSkin').value = 'osk'; $('obSkin').dispatchEvent(new Event('change'));
+  if (snd.some(Boolean)) { $('obHs').value = '4'; $('obHs').dispatchEvent(new Event('change')); }
+  msg('Skin « ' + games.orbeSkin.name + ' » importé.');
+}
+async function obOskLoad() {  // les images du skin (gardées en mémoire), ses choix dans les menus Skin et Hitsounds
+  const M = games.orbeSkin; obOsk = null; obTints = new WeakMap();
+  for (const s of ['obSkin', 'obHs']) $(s).querySelector('option[value="' + (s === 'obSkin' ? 'osk' : '4') + '"]')?.remove();
+  $('obOskDel').hidden = !M; if (!M) return;
+  const img = {}; for (const [k, [file, x2]] of Object.entries(M.imgs)) try { img[k] = {bm: await createImageBitmap(new Blob([await obFileBytes(file)])), x2}; } catch {}
+  if (!img.hitcircle) return;
+  obOsk = {...M, img, kit: null, kitP: null};
+  $('obSkin').append(new Option('osu! : ' + M.name.slice(0, 24), 'osk')); if (M.snd.some(Boolean)) $('obHs').append(new Option('osu! : ' + M.name.slice(0, 24), '4'));
+  const p = games.rhythmPrefs || {}; if (p.obSkin === 'osk') $('obSkin').value = 'osk'; if (p.obHs === '4' && M.snd.some(Boolean)) $('obHs').value = '4';
+}
+function obOskKit() { if (obOsk && !obOsk.kitP && rhCtx) obOsk.kitP = Promise.all(obOsk.snd.map(f => f ? obFileBytes(f).then(b => rhCtx.decodeAudioData(b)).catch(() => null) : null)).then(k => { obOsk.kit = k; }); }
+const obOskOn = () => !!obOsk && $('obSkin').value === 'osk';
+let obTints = new WeakMap();
+function obTint(bm, col) {  // l'image en gris teintée de la couleur du combo (comme osu!), gardée pour les images suivantes
+  let m = obTints.get(bm); if (!m) obTints.set(bm, m = new Map()); let c = m.get(col);
+  if (!c) { c = document.createElement('canvas'); c.width = bm.width; c.height = bm.height; const x = c.getContext('2d'); x.drawImage(bm, 0, 0); x.globalCompositeOperation = 'multiply'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); x.globalCompositeOperation = 'destination-in'; x.drawImage(bm, 0, 0); m.set(col, c); }
+  return c;
+}
+const obOskCol = n => { const C = obOsk.cols?.length ? obOsk.cols : OSK_COLS; return C[(n.col || 0) % C.length]; };
+function obOskImg(K, k, x, y, r, tint, rot) {  // une image du skin à la taille d'osu! : 128 pixels (256 en @2x) pour un cercle de rayon r
+  const e = obOsk.img[k]; if (!e) return false; const s = r / 64 / (e.x2 ? 2 : 1), w = e.bm.width * s, h = e.bm.height * s, src = tint ? obTint(e.bm, tint) : e.bm;
+  if (rot) { K.save(); K.translate(x, y); K.rotate(rot); K.drawImage(src, -w / 2, -h / 2, w, h); K.restore(); } else K.drawImage(src, x - w / 2, y - h / 2, w, h);
+  return true;
+}
+function obOskCirc(K, x, y, r, col, combo) {
+  obOskImg(K, 'hitcircle', x, y, r, col); obOskImg(K, 'hitcircleoverlay', x, y, r);
+  if (combo == null) return;
+  const ds = [...String(combo)].map(c => obOsk.img['d' + c]);
+  if (!ds.every(Boolean)) { K.font = 'bold ' + Math.round(r * .9) + 'px sans-serif'; K.textAlign = 'center'; K.textBaseline = 'middle'; K.fillStyle = '#ffffff'; K.fillText(String(combo), x, y); return; }
+  const k = r / 64 * .8, ws = ds.map(e => e.bm.width / (e.x2 ? 2 : 1) * k), ov = obOsk.overlap * k, tot = ws.reduce((a, b) => a + b, 0) - ov * (ws.length - 1);
+  let cx = x - tot / 2; ds.forEach((e, i) => { const h = e.bm.height / (e.x2 ? 2 : 1) * k; K.drawImage(e.bm, cx, y - h / 2, ws[i], h); cx += ws[i] - ov; });
+}
+const obShade = (hex, k) => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * k).toString(16).padStart(2, '0')).join('');
+function obOskSlider(K, n, now, after, col) {  // le corps tracé net (bord et fond aux couleurs du skin), les tics, la flèche de retour, la boule et le cercle de suivi
+  const r = rh.r, X = OB.X0, Y = OB.Y0, pre = rh.pre, end = n.t + n.len; if (now > end + .2) return;
+  const grow = obClamp((now - (n.t - pre)) / (pre * .45), 0, 1), out = now > end ? 1 - (now - end) / .2 : 1;
+  const a = obMod('HD') ? obClamp((now - (n.t - pre)) / (pre * .4), 0, 1) * obClamp(1 - (now - (n.t - pre * .6)) / (pre * .6 + n.len), 0, 1) : obClamp((now - (n.t - pre)) / (.4 * Math.min(1, pre / .45)), 0, 1);
+  const L = n.pts.at(-1)[2] * grow, pts = n.pts.filter(p => p[2] <= L); pts.push(obAt(n.pts, grow));
+  const path = () => { K.beginPath(); pts.forEach(([x, y], i) => i ? K.lineTo(X + x, Y + y) : K.moveTo(X + x, Y + y)); };
+  K.save(); K.globalAlpha = a * out * .9; K.lineCap = K.lineJoin = 'round';
+  path(); K.strokeStyle = obOsk.border || '#ffffff'; K.lineWidth = r * 1.9; K.stroke();
+  path(); K.strokeStyle = obOsk.track || obShade(col, .45); K.lineWidth = r * 1.66; K.stroke();
+  path(); K.strokeStyle = obOsk.track ? 'rgba(255,255,255,.1)' : obShade(col, .7); K.lineWidth = r * .8; K.stroke();
+  K.restore(); if (now > end) return;
+  K.globalAlpha = a; const pass = after < 0 ? 0 : Math.floor(obClamp(after / n.len, 0, .999) * n.reps);
+  for (const p of n.parts) if (p.kind === 'tick' && p.t > now && Math.floor((p.t - n.t) / n.len * n.reps) === pass) { const [x, y] = obBall(n, p.t); if (!obOskImg(K, 'sliderscorepoint', X + x, Y + y, r)) { K.fillStyle = '#ffffff'; K.beginPath(); K.arc(X + x, Y + y, r * .12, 0, 7); K.fill(); } }
+  const rep = n.parts.find(p => p.kind === 'rep' && p.t > now);
+  if (rep && grow >= 1) { const [x, y] = obBall(n, rep.t), [bx, by] = obBall(n, rep.t + n.len / n.reps * .1), bf = (obToB(rh.c, now) % 1 + 1) % 1; obOskImg(K, 'reversearrow', X + x, Y + y, r * (1 + .15 * (1 - bf)), null, Math.atan2(by - y, bx - x)); }
+  K.globalAlpha = 1; if (after < 0) return;
+  const [bx, by] = obBall(n, now), x = X + bx, y = Y + by, k = obClamp((performance.now() - (n.trkAt || 0)) / 150, 0, 1);
+  if (!obOskImg(K, obOsk.img.sliderb0 ? 'sliderb0' : 'sliderb', x, y, r)) obOskImg(K, 'hitcircle', x, y, r, col);
+  if (n.trk || (n.trkAt && k < 1)) { K.globalAlpha = n.trk ? 1 : 1 - k; obOskImg(K, obOsk.img.sliderfollowcircle ? 'sliderfollowcircle' : 'sliderfollowcircle-0', x, y, r * (n.trk ? .5 + .5 * (1 - (1 - k) ** 2) : 1 + .2 * k)); K.globalAlpha = 1; }
+}
+function obOskNote(K, n, now, after, fade, jx) {  // un objet avec le skin : comme dans le terrain en pixels, mais avec les images du skin
+  const r = rh.r, col = obOskCol(n), hd = obMod('HD'), x = OB.X0 + n.x + jx, y = OB.Y0 + n.y;
+  if (n.kind === 'slide') obOskSlider(K, n, now, after, col);
+  const gone = n.judged && !n.missed;
+  if (gone && n.hitAt != null && now - n.hitAt < .24) { const k = (now - n.hitAt) / .24; K.globalAlpha = .8 * (1 - k) * (hd ? .5 : 1); obOskCirc(K, x, y, r * (1 + .4 * k), col); K.globalAlpha = 1; }
+  if (gone || (n.missed && after > .3)) return;
+  K.globalAlpha = n.missed ? .45 * (1 - after / .3) : fade; if (K.globalAlpha > .01) obOskCirc(K, x, y, r, n.missed ? '#505060' : col, n.combo);
+  if (!n.missed && after < 0 && !hd) { K.globalAlpha = obClamp((now - (n.t - rh.pre)) / (rh.pre * .5), 0, 1) * .9; obOskImg(K, 'approachcircle', x, y, r * (1 + 3 * obClamp(-after / rh.pre, 0, 1)), col); }
+  K.globalAlpha = 1;
+}
+let obHiC = null;
+function obHi() {  // la couche nette, posée exactement sur le terrain : on y recopie d'abord le fond en pixels
+  if (!obHiC) { obHiC = document.createElement('canvas'); obHiC.style.cssText = 'position:absolute;pointer-events:none;image-rendering:auto;max-width:none;aspect-ratio:auto'; cv.after(obHiC); const p = cv.parentElement; if (getComputedStyle(p).position === 'static') p.style.position = 'relative'; }
+  const c = obHiC, d = devicePixelRatio || 1, w = Math.max(W, Math.round(cv.offsetWidth * d)), h = Math.max(H, Math.round(cv.offsetHeight * d)); c.hidden = false;
+  if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
+  const st = c.style, L = cv.offsetLeft + 'px', T = cv.offsetTop + 'px', CW = cv.offsetWidth + 'px', CH = cv.offsetHeight + 'px'; if (st.left !== L || st.top !== T || st.width !== CW || st.height !== CH) Object.assign(st, {left: L, top: T, width: CW, height: CH});
+  const K = c.getContext('2d'); K.setTransform(1, 0, 0, 1, 0, 0); K.imageSmoothingEnabled = false; K.drawImage(cv, 0, 0, w, h); K.imageSmoothingEnabled = true; K.imageSmoothingQuality = 'high'; K.setTransform(w / W, 0, 0, h / H, 0, 0);
+  return K;
+}
+function obHiEnd(K) {  // le reste (le HUD, les écrans) recopié par-dessus, puis le curseur du skin tout en haut
+  const c = obHiC; K.setTransform(1, 0, 0, 1, 0, 0); K.imageSmoothingEnabled = false; K.drawImage(cv, 0, 0, c.width, c.height); K.imageSmoothingEnabled = true; K.setTransform(c.width / W, 0, 0, c.height / H, 0, 0);
+  if (rh.mode !== 'play' || !obOsk.img.cursor) return;
+  const sz = (+$('obCurSize').value || 1) * 64 * H / 768;  // le curseur à sa taille d'osu! (écran de 768 de haut)
+  if (obOsk.img.cursortrail) rh.trail.forEach(([x, y], i) => { K.globalAlpha = (i + 1) / rh.trail.length * .8; obOskImg(K, 'cursortrail', x, y, sz); });
+  K.globalAlpha = 1; obOskImg(K, 'cursor', rh.cx, rh.cy, sz); obOskImg(K, 'cursormiddle', rh.cx, rh.cy, sz);
+}
+obOskLoad().catch(() => {});
 const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
   get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · ' + (rh.theme?.name || '') + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1) + ' · HP ' + o.hp.toFixed(1), '#3fe0ff']] : []),
     ...(rh?.mods ? [['Mods ' + rh.mods + ' · points ×' + obModMult().toFixed(2), '#ffd84a']] : []), ...(rh?.var ? [['Variante ' + (rh.var + 1) + ' de la map', '#b0f4ff']] : []),
     ['Clique (ou une de tes touches) quand le cercle touche l\'orbe', '#e8e0ff'], ['Glissières : suis la boule · toupies : tourne', '#c8f8ff']]; },
   chart: obChart, stars: obStars, tag: len => obStyle(len).name,
   reset() {
+    if (rh.starsFor !== rh.notes) { rh.starsFor = rh.notes; rh.baseStars = obStars(rh.notes); }  // les étoiles de la map sans mods : elles donnent l'AR
     const o = obStatsM(rh.diff, rh.c.len); rh.theme = obTheme(rh.c.len); OB.COLS = rh.theme.cols;
     Object.assign(rh, {keys: new Set(), cx: rh.cx ?? W / 2, cy: rh.cy ?? H / 2, trail: [], pops: [], ob: o, pre: o.pre, r: o.r, pk: o.pk, shake: 0, rate: obMod('DT') ? 1.5 : obMod('HT') ? .75 : 1, mods: obModTxt(),
       hp: 1, hpHist: [], hpT: -9, failed: false, errs: [], kc: {K1: 0, K2: 0, M1: 0, M2: 0}, dScore: 0, cPop: 0, lastCombo: 0, lastNow: null, menu: 0, retryAt: 0, retrying: false, rank: 0, sliding: false, spinning: 0, noSave: obMod('AT'), ai: 0, pp: 0, resT: 0, resSnd: 0, pick: null, aim: [], tl: [], tlNext: 0, run: (games.orbeRun || {})[rh.info ? obKey() : ''] || null, var: rh.info ? (games.orbeVar || {})[rh.info.key] || 0 : 0});
     rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r);
     obPrep(); if (obMod('FL')) [110, 70, 58, 46].forEach(obFlashCnv);
-    if (rhCtx && rh.info) { obSet(+$('obHs').value); obExtra ??= (rhKit ??= rhKitMake()).extra(); }  // les sons prêts avant de jouer : rien à fabriquer pendant la partie
+    if (rhCtx && rh.info) { obOskKit(); obSet(+$('obHs').value); obExtra ??= (rhKit ??= rhKitMake()).extra(); }  // les sons prêts avant de jouer : rien à fabriquer pendant la partie
     obTopShow();
   },
   update() {  // 60 fois par seconde : ce qui bouge à l'écran ; le jeu lui-même se joue à chaque image de l'écran (obLogic)
@@ -1622,10 +2029,10 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     if (rh.noSave) return;
     const c = rh.counts, e0 = rh.errs.map(x => x[1] * 1000), mu = e0.length ? e0.reduce((a, b) => a + b, 0) / e0.length : 0;
     rh.ur = e0.length ? Math.sqrt(e0.reduce((a, b) => a + (b - mu) ** 2, 0) / e0.length) * 10 : 0;
-    rh.pp = rh.failed ? 0 : obPP(rh.sx, {acc: rh.acc, n300: c.PARFAIT, n100: c.BIEN, n50: c.OK, miss: c['RATÉ'], combo: rh.maxCombo, fc: rh.fc, n: rh.notes.length, od: rh.ob.od, mods: rh.mods.match(/../g) || []});
+    rh.pp = rh.failed ? 0 : obPP(rh.sx, {acc: rh.acc, n300: c.PARFAIT, n100: c.BIEN, n50: c.OK, miss: c['RATÉ'], combo: rh.maxCombo, fc: rh.fc, n: rh.notes.length, od: rh.ob.od, ar: rh.ob.ar, rate: rh.rate, mods: rh.mods.match(/../g) || []});
     const H = gstore('orbeHist', []), a = Math.round(rh.acc * 10000) / 100, played = ((rh.failed ? rh.failNow : rh.lastEnd) - rh.first) / rh.rate;
     const am = rh.aim.length >= 8 ? Math.round(rh.aim.reduce((s0, q) => s0 + q[0], 0) / rh.aim.length * 100) : null;
-    H.push({ai: am, d: Date.now(), k: obKey(), n: rh.info.name, df: RH_DIFFS[rh.diff] || 'Perso', s: rh.score, a, ur: Math.round(rh.ur), pp: rh.pp, g: rh.failed ? 'F' : rh.grade, m: rh.mods, f: rh.failed ? 1 : 0, t: Math.max(0, Math.round(played)), c: rh.maxCombo, st: Math.round(rh.stars * 100) / 100, F: !rh.failed && !c['RATÉ'] && rh.maxCombo >= rh.fc ? 1 : 0});
+    H.push({ai: am, d: Date.now(), k: obKey(), n: rh.info.name, df: RH_DIFFS[rh.diff] || rh.info.ver || 'Perso', s: rh.score, a, ur: Math.round(rh.ur), pp: rh.pp, g: rh.failed ? 'F' : rh.grade, m: rh.mods, f: rh.failed ? 1 : 0, t: Math.max(0, Math.round(played)), c: rh.maxCombo, st: Math.round(rh.stars * 100) / 100, F: !rh.failed && !c['RATÉ'] && rh.maxCombo >= rh.fc ? 1 : 0, sy: rh.ob.st.name, cl: Object.values(rh.kc).reduce((x, y) => x + y, 0)});
     { const had = new Map(obMedals(H.slice(0, -1)).map(m => [m.id, m.tier])); for (const m of obMedals(H)) if (m.tier > (had.get(m.id) || 0)) { toast('Médaille : ' + m.name + ' · ' + OB_TIER[m.tiers.length > 1 ? m.tier - 1 : 2][0] + ' · ' + m.desc(m.tiers[m.tier - 1])); setTimeout(() => obUi('medal'), 2200); } }
     if (H.length > 1000) H.splice(0, H.length - 1000);
     if (!rh.failed) { const L = (gstore('orbeTop', {})[obKey()] ??= []), e = {s: rh.score, a, g: rh.grade, c: rh.maxCombo, x: c['RATÉ'], m: rh.mods, pp: rh.pp, d: Date.now()};
@@ -1649,6 +2056,7 @@ function obPrep() {
     const bi = obToB(rh.c, n.t), k = Math.round(bi);
     // clap sur la caisse claire (sinon sur les temps 2 et 4), cymbale sur un accent du refrain ou d'un début de mesure, sifflet sur les glissières
     n.cl = n.snd ? n.snd === 'snare' : Math.abs(bi - k) < .08 && k % 2 === 1; n.fin = (n.acc || 0) > .85 && (n.kiai || Math.abs(bi / 4 - Math.round(bi / 4)) < .02); n.wh = n.kind === 'slide' && !n.cl;
+    if (n.hs != null) { n.cl = !!(n.hs & 8); n.fin = !!(n.hs & 4); n.wh = !!(n.hs & 2); }
     if (n.kind !== 'slide') continue;
     const parts = [], per = n.len / n.reps;  // les retours et le bout, puis un tic par temps
     for (let j = 1; j <= n.reps; j++) parts.push({t: n.t + per * j, kind: j < n.reps ? 'rep' : 'end'});
@@ -1661,7 +2069,7 @@ function obPrep() {
   rh.first = ns[0]?.t ?? 0; rh.lastEnd = end; rh.skipTo = rh.first > 6 ? rh.first - Math.max(2, rh.pre + 1) : 0;
   const drain = Math.max(1, rh.lastEnd - rh.first - rh.breaks.reduce((a, b) => a + b.e - b.s, 0));
   rh.dm = Math.max(1, Math.round((rh.ob.hp + rh.ob.cs + rh.ob.od + obClamp(ns.length / drain * 8, 0, 16)) / 38 * 5));
-  rh.sx = obStarsX(ns.map(n => ({...n, t: n.t / rh.rate, len: (n.len || 0) / rh.rate, r}))); rh.stars = rh.sx.stars;  // les étoiles avec les mods
+  rh.sx = obStarsX(ns.map(n => ({...n, r})), rh.ob.od, rh.rate); rh.stars = rh.sx.stars;  // les étoiles avec les mods (taille, OD, vitesse)
   rh.fc = ns.reduce((a, n) => a + 1 + (n.parts?.length || 0), 0);  // le combo d'une partie parfaite
 }
 const obBreak = now => rh.breaks?.find(b => now >= b.s && now <= b.e);
@@ -1756,7 +2164,7 @@ const obNeed = n => Math.max(1, n.len * 1.2) * 2 * Math.PI;
 // les sons : les hitsounds du jeu de sons choisi, joués au moment de la frappe ; les sons en boucle de la glissière suivie et de la toupie qui tourne
 const obKits = [];
 let obExtra = null;
-const obSet = s => s >= 0 && s <= 3 && rhCtx ? (obKits[s] ??= (rhKit ??= rhKitMake()).hs(s)) : null;
+const obSet = s => s === 4 ? obOsk?.kit || null : s >= 0 && s <= 3 && rhCtx ? (obKits[s] ??= (rhKit ??= rhKitMake()).hs(s)) : null;
 const obPlayBuf = (b, v) => { if (!rhCtx || !rhHs || !b) return; const s = rhCtx.createBufferSource(), gn = rhCtx.createGain(); s.buffer = b; gn.gain.value = v; s.connect(gn).connect(rhHs); s.start(); };
 function obHs(n, part) {
   const k = rh.info && obSet(+$('obHs').value); if (!k) return;  // sans niveau (la vérification au chargement) : en silence
@@ -1802,7 +2210,7 @@ function obResumeTry() {
   rh.cx = rh.pcx; rh.cy = rh.pcy; rh.mode = 'play'; rhCtx.resume(); obLock();
 }
 // la clé du niveau joué : une autre variante de la map a son propre classement
-const obKey = () => rh.info.key + (rh.var ? '~' + rh.var : '');
+const obKey = () => rh.info.key + (rh.var ? '~' + rh.var + (obVarStyle(rh.info.key) ? '-' + obVarStyle(rh.info.key) : '') : '');
 // Auto et Pilote : le curseur va tout seul d'un orbe au suivant (en douceur), suit la boule des glissières, tourne sur les toupies (7 tours par seconde)
 function obAutoPos(now) {
   const ns = rh.notes; let i = rh.ai || 0; while (i < ns.length - 1 && ns[i].t + (ns[i].len || 0) < now) i++; rh.ai = i;
@@ -1816,20 +2224,34 @@ function obAutoPos(now) {
   }
   rh.cx = OB.X0 + x; rh.cy = OB.Y0 + y;
 }
-// les points de performance (pp), à la manière d'osu! : la visée, la vitesse et la précision de la partie, selon la difficulté du niveau avec ses mods ;
-// un raté, un combo cassé, une précision basse en enlèvent ; Relax, Pilote et Auto n'en donnent pas
+// les points de performance (pp), calculés comme osu! (version de 2023) : la visée, la vitesse et la précision, selon les étoiles de la map avec les mods.
+// Les ratés « effectifs » comptent aussi les combos cassés sur les glissières ; AR et OD sont pris après HR/EZ et la vitesse (DT/HT) ;
+// Relax, Pilote et Auto ne donnent rien. o : n300, n100, n50, miss, combo, fc (le combo maximal), n (objets), od, ar, rate, mods
 function obPP(sx, o) {
   const has = m => o.mods.includes(m); if (!sx || has('RX') || has('AP') || has('AT')) return 0;
-  const B = v => (5 * Math.max(1, v / .0675) - 4) ** 3 / 1e5, N = o.n, od = o.od, len = .95 + .4 * Math.min(1, N / 2000) + (N > 2000 ? Math.log10(N / 2000) * .5 : 0);
-  const miss = .97 ** o.miss, cmb = Math.min(1, (o.combo / Math.max(1, o.fc)) ** .8);
-  let aim = B(sx.aim) * len * miss * cmb * (.5 + o.acc / 2) * (.98 + od * od / 2500), speed = B(sx.speed) * len * miss * cmb * (.95 + od * od / 750) * o.acc ** ((14.5 - Math.max(od, 8)) / 2);
-  if (has('HD')) { aim *= 1.04; speed *= 1.04; }
-  if (has('FL')) aim *= 1 + .35 * Math.min(1, N / 200) + (N > 200 ? .3 * Math.min(1, (N - 200) / 300) : 0);
-  const p3 = N ? obClamp((o.n300 * 6 + o.n100 * 2 + o.n50) / (N * 6), 0, 1) : 0, acc = 1.52163 ** od * p3 ** 24 * 2.83 * Math.min(1.15, (N / 1000) ** .3) * (has('HD') ? 1.08 : 1) * (has('FL') ? 1.02 : 1);
-  return Math.round((aim ** 1.1 + speed ** 1.1 + acc ** 1.1) ** (1 / 1.1) * 1.14 * (has('NF') ? .9 : 1));
+  const N = Math.max(1, o.n), rate = o.rate || 1, sl = sx.nS || 0, circ = sx.nC ?? N;
+  const od = (80 - (80 - 6 * o.od) / rate) / 6, pre = (o.ar < 5 ? 1800 - 120 * o.ar : 1200 - 150 * (o.ar - 5)) / rate, ar = pre > 1200 ? (1800 - pre) / 120 : 5 + (1200 - pre) / 150;
+  const acc = (o.n300 * 6 + o.n100 * 2 + o.n50) / (N * 6);
+  let em = o.miss; if (sl) { const thr = o.fc - .1 * sl; if (o.combo < thr) em = Math.max(em, Math.min(thr / Math.max(1, o.combo), o.n100 + o.n50 + o.miss)); }
+  const len = .95 + .4 * Math.min(1, N / 2000) + (N > 2000 ? Math.log10(N / 2000) * .5 : 0), cmb = o.fc > 0 ? Math.min(1, o.combo ** .8 / o.fc ** .8) : 1;
+  let aim = obBasePerf(sx.aim) * len;
+  if (em > 0) aim *= .97 * (1 - (em / N) ** .775) ** em;
+  aim *= cmb * (1 + (ar > 10.33 ? .3 * (ar - 10.33) : ar < 8 ? .05 * (8 - ar) : 0) * len); if (has('HD')) aim *= 1 + .04 * (12 - ar);
+  if (sl) { const ed = sl * .15, drop = obClamp(Math.min(o.n100 + o.n50 + o.miss, o.fc - o.combo), 0, ed); aim *= (1 - sx.sf) * (1 - drop / ed) ** 3 + sx.sf; }
+  aim *= acc * (.98 + od * od / 2500);
+  if (has('FL')) aim *= 1 + .35 * Math.min(1, N / 200) + (N > 200 ? .3 * Math.min(1, (N - 200) / 300) : 0);  // osu! a une compétence « flashlight » à part : ici, un bonus sur la visée
+  let speed = obBasePerf(sx.speed) * len;
+  if (em > 0) speed *= .97 * (1 - (em / N) ** .775) ** (em ** .875);
+  speed *= cmb * (1 + (ar > 10.33 ? .3 * (ar - 10.33) : 0) * len); if (has('HD')) speed *= 1 + .04 * (12 - ar);
+  const rt = N - (sx.sn || 0), r3 = Math.max(0, o.n300 - rt), r1 = Math.max(0, o.n100 - Math.max(0, rt - o.n300)), r5 = Math.max(0, o.n50 - Math.max(0, rt - o.n300 - o.n100)), ra = sx.sn ? (r3 * 6 + r1 * 2 + r5) / (sx.sn * 6) : 0;
+  speed *= (.95 + od * od / 750) * ((acc + ra) / 2) ** ((14.5 - Math.max(od, 8)) / 2) * .99 ** (o.n50 < N / 500 ? 0 : o.n50 - N / 500);
+  const better = circ ? obClamp(((o.n300 - (N - circ)) * 6 + o.n100 * 2 + o.n50) / (circ * 6), 0, 1) : 0;
+  const accV = 1.52163 ** od * better ** 24 * 2.83 * Math.min(1.15, (circ / 1000) ** .3) * (has('HD') ? 1.08 : 1) * (has('FL') ? 1.02 : 1);
+  const mult = 1.14 * (has('NF') ? Math.max(.9, 1 - .02 * em) : 1);
+  return Math.round((aim ** 1.1 + speed ** 1.1 + accV ** 1.1) ** (1 / 1.1) * mult);
 }
-{ const P = (acc, miss, mods = []) => obPP({aim: 2.6, speed: 1.8}, {acc, n300: Math.round(500 * acc), n100: 500 - Math.round(500 * acc), n50: 0, miss, combo: miss ? 200 : 700, fc: 700, n: 500, od: 7, mods});
-  console.assert(P(1, 0) > 80 && P(1, 0) < 250 && P(.95, 0) < P(1, 0) && P(1, 3) < P(1, 0) && P(1, 0, ['HD']) > P(1, 0) && P(1, 0, ['RX']) === 0, 'obPP', P(1, 0)); }
+{ const sx = {aim: 2.6, speed: 1.8, sf: .95, sn: 300, nC: 400, nS: 100, nSp: 0}, P = (acc, miss, mods = []) => obPP(sx, {n300: Math.round(500 * acc), n100: 500 - Math.round(500 * acc), n50: 0, miss, combo: miss ? 200 : 700, fc: 700, n: 500, od: 8, ar: 9, mods});
+  console.assert(P(1, 0) > 120 && P(1, 0) < 400 && P(.95, 0) < P(1, 0) && P(1, 3) < P(1, 0) && P(1, 0, ['HD']) > P(1, 0) && P(1, 0, ['RX']) === 0, 'obPP', P(1, 0)); }
 // le profil, comme dans osu! : le total de pp (ta meilleure partie de chaque niveau, la 1re comptant en entier, puis 95 %, 90 %…, plus un petit bonus
 // par niveau joué) et la précision pondérée de la même façon
 function obProfile() {
@@ -1852,24 +2274,77 @@ function obChartCnv(vals, col, lo, hi, bars) {
 function obStatsPage() {
   const H = games.orbeHist || [], fin = H.filter(h => !h.f), {pp, L, acc} = obProfile();
   const card = (t, ...k) => { const c = el('div', 'sysCard'); c.append(el('b', '', t), ...k); return c; }, row = (a, b) => { const r = el('div', 'obRow'); r.append(el('span', '', a), el('b', '', String(b))); return r; };
-  if (!H.length) return [card('STATISTIQUES', el('span', 'hint', 'Joue une partie : tes statistiques apparaîtront ici.'))];
+  const hint = t => el('span', 'hint', t), pct = v => v.toFixed(2) + ' %';
+  if (!H.length) return [card('STATISTIQUES', hint('Joue une partie : tes statistiques apparaîtront ici.'))];
   const time = H.reduce((s, h) => s + (h.t || 0), 0), urs = fin.filter(h => h.ur > 0).map(h => h.ur), nG = g => fin.filter(h => h.g === g).length, last = fin.slice(-60);
-  const days = Array.from({length: 14}, (_, i) => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - 13 + i); return H.filter(h => h.d >= +d && h.d < +d + 864e5).length; });
   const R = obRank(pp), pps = obPPSeries(), rk = card('RANG', el('span', '', R.name + ' · ' + Math.round(pp) + ' pp' + (R.next ? ' · prochain rang : ' + R.next[1] + ' à ' + R.next[0] + ' pp' : '')));
-  if (pps.length >= 2) rk.append(el('span', 'hint', 'Tes pp au fil des parties'), obChartCnv(pps, R.col, 0, Math.max(...pps, 1)));
+  if (pps.length >= 2) rk.append(hint('Tes pp au fil des parties'), obChartCnv(pps, R.col, 0, Math.max(...pps, 1)));
   const md = obMedals(H), mg = el('div', 'obMedals');
   for (const m of md) { const t = el('div', 'obMedal' + (m.on ? '' : ' off')), tn = m.on ? OB_TIER[m.tiers.length > 1 ? m.tier - 1 : 2][0] : '';
-    t.append(obBadge(m.col, m.tier, m.on), el('b', '', m.name + (tn ? ' · ' + tn : '')), el('span', 'hint', m.next != null ? 'prochain : ' + m.desc(m.next) : m.desc(m.tiers.at(-1)))); mg.append(t); }
-  const out = [card('CARTE DE JOUEUR', ...obCardBox()), rk, card('MÉDAILLES · ' + md.filter(m => m.on).length + ' / ' + md.length, mg), card('PROFIL', row('Performance', Math.round(pp) + ' pp'), row('Précision', acc.toFixed(2) + ' %'), row('Parties jouées', H.length), row('Parties finies', fin.length),
-    row('Temps de jeu', Math.floor(time / 3600) + ' h ' + String(Math.floor(time % 3600 / 60)).padStart(2, '0') + ' min'), row('Meilleur UR', urs.length ? Math.min(...urs) : '–'),
-    row('Meilleur combo', H.reduce((m, h) => Math.max(m, h.c || 0), 0) + 'x'), row('SS · S · A', nG('SS') + ' · ' + nG('S') + ' · ' + nG('A')))];
-  if (last.length >= 2) out.push(card('AU FIL DES PARTIES', el('span', 'hint', 'Précision des 60 dernières parties finies'), obChartCnv(last.map(h => h.a), '#3fe0ff', Math.min(...last.map(h => h.a)) - 1, 100),
-    el('span', 'hint', 'UR : plus il est bas, plus tu es régulier'), obChartCnv(last.map(h => h.ur), '#ffd84a', 0, Math.max(...last.map(h => h.ur), 100)),
-    el('span', 'hint', 'Parties par jour, les 14 derniers jours'), obChartCnv(days, '#7ee07a', 0, Math.max(...days, 1), true)));
-  if (L.length) out.push(card('MEILLEURES PERFORMANCES', ...L.slice(0, 10).map((h, i) => row((i + 1) + '. ' + h.n + ' · ' + h.df + (h.m ? ' · ' + h.m : ''), h.pp + ' pp · ' + h.a.toFixed(2) + ' % · ' + h.g))));
+    t.append(obBadge(m.col, m.tier, m.on), el('b', '', m.name + (tn ? ' · ' + tn : '')), hint(m.next != null ? 'prochain : ' + m.desc(m.next) : m.desc(m.tiers.at(-1)))); mg.append(t); }
+  const out = [card('CARTE DE JOUEUR', ...obCardBox()), rk, card('MÉDAILLES · ' + md.filter(m => m.on).length + ' / ' + md.length, mg), card('PROFIL', row('Performance', Math.round(pp) + ' pp'), row('Précision', pct(acc)), row('Parties jouées', H.length), row('Parties finies', fin.length),
+    row('Meilleur UR', urs.length ? Math.min(...urs) : '–'), row('SS · S · A', nG('SS') + ' · ' + nG('S') + ' · ' + nG('A')))];
+  // les meilleures performances, comme sur un profil osu! : la pondération (100 %, 95 %, 90 %…), les étoiles, les mods, la note
+  if (L.length) out.push(card('MEILLEURES PERFORMANCES', hint('Ta meilleure partie de chaque niveau : la 1re compte en entier, la 2e à 95 %, la 3e à 90 %…'),
+    ...L.slice(0, 15).map((h, i) => { const r = row((i + 1) + '. ' + h.n + ' [' + h.df + ']' + (h.st ? ' ' + rhStarTxt(h.st) : '') + (h.m ? ' +' + h.m : ''), h.pp + ' pp → ' + Math.round(h.pp * .95 ** i) + ' · ' + pct(h.a) + ' · ' + h.g);
+      r.title = new Date(h.d).toLocaleDateString('fr-FR') + (h.c ? ' · combo ' + h.c + 'x' : '') + (h.F ? ' · FC' : ''); return r; })));
+  // dans le temps : le profil (pp, précision, rang) à la fin de chaque jour, sur 30 jours ; le meilleur progrès de la semaine
+  const day0 = new Date(); day0.setHours(0, 0, 0, 0); const D = 864e5, ends = Array.from({length: 30}, (_, i) => +day0 - (28 - i) * D);
+  const tl = obTimeline(H, ends);
+  if (fin.length >= 2) {
+    const wk = tl.gains.filter(x => x.h.d >= +day0 - 6 * D).sort((a, b) => b.g - a.g)[0], r0 = obRank(tl.pp[0]).name, r1 = R.name;
+    out.push(card('DANS LE TEMPS', hint('Tes pp à la fin de chaque jour (30 jours)'), obChartCnv(tl.pp, R.col, Math.min(...tl.pp) * .95, Math.max(...tl.pp, 1)),
+      hint('Ta précision (pondérée comme le profil)'), obChartCnv(tl.acc, '#3fe0ff', Math.min(...tl.acc.filter(v => v > 0), 100) - .5, 100),
+      row('Rang', r0 === r1 ? r1 + ' depuis 30 jours' : r0 + ' il y a 30 jours → ' + r1), row('Cette semaine', (tl.pp.at(-1) - tl.pp.at(-8) >= 0 ? '+' : '') + Math.round(tl.pp.at(-1) - tl.pp.at(-8)) + ' pp'),
+      row('Meilleur progrès de la semaine', wk && wk.g > .5 ? wk.h.n + ' [' + wk.h.df + '] : +' + Math.round(wk.g) + ' pp' : '–')));
+  }
+  if (last.length >= 2) out.push(card('AU FIL DES PARTIES', hint('Précision des 60 dernières parties finies'), obChartCnv(last.map(h => h.a), '#3fe0ff', Math.min(...last.map(h => h.a)) - 1, 100),
+    hint('UR : plus il est bas, plus tu es régulier'), obChartCnv(last.map(h => h.ur), '#ffd84a', 0, Math.max(...last.map(h => h.ur), 100))));
+  // par style de map et par étoiles : le nombre de parties, la précision moyenne, les pp moyens (parties finies)
+  const group = f => { const m = new Map(); for (const h of fin) { const k = f(h); if (k == null) continue; const o = m.get(k) || {n: 0, a: 0, p: 0}; o.n++; o.a += h.a; o.p += h.pp || 0; m.set(k, o); } return m; };
+  const line = (k, o) => row(k, o.n + ' partie' + (o.n > 1 ? 's' : '') + ' · ' + pct(o.a / o.n) + ' · ' + Math.round(o.p / o.n) + ' pp');
+  const bySt = group(obHistStyle), byS = group(h => h.st ? Math.min(7, Math.floor(h.st)) : null);
+  if (fin.length) out.push(card('PAR STYLE ET DIFFICULTÉ', hint('Par style de map'), ...[...bySt].sort((a, b) => b[1].n - a[1].n).map(([k, o]) => line(k, o)),
+    hint('Par étoiles'), ...[...byS].sort((a, b) => a[0] - b[0]).map(([k, o]) => line(k >= 7 ? '7 ★ et plus' : k + ' à ' + (k + 1) + ' ★', o))));
+  // le temps de jeu et l'activité : le calendrier des parties (13 semaines), les clics, le combo, les mods préférés
+  const mods = new Map(); for (const h of H) for (const m of (h.m || '').match(/../g) || []) mods.set(m, (mods.get(m) || 0) + 1);
+  const cl = H.reduce((s, h) => s + (h.cl || 0), 0), act = new Set(H.map(h => new Date(h.d).toDateString())).size;
+  out.push(card('TEMPS DE JEU ET ACTIVITÉ', hint('Tes parties par jour, les 13 dernières semaines'), obCalendar(H),
+    row('Temps de jeu', Math.floor(time / 3600) + ' h ' + String(Math.floor(time % 3600 / 60)).padStart(2, '0') + ' min'), row('Jours joués', act), row('Clics', cl ? obNum(cl) : '–'),
+    row('Meilleur combo', H.reduce((m, h) => Math.max(m, h.c || 0), 0) + 'x'), row('Mods préférés', mods.size ? [...mods].sort((a, b) => b[1] - a[1]).slice(0, 4).map(([m, n]) => m + ' (' + n + ')').join(' · ') : 'aucun')));
   const cnt = new Map(); for (const h of H) { const k = h.n + ' · ' + h.df, o = cnt.get(k) || {n: 0, s: 0}; o.n++; o.s = Math.max(o.s, h.s); cnt.set(k, o); }
   out.push(card('NIVEAUX PRÉFÉRÉS', ...[...cnt].sort((a, b) => b[1].n - a[1].n).slice(0, 5).map(([k, o]) => row(k, o.n + ' parties · ' + obNum(o.s)))));
   return out;
+}
+// le profil rejoué partie après partie : les pp et la précision à chaque fin de jour (ends), et ce que chaque partie a ajouté aux pp du profil
+function obTimeline(H, ends) {
+  const best = new Map(), prof = () => { const L = [...best.values()].sort((a, b) => b.pp - a.pp), w = L.map((_, i) => .95 ** i), sw = w.reduce((a, b) => a + b, 0);
+    return [L.reduce((s, h, i) => s + h.pp * w[i], 0) + 416.67 * (1 - .9994 ** best.size), sw ? L.reduce((s, h, i) => s + h.a * w[i], 0) / sw : 0]; };
+  const pp = [], acc = [], gains = [], wk = ends.at(-1) - 7 * 864e5; let j = 0, cur = [0, 0];
+  for (const h of [...H].sort((a, b) => a.d - b.d)) {
+    while (j < ends.length && h.d >= ends[j]) { pp.push(cur[0]); acc.push(cur[1]); j++; }
+    if (h.f || !(h.pp > (best.get(h.k)?.pp || 0))) continue;
+    best.set(h.k, h); const before = cur[0]; cur = prof(); if (h.d >= wk) gains.push({h, g: cur[0] - before});
+  }
+  while (j < ends.length) { pp.push(cur[0]); acc.push(cur[1]); j++; }
+  return {pp, acc, gains};
+}
+{ const h = (d, k, p, a, f = 0) => ({d, k, pp: p, a, f}), T = obTimeline([h(5, 'a', 100, 90), h(15, 'b', 50, 100), h(16, 'a', 80, 99), h(25, 'a', 120, 95, 1), h(26, 'a', 150, 96)], [10, 20, 30]);
+  console.assert(T.pp.length === 3 && Math.round(T.pp[0]) === 100 && Math.round(T.pp[1]) === 148 && Math.round(T.pp[2]) === 198 && T.gains.length === 3 && Math.round(T.gains[2].g) === 50, 'obTimeline', T); }
+// le style d'une partie : enregistré depuis la 1.3.5 ; avant, retrouvé depuis la chanson (ou le style choisi pour sa variante)
+function obHistStyle(h) {
+  if (h.sy) return h.sy; if (/^osu/.test(h.k)) return 'osu!';
+  const v = /-([^-~]+)$/.exec(h.k); if (v && OB_STYLES.some(x => x.name === v[1])) return v[1];
+  const m = /^rh(\d+)/.exec(h.k); return m && RH_SONGS[+m[1]] ? obStyle(obLen(+m[1])).name : 'Tes musiques';
+}
+function obCalendar(H) {  // un carré par jour (13 semaines, lundi en haut), plus clair les jours où tu as beaucoup joué
+  const n = new Map(); for (const h of H) { const k = new Date(h.d).toDateString(); n.set(k, (n.get(k) || 0) + 1); }
+  const c = el('canvas', 'obChartC'), w = 300, hh = 64, q = c.getContext('2d'); c.width = w; c.height = hh; q.imageSmoothingEnabled = false; px(q, '#0a0814', 0, 0, w, hh);
+  const t = new Date(); t.setHours(0, 0, 0, 0); const wd = (t.getDay() + 6) % 7, start = new Date(t), max = Math.max(1, ...n.values()); start.setDate(t.getDate() - wd - 12 * 7);
+  const C = ['#1a1430', '#1e4a5a', '#2a7a8a', '#3fb0c8', '#3fe0ff'];
+  for (let k = 0; k < 13 * 7; k++) { const d = new Date(start); d.setDate(start.getDate() + k); if (d > t) break; const v = n.get(d.toDateString()) || 0;
+    px(q, C[v ? 1 + Math.min(3, Math.floor(v / max * 3.99)) : 0], 6 + Math.floor(k / 7) * 22, 4 + (k % 7) * 8, 20, 7); }
+  return c;
 }
 $('rhTabStats').onclick = () => { rhTab = 'stats'; rhList(); $('rhTabStats').blur(); };
 // la couleur d'une difficulté selon ses étoiles, comme dans osu! : bleu, vert, jaune, orange, rouge, violet, puis presque noir
@@ -1923,6 +2398,7 @@ ctx.onClose?.(() => { if (rh?.mode === 'ready' && rh.pv) rhCtx?.suspend(); });
 function obPreview() {
   if (!rh || rh.mode !== 'ready' || !rh.c?.buffer || !+$('obPrev').value) return;
   rhAudio(); const en = obEnergy(rh.c, rh.notes); let st = null; for (let t = 4; t < rh.c.len - 10; t += .5) if (en.kiai(t)) { st = t; break; }
+  if (rh.info?.preview > 0) st = rh.info.preview;
   st = Math.max(0, Math.min(st ?? rh.c.len * .35, rh.c.len - 12)); const L = Math.max(4, Math.min(30, rh.c.len - st - .5)), at = rhCtx.currentTime + .05;
   try { rh.src?.stop(); } catch {}
   const src = rhCtx.createBufferSource(), gn = rhCtx.createGain(); src.buffer = rh.c.buffer; src.loop = true; src.loopStart = st; src.loopEnd = st + L;
@@ -1943,7 +2419,7 @@ function obReadyDraw() {
   const k = {circle: 0, slide: 0, spin: 0}; for (const n of rh.notes) k[n.kind] = (k[n.kind] || 0) + 1;
   pxFont(g, k.circle + ' cercles · ' + k.slide + ' glissières · ' + k.spin + ' toupies', 8, 40, '#e8e0ff', 6);
   px(g, '#05010b', W - 57, 5, 50, 15); px(g, sc, W - 56, 6, 48, 13); pxFont(g, rhStarTxt(rh.stars), W - 32, 16, rh.stars >= 6.5 ? '#ffffff' : '#0a0814', 8, 'center');
-  pxFont(g, RH_DIFFS[rh.diff] || 'Perso', W - 32, 30, '#ffffff', 6, 'center');
+  pxFont(g, obDfName(), W - 32, 30, '#ffffff', 6, 'center');
   if (rh.mods || rh.var) pxFont(g, (rh.mods || '') + (rh.mods && rh.var ? ' · ' : '') + (rh.var ? 'variante ' + (rh.var + 1) : ''), W - 8, 41, '#ffd84a', 5, 'right');
   // l'orbe du milieu : il bat sur les temps, avec des ondes qui s'élargissent
   const cx = W / 2, cy = 108, R = 26 + Math.round(pulse * 4), col = OB.COLS[0];
@@ -2154,7 +2630,12 @@ function obModsUi() {
       const V = gstore('orbeVar', {}), v = f(V[rh.info.key] || 0); if (v) V[rh.info.key] = v; else delete V[rh.info.key]; saveGames(); rhSelect(rh.song, rh.diff); };
     vb.append(b);
   }
-  const vi = document.createElement('span'); vi.className = 'hint obVarInfo'; vb.append(vi);
+  const ss = document.createElement('select'); ss.className = 'f gSel obVarSt'; ss.title = 'Le style de map de la variante';
+  ss.append(new Option('style de la chanson', ''), ...OB_STYLES.map(x => new Option(x.name, x.name)));
+  ss.onchange = () => { ss.blur(); if (!rh?.info || (rh.mode !== 'ready' && rh.mode !== 'over')) return obModsShow();
+    const V = gstore('orbeVar', {}), S = gstore('orbeVarSt', {}), k = rh.info.key;
+    if (ss.value) { S[k] = ss.value; V[k] ||= 1; } else delete S[k]; saveGames(); rhSelect(rh.song, rh.diff); };
+  const vi = document.createElement('span'); vi.className = 'hint obVarInfo'; vb.append(ss, vi);
   $('obModBar').append(box, vb); obModsShow();
 }
 function obModsShow() {
@@ -2166,10 +2647,11 @@ $('obDim').oninput = obDimShow;
 $('obHs').addEventListener('change', () => { const k = obSet(+$('obHs').value); if (k) { rhCtx.resume(); obPlayBuf(k[0], .5); } });  // pour l'entendre
 const obNum = v => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 function obTopShow() {
-  const box = $('obTop'), vi = document.querySelector('.obVarInfo'); if (vi && rh?.info) vi.textContent = rh.var ? 'variante ' + (rh.var + 1) : 'la map de départ';
+  const box = $('obTop'), vi = document.querySelector('.obVarInfo'); if (vi && rh?.info) vi.textContent = rh.var ? 'variante ' + (rh.var + 1) + (obVarStyle(rh.info.key) ? ' · ' + obVarStyle(rh.info.key) : '') : 'la map de départ';
+  const vs = document.querySelector('.obVarSt'); if (vs?.parentElement) vs.parentElement.hidden = !!rh?.info?.osu; if (vs && rh?.info) { vs.value = obVarStyle(rh.info.key) || ''; vs.disabled = rh.mode !== 'ready' && rh.mode !== 'over'; }
   if (!box || !rh?.info) return;
   const L = (games.orbeTop || {})[obKey()] || [], day = d => { const x = new Date(d); return String(x.getDate()).padStart(2, '0') + '/' + String(x.getMonth() + 1).padStart(2, '0'); };
-  box.replaceChildren(el('span', 'hint', rh.info.name + ' · ' + (RH_DIFFS[rh.diff] || 'Perso')),
+  box.replaceChildren(el('span', 'hint', rh.info.name + ' · ' + (obDfName())),
     ...(L.length ? L.map((e, i) => { const r = el('div', 'obLbRow'); r.append(el('span', 'n', String(i + 1)), el('span', 'obG obG' + e.g, e.g), el('b', '', obNum(e.s)),
       el('span', 'hint', e.a.toFixed(2) + ' % · ' + e.c + 'x' + (e.m ? ' · ' + e.m : '') + (e.pp ? ' · ' + Math.round(e.pp) + ' pp' : '') + ' · ' + day(e.d))); return r; })
       : [el('span', 'hint', 'Pas encore de partie finie sur ce niveau.')]));
@@ -2287,8 +2769,9 @@ function obDraw() {
   if (rh.mode === 'play') { obLogic(rhNow()); rh.pcx = rh.cx; rh.pcy = rh.cy; }
   const now = !live ? -2 : rh.mode === 'fail' ? rh.failNow : rhNow(), brk = live && obBreak(now);
   if (rh.combo > rh.lastCombo) rh.cPop = 6; rh.lastCombo = rh.combo; if (rh.cPop) rh.cPop--;
-  g.drawImage(obBg(rh.theme || OB_THEMES[0]), 0, 0);
+  g.drawImage(rh.info?.bg || obBg(rh.theme || OB_THEMES[0]), 0, 0);
   if (live) { g.fillStyle = 'rgba(0,0,0,' + (+$('obDim').value / 100 * (brk ? .5 : 1)) + ')'; g.fillRect(0, 0, W, H); }  // le fond assombri (moins pendant une pause du morceau)
+  const K = live && obOskOn() ? obHi() : (obHiC && !obHiC.hidden && (obHiC.hidden = true), null); if (K) g.clearRect(0, 0, W, H);  // un skin osu! : ses objets sur la couche nette
   if (live) {
     // les orbes visibles, du plus lointain au plus proche (le prochain à toucher passe dessus)
     const vis = []; for (const n of rh.notes) { if (n.t - now > pre) break; if (n.t + (n.len || 0) + .3 < now) continue; vis.push(n); }
@@ -2301,6 +2784,7 @@ function obDraw() {
       // l'apparition comme dans osu! : en 0,4 s (moins si les orbes viennent très vite) ; caché (HD) : il s'efface avant le bon moment
       const fade = hd ? obClamp((now - (n.t - pre)) / (pre * .4), 0, 1) * obClamp(1 - (now - (n.t - pre * .6)) / (pre * .3), 0, 1) : obClamp((now - (n.t - pre)) / (.4 * Math.min(1, pre / .45)), 0, 1);
       if (n.kind === 'spin') { spin = n; continue; }
+      if (K) { obOskNote(K, n, now, after, fade * .92, jx); continue; }
       if (n.kind === 'slide') obDrawSlider(n, now, after);
       const gone = n.judged && !n.missed;
       if (gone && n.hitAt != null && now - n.hitAt < .24) {  // touché : l'orbe grossit et s'efface
@@ -2326,13 +2810,14 @@ function obDraw() {
     const sk = obSk(); rh.trail.push([rh.cx, rh.cy]); while (rh.trail.length > Math.max(1, +$('obTrail').value === 1 ? 28 : sk.trail)) rh.trail.shift();
     obCurS = +$('obCurSize').value || 1; obCX = Math.round(rh.cx); obCY = Math.round(rh.cy); g.save();
     if (obCurS !== 1) { g.translate(obCX, obCY); g.scale(obCurS, obCurS); g.translate(-obCX, -obCY); }  // agrandi en nombre entier de pixels : reste net
-    sk.cur(obCX, obCY, rh.keys.size > 0); g.restore(); obCurS = 1;
+    if (!K || !obOsk.img.cursor) sk.cur(obCX, obCY, rh.keys.size > 0); g.restore(); obCurS = 1;
   }
   rhScreens(86);
   if (rh.retryAt) {  // ² maintenu : l'écran noircit, puis la partie recommence
     const k = (performance.now() - rh.retryAt) / 450; g.fillStyle = 'rgba(0,0,0,' + Math.min(1, k) + ')'; g.fillRect(0, 0, W, H);
     if (k >= 1) { rh.retryAt = 0; obRetry(); }
   }
+  if (K) obHiEnd(K);
 }
 function obDrawSlider(n, now, after) {
   const r = rh.r, X = OB.X0, Y = OB.Y0, pre = rh.pre, end = n.t + n.len, col = OB.COLS[n.col];
@@ -2431,7 +2916,7 @@ const obEase = f => 1 - (1 - obClamp(f, 0, 1)) ** 3;
 function obResults() {
   const T = (performance.now() - (rh.resT ||= performance.now())) / 1000, col = {SS: '#ffffff', S: '#ffd84a', A: '#7ee07a', B: '#3fe0ff', C: '#b46aee', D: '#ff4a5a'}[rh.grade] || '#ffffff';
   g.fillStyle = 'rgba(7,3,20,.94)'; g.fillRect(0, 0, W, H); px(g, '#120a26', 0, 0, W, 31); px(g, RHG.color, 0, 31, W, 1);
-  const c = rh.counts, title = rh.info.name.length > 40 ? rh.info.name.slice(0, 39) + '…' : rh.info.name, diff = RH_DIFFS[rh.diff] || 'Perso';
+  const c = rh.counts, title = rh.info.name.length > 40 ? rh.info.name.slice(0, 39) + '…' : rh.info.name, diff = obDfName();
   pxFont(g, title, 8, 14, '#ffffff', 8); pxFont(g, diff + ' · ' + rhStarTxt(rh.stars) + (rh.mods ? ' · ' + rh.mods : ''), 8, 25, '#a8a0c8', 6);
   const note = rh.noSave ? ['Auto : rien n\'est enregistré', '#a8a0c8'] : rh.failed ? ['Partie perdue : non comptée', '#ff4a5a'] : rh.rank === 1 ? ['N° 1 DU NIVEAU !', '#ffd84a'] : rh.rank ? ['N° ' + rh.rank + ' du niveau', '#e8e0ff'] : null;
   if (note && T > 1.5) pxFont(g, note[0], W - 8, 25, note[1], 6, 'right');

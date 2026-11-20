@@ -112,9 +112,55 @@ module.exports = async ({ pj, sleep }) => {
   const s1 = await pj(`(r => r.song + '|' + r.mode)(document.getElementById('gc').__rh.st())`); if (s1.split('|')[0] == s0) throw new Error('flèche Bas : ' + s0 + ' -> ' + s1);
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })), 0`); await sleep(2500);
   const d1 = await pj(`document.getElementById('gc').__rh.st().diff`); if (d1 === 'normal') throw new Error('flèche Droite : ' + d1);
+  // une map osu! (.osz fabriqué ici : un son de 12 s, cercles, glissières en arc et en Bézier, toupie) déposée sur le jeu : importée, jouée avec ses propres réglages
+  const osz = await pj(`(async () => { const sr = 22050, n = sr * 12, pcm = new Int16Array(n); for (let b = 1; b < 24; b++) for (let i = 0; i < 800; i++) pcm[b * sr / 2 + i] = Math.sin(i / 3) * 12000 * Math.exp(-i / 200);
+      const wav = new Uint8Array(44 + n * 2), dv = new DataView(wav.buffer), w4 = (o, s) => [...s].forEach((c, i) => wav[o + i] = c.charCodeAt(0));
+      w4(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w4(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, sr, true); dv.setUint32(28, sr * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w4(36, 'data'); dv.setUint32(40, n * 2, true); wav.set(new Uint8Array(pcm.buffer), 44);
+      const osu = ['osu file format v14', '[General]', 'AudioFilename: audio.wav', 'PreviewTime: 2000', 'Mode: 0', '[Metadata]', 'Title:Essai', 'Artist:Test', 'Creator:Orbe', 'Version:Insane', 'BeatmapSetID:-1', '[Difficulty]', 'HPDrainRate:4', 'CircleSize:4', 'OverallDifficulty:8', 'ApproachRate:9', 'SliderMultiplier:1.6', 'SliderTickRate:1',
+        '[TimingPoints]', '500,500,4,2,0,60,1,0', '[HitObjects]', '100,100,1000,5,0', '300,100,1500,1,8', '400,300,2000,2,2,P|300:350|200:300,1,160', '100,200,3000,6,0,B|150:150|150:150|250:200,2,140', '256,192,5000,12,0,6500', '300,250,7000,5,4', '200,250,7250,1,0', '100,250,7500,1,0'].join('\\n');
+      const files = [['audio.wav', wav], ['Test - Essai (Orbe) [Insane].osu', new TextEncoder().encode(osu)]], parts = [], cen = []; let off = 0;
+      for (const [name, d] of files) { const nb = new TextEncoder().encode(name), h = new Uint8Array(30), c = new Uint8Array(46), hv = new DataView(h.buffer), cv = new DataView(c.buffer);
+        hv.setUint32(0, 0x04034b50, true); hv.setUint32(18, d.length, true); hv.setUint32(22, d.length, true); hv.setUint16(26, nb.length, true);
+        cv.setUint32(0, 0x02014b50, true); cv.setUint32(20, d.length, true); cv.setUint32(24, d.length, true); cv.setUint16(28, nb.length, true); cv.setUint32(42, off, true);
+        parts.push(h, nb, d); cen.push(c, nb); off += 30 + nb.length + d.length; }
+      const cl = cen.reduce((a, x) => a + x.length, 0), e = new Uint8Array(22), ev = new DataView(e.buffer); ev.setUint32(0, 0x06054b50, true); ev.setUint16(10, 2, true); ev.setUint32(12, cl, true); ev.setUint32(16, off, true);
+      const dt = new DataTransfer(); dt.items.add(new File([...parts, ...cen, e], 'Test - Essai.osz'));
+      document.getElementById('rhSongs').dispatchEvent(new DragEvent('drop', {dataTransfer: dt, bubbles: true, cancelable: true}));
+      for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 250)); const rh = document.getElementById('gc').__rh.st(); if (rh.info?.osu && rh.mode === 'ready') break; }
+      const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelectorAll('#rhSongs .rhSong').length, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
+  if (!/^8\|2\|1\|9\|4\|osu!/.test(osz)) throw new Error('map osu! : ' + osz);
+  await sleep(500); await shot('osu-pret');
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(3500); await shot('osu-jeu');
+  await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
+  // un skin osu! (.osk fabriqué ici : cercle, contour, cercle d'approche, curseur, chiffres, deux couleurs) déposé sur le jeu : la partie se dessine nette par-dessus
+  const osk = await pj(`(async () => { const png = async (w, h, f) => { const c = document.createElement('canvas'); c.width = w; c.height = h; f(c.getContext('2d'), w, h); return new Uint8Array(await (await new Promise(r => c.toBlob(r, 'image/png'))).arrayBuffer()); };
+      const ring = (lw, fill) => (x, w) => { x.beginPath(); x.arc(w / 2, w / 2, w / 2 - lw, 0, 7); if (fill) { x.fillStyle = '#c0c0c0'; x.fill(); } x.lineWidth = lw; x.strokeStyle = '#ffffff'; x.stroke(); };
+      const files = [['Bleu/skin.ini', new TextEncoder().encode('[General]\\nName: Essai bleu\\n[Colours]\\nCombo1: 60,140,255\\nCombo2: 255,90,160\\n')], ['Bleu/hitcircle@2x.png', await png(256, 256, ring(10, true))], ['Bleu/hitcircleoverlay@2x.png', await png(256, 256, ring(6))],
+        ['Bleu/approachcircle.png', await png(128, 128, ring(4))], ['Bleu/cursor@2x.png', await png(100, 100, (x, w) => { x.fillStyle = '#ffe040'; x.beginPath(); x.arc(w / 2, w / 2, w / 2 - 4, 0, 7); x.fill(); })]];
+      for (let d = 0; d < 10; d++) files.push(['Bleu/default-' + d + '@2x.png', await png(44, 64, (x) => { x.fillStyle = '#ffffff'; x.font = 'bold 56px sans-serif'; x.textAlign = 'center'; x.fillText(String(d), 22, 54); })]);
+      const parts = [], cen = []; let off = 0;
+      for (const [name, d] of files) { const nb = new TextEncoder().encode(name), h = new Uint8Array(30), c = new Uint8Array(46), hv = new DataView(h.buffer), cv = new DataView(c.buffer);
+        hv.setUint32(0, 0x04034b50, true); hv.setUint32(18, d.length, true); hv.setUint32(22, d.length, true); hv.setUint16(26, nb.length, true);
+        cv.setUint32(0, 0x02014b50, true); cv.setUint32(20, d.length, true); cv.setUint32(24, d.length, true); cv.setUint16(28, nb.length, true); cv.setUint32(42, off, true);
+        parts.push(h, nb, d); cen.push(c, nb); off += 30 + nb.length + d.length; }
+      const cl = cen.reduce((a, x) => a + x.length, 0), e = new Uint8Array(22), ev = new DataView(e.buffer); ev.setUint32(0, 0x06054b50, true); ev.setUint16(10, files.length, true); ev.setUint32(12, cl, true); ev.setUint32(16, off, true);
+      const dt = new DataTransfer(); dt.items.add(new File([...parts, ...cen, e], 'Bleu.osk'));
+      document.getElementById('rhSongs').dispatchEvent(new DragEvent('drop', {dataTransfer: dt, bubbles: true, cancelable: true}));
+      for (let i = 0; i < 40 && document.getElementById('obSkin').value !== 'osk'; i++) await new Promise(r => setTimeout(r, 250));
+      return document.getElementById('obSkin').value + '|' + document.getElementById('obOskMsg').textContent; })()`);
+  if (!osk.startsWith('osk|')) throw new Error('skin osu! : ' + osk);
+  await pj(`document.querySelector('#rhSongs .rhSong .obDiff')?.click(), 0`); await sleep(2500);
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(1800);
+  const hi = await pj(`(c => c && !c.hidden && c.width > 320 ? c.toDataURL('image/png') : '')(document.querySelector('#gc + canvas'))`);
+  if (!hi) throw new Error('skin osu! : pas de couche nette');
+  if (dir) fs.writeFileSync(require('path').join(dir, 'orbe-osu-skin.png'), Buffer.from(hi.split(',')[1], 'base64'));
+  await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
+  await pj(`document.getElementById('obOskDel').click(), 0`); await sleep(800);
+  if (await pj(`document.getElementById('obSkin').value`) === 'osk') throw new Error('skin osu! : pas retiré');
   // l'onglet des statistiques (laissé ouvert pour la capture de fin)
   await pj(`document.getElementById('rhTabStats').click(), 0`); await sleep(400);
-  const stt = await pj(`document.getElementById('rhSongs').textContent`); if (!/PROFIL/.test(stt) || !/pp/.test(stt)) throw new Error('statistiques : ' + stt.slice(0, 200));
+  const stt = await pj(`document.getElementById('rhSongs').textContent`); await shot('stats-page'); if (!/PROFIL/.test(stt) || !/pp/.test(stt) || !/PAR STYLE ET DIFFICULTÉ/.test(stt) || !/TEMPS DE JEU ET ACTIVITÉ/.test(stt) || !/osu!/.test(stt)) throw new Error('statistiques : ' + stt.replace(/\s+/g, ' ').slice(0, 1500));
+  await pj(`[...document.querySelectorAll('#rhSongs .sysCard > b')].find(b => b.textContent === 'PAR STYLE ET DIFFICULTÉ')?.parentElement.scrollIntoView(), 0`); await sleep(300);
   const errs2 = await pj(`__e`); if (errs2.length) throw new Error(errs2.join(' | '));
   return 'carte des temps ' + tm.join('/') + ', plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
 };

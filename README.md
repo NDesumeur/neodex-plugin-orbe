@@ -46,11 +46,11 @@ D'autres mods : **SD** (un seul raté et c'est perdu), **PF** (tout ce qui n'est
 
 ## pp et statistiques
 
-Chaque partie finie rapporte des **pp** (points de performance), calculés comme dans osu! : la visée, la vitesse et la précision, selon la difficulté du niveau et tes mods. Un raté ou un combo cassé en enlève. Ton **profil** additionne ta meilleure partie de chaque niveau (la 1re compte en entier, puis 95 %, 90 %…).
+Chaque partie finie rapporte des **pp** (points de performance), calculés avec les formules d'osu! (celles de 2023) : la visée, la vitesse et la précision, selon les étoiles du niveau, son OD, son AR et tes mods. Les valeurs sont très proches de celles d'osu!, sans être garanties identiques (la lampe FL est comptée comme un bonus de visée). Un raté ou un combo cassé en enlève. Ton **profil** additionne ta meilleure partie de chaque niveau (la 1re compte en entier, puis 95 %, 90 %…).
 
 Ton **rang** suit ton total de pp : Débutant, Bronze (50 pp), Argent (200), Or (500), Platine (1000), Diamant (2000), Maître (4000) et Légende (7000). Les **médailles** ont trois paliers, **bronze**, **argent** et **or** : Belles notes (A, S, SS), Full combo (1, 10, 50 niveaux), Étoiles (3, 5, 7★), Précision (95, 98, 99,5 %), Combo (500, 1000, 2000), Performance (50, 100, 200 pp en une partie), Caché, Dur, Accéléré et Lampe (finir un niveau de 2, 4, 6★ en HD, HR, DT ou FL), Explorateur (1, 5, 20 autres variantes), Voyageur (10, 50, 200 niveaux différents), Habitué (50, 200, 1000 parties) et Endurance (1, 5, 20 h de jeu) ; plus Premier pas. Chaque nouveau palier s'annonce à la fin de la partie.
 
-L'onglet **STATS** commence par ta **carte de joueur** : une image de ton profil (rang, pp, précision, parties, meilleures performances, médailles) à **enregistrer** (dans Téléchargements) ou à **copier** pour la partager. Puis il montre ton rang avec la courbe de tes pp, tes médailles, ton profil (pp, précision, parties, temps de jeu, meilleur UR et combo), des courbes de ta précision et de ton UR au fil des parties, tes parties par jour, tes meilleures performances et tes niveaux préférés.
+L'onglet **STATS** commence par ta **carte de joueur** : une image de ton profil (rang, pp, précision, parties, meilleures performances, médailles) à **enregistrer** (dans Téléchargements) ou à **copier** pour la partager. Puis il montre ton rang avec la courbe de tes pp, tes médailles, ton profil, tes **meilleures performances** comme sur un profil osu! (les 15 premières, avec ce que chacune compte après pondération, les étoiles, les mods et la note), **dans le temps** (tes pp, ta précision et ton rang à la fin de chaque jour sur 30 jours, ce que tu as gagné cette semaine et ton meilleur progrès de la semaine), des courbes de ta précision et de ton UR au fil des parties, tes résultats **par style de map et par étoiles** (parties, précision et pp moyens), le **temps de jeu et l'activité** (un calendrier de tes parties sur 13 semaines, les jours joués, les clics, le meilleur combo, les mods préférés) et tes niveaux préférés.
 
 ## Pendant la partie
 
@@ -73,7 +73,7 @@ Plus bas, la **courbe de précision** montre ta justesse le long du morceau : en
 L'onglet **Chansons** reprend les 1200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :
 
 - **CS** : la taille des orbes (plus il est haut, plus ils sont petits).
-- **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide). Comme dans osu!, il vaut 8 vers 4 étoiles et au moins 9 dès 5 étoiles.
+- **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide). Comme dans les maps classées d'osu!, il suit les étoiles de la map : 7,5 à 3 étoiles, 8,5 à 4, 9 à 5, puis jusqu'à 10.
 - **OD** : la précision demandée.
 
 Chaque morceau a aussi un **style de map**, le même à toutes ses difficultés et affiché dans la liste :
@@ -95,18 +95,21 @@ Comme un mapper, le jeu **repère les refrains** : quand 4 mesures du refrain re
 
 La musique guide la map : des streams sur les roulements, des glissières sur les notes tenues, la cymbale sur les accents, de nouveaux combos plus souvent dans le refrain.
 
-Un niveau donne toujours la même map. **AUTRE VARIANTE** en fabrique une autre, avec son propre classement ; **LA PREMIÈRE** revient à la map de départ.
+Un niveau donne toujours la même map. **AUTRE VARIANTE** en fabrique une autre, avec son propre classement ; **LA PREMIÈRE** revient à la map de départ. Une variante peut aussi prendre **un autre style de map** (Sauts, Streams, Précision…) que celui de la chanson.
 
-Les étoiles se rapprochent de celles d'osu! : la visée compte aussi le trajet des glissières, les angles et les changements de vitesse, la vitesse compte les changements de rythme.
+Les étoiles sont calculées avec les formules d'osu! (celles de 2023) : la visée (avec le trajet des glissières, les angles et les changements de vitesse), la vitesse (avec les changements de rythme), sur la même échelle qu'osu!.
 
 ## Mes musiques
 
 Dans **Mes musiques**, crée un niveau à partir d'un **fichier audio** importé ou d'une musique de ta bibliothèque **NeoMusic** : le jeu trouve son tempo et ses temps forts et place les orbes dessus (il suit aussi un tempo qui change, et sépare les basses, la caisse claire et les aigus), à la **difficulté** choisie (1 à 10 étoiles). Les orbes sont placés de la même façon sur tous tes PC.
 
+**Maps osu!** : télécharge une map sur le site d'osu! (**CATALOGUE OSU!** l'ouvre dans un onglet ; il faut un compte osu!), puis **IMPORTER UNE MAP OSU!** ou dépose le fichier **.osz** sur le jeu. Chaque difficulté (mode standard) garde ses propres orbes, glissières, toupies, sons de frappe, son fond et ses réglages CS, AR, OD et HP ; ses étoiles et ses pp sont calculés comme dans osu!. La musique, les difficultés et le fond sont gardés dans les données du jeu (15 Mo au plus pour la musique) et suivent la synchronisation.
+
 ## Réglages
 
 - **Volumes** séparés : la **musique**, les **frappes** (hitsounds, glissières, toupies) et le **menu** (changer de chanson ou de difficulté, la note de fin, les médailles).
 - **Hitsounds** : les sons de frappe d'osu!, en quatre jeux (Normal, Soft, Drum et **8-bit**, aux sons de vieille console), avec le sifflet sur les glissières, la cymbale sur les accents et le clap sur les temps 2 et 4 ; plus le tic des glissières et les sons des toupies. Ou bien **Son des clics** : un son unique à chaque note touchée, au choix parmi 10 (Doux, Clap, Bois, Grosse caisse, Cristal, Pop, Charleston, Caisse claire, Pluck, Tok) ou aucun. Perdre un combo de 10 ou plus joue un son « combo cassé ».
+- **Skin osu!** : **IMPORTER UN SKIN OSU!** (ou dépose un fichier **.osk** sur le jeu) : ses cercles, son cercle d'approche, ses chiffres, ses glissières, son curseur, ses couleurs de combo et ses sons de frappe remplacent ceux d'Orbe, dessinés nets (le reste du jeu reste en pixels). Il apparaît dans les menus Skin et Hitsounds ; **RETIRER LE SKIN** l'enlève. Un seul skin à la fois.
 - **Fond assombri** (0 à 100 %) : le fond s'assombrit pendant la partie pour mieux voir les orbes (moins pendant les pauses du morceau).
 - **Curseur** : sa taille (1× à 3×), sa traînée (celle du skin, longue ou aucune) et le **pointage** : souris (capturée) ou **tablette** (le curseur va là où pointe le stylet).
 - **Sensibilité** (0,3× à 3×) : la vitesse du curseur en partie. Pendant la partie la souris est capturée et suit son déplacement brut, sans l'accélération de Windows ; Échap la libère et met en pause.
