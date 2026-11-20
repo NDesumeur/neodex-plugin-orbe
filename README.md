@@ -73,19 +73,19 @@ Plus bas, la **courbe de précision** montre ta justesse le long du morceau : en
 L'onglet **Chansons** reprend les 1200 morceaux de Rythme. Chaque niveau a ses réglages, affichés avant de jouer :
 
 - **CS** : la taille des orbes (plus il est haut, plus ils sont petits).
-- **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide).
+- **AR** : le temps où on les voit venir (plus il est haut, plus le cercle d'approche est rapide). Comme dans osu!, il vaut 8 vers 4 étoiles et au moins 9 dès 5 étoiles.
 - **OD** : la précision demandée.
 
 Chaque morceau a aussi un **style de map**, le même à toutes ses difficultés et affiché dans la liste :
 
-- **Sauts** : de grands écarts en triangles, carrés, étoiles et allers-retours.
+- **Sauts** : de grands écarts en triangles, carrés, étoiles, allers-retours, grandes courbes et écarts qui grandissent ; le motif change toutes les 4 notes. C'est le style le plus fréquent.
 - **Streams** : de longues suites d'orbes serrés, en courbes, sur les doubles-croches de la batterie.
 - **Précision** : des orbes plus petits, une précision plus sévère.
 - **Technique** : des doubles, des triples et des rythmes qui changent, avec des orbes empilés.
 - **Glissières** : beaucoup de glissières, plus longues, plus courbées et plus rapides.
 - **Mixte** : un autre style toutes les 8 mesures.
 
-Facile reste sur des rythmes simples. Les doubles et triples arrivent en Normal, les streams en Difficile, et en Expert ils vont jusqu'à 17 orbes (33 en style Streams). Les étoiles (1 à 10) se calculent sur la map elle-même : la visée (les écarts, rapportés à la taille des orbes et au temps) et la vitesse (les clics par seconde).
+Facile reste sur des rythmes simples. Les doubles et triples arrivent en Normal, les streams en Difficile. Chaque style a sa longueur de stream maximale (3 orbes en Sauts, 5 en Précision, Glissières et Mixte, 7 en Technique, jusqu'à 33 en Streams) : au-delà, le passage continue en sauts au demi-temps. Les longs streams restent donc dans les maps Streams. Les étoiles (1 à 10) se calculent sur la map elle-même : la visée (les écarts, rapportés à la taille des orbes et au temps) et la vitesse (les clics par seconde).
 
 ## Des maps variées
 

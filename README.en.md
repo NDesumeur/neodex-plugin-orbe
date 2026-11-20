@@ -73,19 +73,19 @@ Further down, the **accuracy curve** shows how precise you were along the song: 
 The **Songs** tab offers the 1200 Rythme tracks. Each level has its own settings, shown before you play:
 
 - **CS**: orb size (the higher, the smaller).
-- **AR**: how early you see them coming (the higher, the faster the approach circle).
+- **AR**: how early you see them coming (the higher, the faster the approach circle). As in osu!, it is 8 around 4 stars and at least 9 from 5 stars.
 - **OD**: how precise you must be.
 
 Each track also has a **map style**, the same at all its difficulties and shown in the list:
 
-- **Jumps** (Sauts): wide gaps in triangles, squares, stars and back-and-forths.
+- **Jumps** (Sauts): wide gaps in triangles, squares, stars, back-and-forths, wide curves and growing gaps; the pattern changes every 4 notes. It is the most common style.
 - **Streams**: long runs of tight orbs, in curves, on the drums' sixteenth notes.
 - **Precision** (Précision): smaller orbs, stricter timing.
 - **Technical** (Technique): doubles, triples and changing rhythms, with stacked orbs.
 - **Sliders** (Glissières): lots of sliders, longer, more curved and faster.
 - **Mixed** (Mixte): a different style every 8 bars.
 
-Easy keeps to simple rhythms. Doubles and triples come in Normal, streams in Hard, and in Expert they go up to 17 orbs (33 in the Streams style). Stars (1 to 10) are computed from the map itself: aim (the gaps, relative to orb size and time) and speed (clicks per second).
+Easy keeps to simple rhythms. Doubles and triples come in Normal, streams in Hard. Each style has its own longest stream (3 orbs in Jumps, 5 in Precision, Sliders and Mixed, 7 in Technical, up to 33 in Streams): past that, the passage carries on as half-beat jumps. Long streams stay in Streams maps. Stars (1 to 10) are computed from the map itself: aim (the gaps, relative to orb size and time) and speed (clicks per second).
 
 ## Varied maps
 

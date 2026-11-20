@@ -1222,19 +1222,19 @@ const OB = {X0: 32, Y0: 28, PW: 256, PH: 192,  // le terrain (4:3) dans la toile
 // les réglages d'un niveau, comme dans les jeux du genre : CS (taille des orbes), AR (le temps où on les voit venir), OD (la précision demandée),
 // et le style de la map, tiré du morceau (le même à toutes ses difficultés) : il change les rythmes, le placement et ces réglages
 const OB_STYLES = [
-  {name: 'Sauts', cs: -.6, ar: .6, od: 0, sp: 1.5, fill: .4, stream: .2, slide: .7, sv: 1, pat: ['zig', 'tri', 'star', 'square']},
-  {name: 'Streams', cs: .3, ar: .2, od: 0, sp: .8, fill: 1.1, stream: 2.4, slide: .6, sv: 1, pat: ['flow', 'flow', 'zig']},
-  {name: 'Précision', cs: 1.8, ar: -.4, od: 1.2, sp: .85, fill: .6, stream: .4, slide: .9, sv: .9, pat: ['square', 'flow', 'tri']},
-  {name: 'Technique', cs: .5, ar: .5, od: .6, sp: 1, fill: 2, stream: .9, slide: 1.3, sv: 1.35, pat: ['flow', 'zig', 'tri', 'square']},
-  {name: 'Glissières', cs: 0, ar: 0, od: 0, sp: 1.1, fill: .6, stream: .5, slide: 2.2, sv: 1.6, pat: ['flow', 'flow', 'tri']},
-  {name: 'Mixte', cs: 0, ar: 0, od: .3, sp: 1, fill: 1, stream: 1, slide: 1, sv: 1.1, pat: ['flow', 'zig', 'tri', 'square', 'star']},
+  {name: 'Sauts', cs: -.6, ar: .2, od: 0, sp: 1.5, fill: .4, stream: .1, run: 3, w: 3, slide: .7, sv: 1, pat: ['zig', 'tri', 'star', 'square']},
+  {name: 'Streams', cs: .3, ar: 0, od: 0, sp: .8, fill: 1.1, stream: 2, run: 33, w: 1, slide: .6, sv: 1, pat: ['flow', 'flow', 'zig']},
+  {name: 'Précision', cs: 1.8, ar: -.2, od: 1.2, sp: .95, fill: .6, stream: .3, run: 5, w: 1.5, slide: .9, sv: .9, pat: ['square', 'flow', 'tri']},
+  {name: 'Technique', cs: .5, ar: .1, od: .6, sp: 1.05, fill: 2, stream: .5, run: 7, w: 1, slide: 1.3, sv: 1.35, pat: ['flow', 'zig', 'tri', 'square']},
+  {name: 'Glissières', cs: 0, ar: 0, od: 0, sp: 1.15, fill: .6, stream: .4, run: 5, w: 1, slide: 2.2, sv: 1.6, pat: ['flow', 'flow', 'tri']},
+  {name: 'Mixte', cs: 0, ar: 0, od: .3, sp: 1.1, fill: 1, stream: .5, run: 5, w: 2, slide: 1, sv: 1.1, pat: ['flow', 'zig', 'tri', 'square', 'star']},
 ];
 // le niveau (1 à 10) choisi : il règle tout le reste
 const obLevel = d => /^S\d+$/.test(d) ? +d.slice(1) : {facile: 2, normal: 4, difficile: 6, expert: 8}[d] || 4;
 const obClamp = (v, a, b) => Math.max(a, Math.min(b, v));
-const obStyle = len => OB_STYLES[seeded(Math.round(len * 1000) ^ 0x51ed)() * OB_STYLES.length | 0];
+const obStyle = len => { let v = seeded(Math.round(len * 1000) ^ 0x51ed)() * OB_STYLES.reduce((a, x) => a + x.w, 0); return OB_STYLES.find(x => (v -= x.w) < 0) || OB_STYLES[0]; };  // les Sauts plus souvent, les Streams plus rares
 function obStats(diff, len) {  // r : le rayon des orbes ; pre : le temps où on les voit venir (s) ; pk : la sévérité (les fenêtres PARFAIT / BIEN / OK divisées par pk)
-  const lv = obLevel(diff), st = obStyle(len), cs = obClamp(2.6 + lv * .3 + st.cs, 2, 7), ar = obClamp(3.6 + lv * .6 + st.ar, 3, 10), od = obClamp(2.5 + lv * .55 + st.od, 2, 9.5);
+  const lv = obLevel(diff), st = obStyle(len), cs = obClamp(2.6 + lv * .3 + st.cs, 2, 7), ar = obClamp((lv <= 5 ? 4 + lv : 9 + (lv - 5) * .2) + st.ar, 3, 10), od = obClamp(2.5 + lv * .55 + st.od, 2, 9.5);
   return {lv, st, cs, ar, od, r: Math.round(27.2 - 2.24 * cs), pre: (ar < 5 ? 1800 - 120 * ar : 1200 - 150 * (ar - 5)) / 1000, pk: .045 / ((80 - 6 * od) / 1000)};
 }
 // une glissière : un arc (courbe de Bézier) échantillonné, avec la longueur parcourue à chaque point pour avancer la boule à vitesse constante
@@ -1299,14 +1299,14 @@ const obPick = (w, R) => { const e = Object.entries(w).filter(x => x[1] > 0), to
 const OB_FMT = {
   stream: {curve: 3, S: 2, spiral: 1, zigzag: 1.2, square: .8, line: .6, spaced: 0},
   burst: {line: 2, angle: 2, back: 1, stack: 0},
-  jump: {tri: 2, square: 2, star: 1.2, zig: 1.5, pent: 1, wide: 1, rot: 1, cross: .8},
+  jump: {tri: 2, square: 2, star: 1.2, zig: 1.5, pent: 1, wide: 1, rot: 1, cross: .8, flowJ: 1.5, back: 1, ramp: .8},
   free: {flow: 3, arc: 1.5, snap: 1.5},
 };
 function obFmtW(type, st, lv, kiai) {
   const w = {...OB_FMT[type]}, nm = st.name;
   if (type === 'stream') { if (nm === 'Streams') { w.S += 1; w.zigzag += .8; w.square += .6; } w.spaced = lv >= 8 && (nm === 'Streams' || nm === 'Sauts') ? 1 : 0; if (lv < 5) w.zigzag = w.square = 0; }
   if (type === 'burst') { w.stack = lv >= 5 ? (nm === 'Technique' ? 1.5 : .5) : 0; if (nm === 'Technique') w.back += 1; }
-  if (type === 'jump') { if (nm === 'Sauts') { w.star += 1; w.wide += 1; w.cross += 1; } if (nm === 'Précision') { w.square += 1; w.tri += 1; } if (lv < 5) w.wide = w.cross = 0; if (lv < 4) w.star = 0; if (kiai) { w.wide += .8; w.star += .5; } }
+  if (type === 'jump') { if (nm === 'Sauts') { w.star += 1; w.wide += 1; w.cross += 1; } if (nm === 'Précision') { w.square += 1; w.tri += 1; } if (lv < 5) w.wide = w.cross = w.ramp = 0; if (lv < 4) w.star = 0; if (kiai) { w.wide += .8; w.star += .5; } }
   if (type === 'free') { if (nm === 'Technique') w.snap += 1.5; if (nm === 'Glissières') w.arc += 1.5; if (lv < 4) w.snap = 0; }
   return w;
 }
@@ -1341,7 +1341,7 @@ function obChart(base, c, diff, info) {
     if (step < minStep || a.slide || a.k % 1 || b.k % 1) { run = 1; continue; }  // autour d'un triolet : rien d'ajouté
     if (g === 1) { run++; continue; }
     const heard = (k0, k1) => !hits.size || Array.from({length: k1 - k0}, (_, j) => hits.has(k0 + j)).every(Boolean);  // pas de note inventée : sur un son entendu
-    if (g <= 8 && heard(a.k + 1, b.k) && busy(a.t) >= Math.max(.3, med) && run + g <= maxRun + 1 && rn(a, 'r') < obClamp((lv - 4.5) * .1 * st.stream * ek, 0, .85)) {
+    if (g <= 8 && heard(a.k + 1, b.k) && busy(a.t) >= Math.max(.3, med) && run + g <= maxRun + 1 && rn(a, 'r') < obClamp((lv - 4.5) * .07 * st.stream * ek, 0, .7)) {
       for (let k = a.k + 1; k < b.k; k++) add.push({k, t: T(k), len: 0}); run += g - 1; continue;
     }
     if (lv >= 3.5 && g <= 8 && heard(b.k - 1, b.k) && rn(a, 'f') < obClamp((lv - 3) * .06 * st.fill * ek, 0, .55)) {
@@ -1350,8 +1350,13 @@ function obChart(base, c, diff, info) {
     run = 1;
   }
   ns = ns.concat(add).sort((a, b) => a.k - b.k); run = 1;
-  ns = ns.filter((n, i) => { const p = i && ns[i - 1]; if (!p || n.k - p.k > 1.4 || p.drop) return run = 1; run++;
-    const cap = step < minStep ? 1 : lv >= 8 && stAt(n.t).name === 'Streams' ? 33 : maxRun; return !(n.drop = run > cap); });
+  { let alt = false, po = null, k0 = 0;  // alt : le stream a dépassé le plafond, on ne garde plus qu'une note sur deux jusqu'à sa fin
+    ns = ns.filter(n => { const cont = po && n.k - po.k <= 1.4; po = n;
+      if (!cont) { run = 1; alt = false; return true; }
+      run++; const st = stAt(n.t), cap = step < minStep ? 1 : Math.min(maxRun, st.run + (lv >= 8 && st.name === 'Streams' ? 16 : 0));
+      if (!alt && run <= cap) return true;
+      if (!alt) { alt = true; k0 = n.k - 1; }
+      return Number.isInteger(n.k - k0) && (n.k - k0) % 2 === 0; }); }
   // les « kick sliders » : un double isolé devient parfois une glissière très courte, comme dans osu!
   if (lv >= 4.5) for (let i = 0; i + 1 < ns.length; i++) {
     const a = ns[i], b = ns[i + 1], nx = ns[i + 2];
@@ -1403,8 +1408,8 @@ function obChart(base, c, diff, info) {
     const gs = ns.map((n, i) => i ? Math.round((n.t - ns[i - 1].t - (ns[i - 1].slide ? ns[i - 1].len : 0)) / step) : 99), mv = [];
     for (let i = 1; i < ns.length;) {  // les morceaux du combo : un même écart de suite (sans glissière au milieu)
       let j = i; while (j + 1 < ns.length && gs[j + 1] === gs[i] && !ns[j].slide) j++;
-      const cnt = j - i + 1, type = gs[i] === 1 ? (cnt >= 3 ? 'stream' : 'burst') : cnt >= 2 && !ns[i - 1].slide ? 'jump' : 'free', f = pickF(type, G, R);
-      for (let q = 0; q < cnt; q++) mv[i + q] = {type, f, q, cnt};
+      const cnt = j - i + 1, type = gs[i] === 1 ? (cnt >= 3 ? 'stream' : 'burst') : cnt >= 2 && !ns[i - 1].slide ? 'jump' : 'free'; let f = pickF(type, G, R);
+      for (let q = 0; q < cnt; q++) { if (type === 'jump' && q && q % 4 === 0) f = pickF(type, G, R); mv[i + q] = {type, f, q: type === 'jump' ? q % 4 : q, cnt}; }
       i = j + 1;
     }
     let bend = (.16 + R() * .16) * turn, x = x0, y = y0, bad = 0, combo = 0, flow = 0, base = a, shape = lastShape;
@@ -1422,12 +1427,14 @@ function obChart(base, c, diff, info) {
         if (m.f === 'angle' && !m.q) a += turn * .9; else if (m.f === 'back' && m.cnt === 1) { a += Math.PI - .35 * turn; d = ds * 1.25; } else if (m.f === 'stack') d = r * .4; else a += bend * .5;
       } else {
         const gb = (n.t - ns[i - 1].t - (ns[i - 1].slide ? ns[i - 1].len : 0)) / beat;
-        d = gb * sv * dm; if (gb <= 1.01 && lv >= 4.5) d = Math.max(d, (lv - 3) * 13 * st.sp * sc * dm);  // sur un temps ou un demi-temps : de vrais sauts
+        d = gb * sv * dm; if (gb <= 1.01 && lv >= 4.5) d = Math.max(d, (lv - 3) * 16.5 * st.sp * sc * dm);  // sur un temps ou un demi-temps : de vrais sauts
         if (lv >= 4 && n.acc > .8) d *= 1 + (n.acc - .8);
         if (m.f === 'wide') d *= 1.25;
-        const after = ns[i - 1].slide && lv >= 5 && gb <= 1.01; if (after) d = Math.max(d, (lv - 3) * 12 * st.sp * sc * dm);  // glissière puis saut
-        d = obClamp(d, r * 1.2, 150);
+        const after = ns[i - 1].slide && lv >= 5 && gb <= 1.01; if (after) d = Math.max(d, (lv - 3) * 15 * st.sp * sc * dm);  // glissière puis saut
+        if (m.f === 'ramp') d *= .8 + .12 * Math.min(m.q, 4);  // l'écart grandit à chaque saut
+        d = obClamp(d, r * 1.2, 170);
         if (TURN[m.f]) a += turn * TURN[m.f]; else if (m.f === 'zig') a += Math.PI - .5 * turn; else if (m.f === 'cross') a += turn * (m.q % 2 ? 2.4 : 3.9);
+        else if (m.f === 'flowJ') a += turn * (.45 + R() * .3); else if (m.f === 'back') a += Math.PI + (m.q % 2 ? .3 : -.3) * turn; else if (m.f === 'ramp') a += turn * 2.3;
         else if (after && R() < .5) a += Math.PI - .4 * turn;
         else if (m.f === 'arc') a += bend * 1.6; else if (m.f === 'snap') a += turn * (2 + R() * .6) * (m.q % 2 ? 1 : -1);
         else { a += bend * 2.4; if (++flow % 4 === 0) bend = -bend; }  // une courbe qui change de sens toutes les 4 notes
