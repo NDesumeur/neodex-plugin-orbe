@@ -1,9 +1,9 @@
 {
   "pluginId": "neodex.orbe",
   "repo": "NDesumeur/neodex-plugin-orbe",
-  "version": "1.3.2",
-  "sha256": "33f355874e369469a3f7a1c17331102f5100b48e3f621084e960889e7f67cb3a",
-  "approvedAt": "2026-11-20T13:08:02.333Z",
+  "version": "1.3.3",
+  "sha256": "68e336ab9f1dd469f150a40144b7f5bce796c201e561b8a7e4d3b24cdaed09ff",
+  "approvedAt": "2026-11-20T18:05:08.362Z",
   "neobase": ">=4.1.0",
-  "signature": "t2UqrjUxi6y/MmTmahkiaQSMS1+I4FqTMFzzVqHLzP+pzSrPs2/3gLa+Wvrh2aVlwY82zD+R1LCeaYoZCXQ0Bw=="
+  "signature": "89AOD/lCWDtAZVmz/P33JIMoDyBJAJatfGez7wHml/ZZZRRwIe2v4h2+D/8S+fGVNP3z2jeAjmNgXPE6cZlMBg=="
 }
