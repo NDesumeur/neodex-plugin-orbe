@@ -22,7 +22,8 @@ module.exports = async ({ pj, sleep }) => {
   // la souris tourne sur le terrain et clique souvent : tous les chemins du jeu passent (orbes, glissières, toupies), sans erreur
   await pj(`(() => { const c = document.getElementById('gc'); let a = 0, n = 0; window.__bot = setInterval(() => { const r = c.getBoundingClientRect(); a += .21; const x = r.left + r.width * (.5 + .3 * Math.cos(a)), y = r.top + r.height * (.5 + .3 * Math.sin(a * 1.3));
     document.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, bubbles: true })); if (++n % 9 === 0) { document.dispatchEvent(new KeyboardEvent('keydown', { key: n % 18 ? 'w' : 'x', bubbles: true })); setTimeout(() => document.dispatchEvent(new KeyboardEvent('keyup', { key: n % 18 ? 'w' : 'x', bubbles: true })), 60); } }, 16); return 1; })()`);
-  for (const k of [1, 2, 3, 4]) { await sleep(5000); await shot('partie' + k); }
+  for (const k of [1, 2, 3, 4]) { await pj(`(s => { s.value = '${k}'; s.dispatchEvent(new Event('change')); })(document.getElementById('obSkin')), 0`); await sleep(5000); await shot('partie' + k + '-skin' + k); }  // chaque skin passe à l'écran
+  await pj(`(s => { s.value = '0'; s.dispatchEvent(new Event('change')); })(document.getElementById('obSkin')), 0`);
   const r = await pj(`new Promise(ok => { const d = []; let l = performance.now(), n = 0; const f = t => { d.push(t - l); l = t; if (++n < 240) requestAnimationFrame(f); else ok(d); }; requestAnimationFrame(f); })`);
   await pj(`clearInterval(__bot), document.exitFullscreen?.().catch(() => {}), 0`);
   const errs = await pj(`__e`), s = [...r].sort((x, y) => x - y), avg = r.reduce((x, y) => x + y, 0) / r.length;

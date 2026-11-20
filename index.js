@@ -9,7 +9,7 @@ const HTML = `<div class="appWrap wide">
       <div class="row"><button class="btn" id="rhTabSongs">CHANSONS</button><button class="btn" id="rhTabMine">MES MUSIQUES</button></div>
       <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
       <div id="rhSongs"></div>
-      <div class="sysCard rhOpts"><label>Volume <input type="range" id="rhVol" min="0" max="100" value="70"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
+      <div class="sysCard rhOpts"><label>Volume <input type="range" id="rhVol" min="0" max="100" value="70"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
       <div class="hint">Un cercle se resserre sur chaque orbe : vise-le avec la souris et clique (ou W / X) quand le cercle touche l'orbe. Touche-les dans l'ordre de leurs numéros.</div><div class="hint">Glissière : touche son orbe, puis garde le bouton enfoncé et suis la boule jusqu'au bout (et au retour). Toupie : garde appuyé et fais tourner la souris autour du centre avant que l'anneau se referme.</div><div class="hint">La difficulté de chaque niveau est calculée sur ses notes : de 1★ à 10★.</div>
     </div></div>
 </div>`;
@@ -1058,7 +1058,7 @@ $('rhFs').onclick = () => { rhFull(!document.fullscreenElement); $('rhFs').blur(
 $('rhOffset').addEventListener('change', () => { rhOffMs = +$('rhOffset').value; });
 $('rhClick').onchange = () => { rhAudio(); rhCtx.resume(); rhClick(); };  // le son choisi, pour l'entendre
 $('rhVol').oninput = () => { if (rhOut) rhOut.gain.value = +$('rhVol').value / 100 * .6; };
-for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
+for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
 setInterval(() => { if (rhCtx?.state === 'running' && (!view.classList.contains('on') || rh?.mode !== 'play')) rhCtx.suspend(); }, 200);  // la musique s'arrête avec la partie
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) rhPause(); });  // Échap sort du plein écran : on met en pause
 $('gNew').onclick = () => { if (rh) rhSelect(rh.song, rh.diff); $('gNew').blur(); };
@@ -1088,7 +1088,7 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 }
 
 function rhOpen() {
-  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens']) if (p[id] != null) $(id).value = p[id];
+  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin']) if (p[id] != null) $(id).value = p[id];
   keysUi();
   if (Array.isArray(p.keys) && p.keys.length === OB.KEYS.length) keysSet(p.keys);
   rhOffMs = +$('rhOffset').value; obSensShow(); rhInfo();
@@ -1177,44 +1177,44 @@ function obChart(base, c, diff) {
     if (!grp || (!n.inStream && (bb !== bar || grp.ns.length >= 8)) || grp.ns.length >= 16) { bar = bb; groups.push(grp = {ns: [], st: stAt(n.t)}); }
     grp.ns.push(n); last = n.t + (n.slide ? n.len : 0); prevSlide = n.slide;
   }
-  // 3. le placement, combo par combo, comme un mapper : l'écart suit le temps (streams serrés, sauts larges, accents soulignés), la forme du combo
-  // (zigzag, triangle, carré, étoile, courbe) est essayée dans 8 directions et on garde celle qui tient dans le terrain sans se déformer contre
+  // 3. le placement, combo par combo, comme un mapper : l'écart suit le temps (streams réguliers, sauts larges), une forme (zigzag, triangle, carré,
+  // étoile) sur un rythme régulier, sinon une courbe ; essayée dans 8 directions, et plus serrée si elle ne tient pas, pour ne pas se tordre contre
   // les bords ni recouvrir un orbe encore visible ; un combo au même rythme qu'un précédent reprend sa forme, en miroir
   const M = r + 2, inside = (x, y) => x >= M && x <= OB.PW - M && y >= M && y <= OB.PH - M, out = [], shapes = new Map();
   const near = (objs, n, x, y) => objs.some(o => n.t - o.t < S.pre && o.t < n.t && Math.hypot(o.x - x, o.y - y) < r * 1.8);
-  function place(G, x0, y0, a, turn, R, col) {
-    const st = G.st, pat = st.pat[R() * st.pat.length | 0], curve = (.1 + R() * .25) * turn, objs = []; let x = x0, y = y0, bad = 0, lastT = G.ns[0].t - 9, combo = 0;
-    for (const n of G.ns) {
-      const gb = (n.t - lastT) / beat, inStream = n.inStream && objs.length;
-      let d = gb * (34 + lv * 8) * st.sp;  // l'écart pour un temps (en pixels), comme l'espacement réglé d'une map
-      if (inStream) d = (st.name === 'Précision' || st.name === 'Technique') && R() < .3 ? 0 : obClamp(d, r * .7, r * 1.9);  // en stream, serré (parfois un double empilé)
-      else if (gb <= 1.01 && lv >= 4.5) d = Math.max(d, (lv - 3) * 13 * st.sp);  // sur un temps ou un demi-temps : de vrais sauts
-      if (!inStream && lv >= 3 && n.acc > .7) d *= 1 + (n.acc - .7) * 1.2;  // un accent de la musique : un saut plus grand
-      d = out.length || objs.length ? obClamp(d, d && r * .7, 175) : 0;
-      if (!objs.length) d = out.length ? obClamp((n.t - (out.at(-1).t + out.at(-1).len)) / beat * (34 + lv * 8) * st.sp, r * 1.5, 150) : 0;  // le saut vers le combo
-      else if (inStream) a += curve;  // les streams font des courbes
-      else if (pat === 'zig') a += Math.PI - .45 * turn;
-      else if (pat === 'tri') a += turn * 2 * Math.PI / 3;
-      else if (pat === 'square') a += turn * Math.PI / 2;
-      else if (pat === 'star') a += turn * 4 * Math.PI / 5;
-      else a += turn * (.4 + R() * .7);
+  function place(G, x0, y0, a, turn, R, col, sc = 1) {
+    const st = G.st, ns = G.ns, gaps = ns.slice(1).map((n, i) => n.t - ns[i].t - (ns[i].slide ? ns[i].len : 0));
+    const even = ns.length >= 3 && !ns.some(n => n.slide || n.inStream) && gaps.every(g => Math.abs(g - gaps[0]) < 1e-3);  // une forme ne se pose que sur un rythme régulier
+    const pat = even && lv >= 3.5 ? st.pat.filter(p => p !== 'flow')[R() * st.pat.filter(p => p !== 'flow').length | 0] || 'flow' : 'flow';
+    const sv = (34 + lv * 8) * st.sp * sc, ds = obClamp(step / beat * sv * 1.6, r * 1.1, r * 1.7), objs = [];  // sv : l'écart pour un temps ; ds : celui d'un stream, le même tout du long
+    let bend = (.16 + R() * .16) * turn, x = x0, y = y0, bad = 0, lastT = ns[0].t - 9, combo = 0, flow = 0;
+    for (const n of ns) {
+      const gb = (n.t - lastT) / beat, inStream = n.inStream && objs.length; let d;
+      if (!objs.length) { d = out.length ? obClamp((n.t - (out.at(-1).t + out.at(-1).len)) / beat * sv, r * 1.5, 150) : 0; if (d && lv >= 3 && n.acc > .7) d = Math.min(150, d * (1 + (n.acc - .7) * 1.2)); }  // le saut vers le combo, plus grand sur un accent
+      else if (inStream) { d = ds; a += bend; }  // un stream : une courbe régulière
+      else {
+        d = gb * sv; if (gb <= 1.01 && lv >= 4.5) d = Math.max(d, (lv - 3) * 13 * st.sp * sc);  // sur un temps ou un demi-temps : de vrais sauts
+        d = obClamp(d, r * 1.2, 150);
+        if (pat === 'zig') a += Math.PI - .5 * turn;
+        else if (pat === 'tri') a += turn * 2 * Math.PI / 3;
+        else if (pat === 'square') a += turn * Math.PI / 2;
+        else if (pat === 'star') a += turn * 4 * Math.PI / 5;
+        else { a += bend * 2.4; if (++flow % 4 === 0) bend = -bend; }  // une courbe qui change de sens toutes les 4 notes, pas au hasard
+      }
       let nx = x + Math.cos(a) * d, ny = y + Math.sin(a) * d;
-      for (let k = 0; k < 12 && d; k++) {  // contre les bords : la direction rebondit (la forme se déforme : compté) ; loin des orbes encore à l'écran (sauf en stream)
-        if (!inside(nx, ny)) { bad += 2; if (nx < M || nx > OB.PW - M) a = Math.PI - a; if (ny < M || ny > OB.PH - M) a = -a; if (k > 3) a += .7; }
-        else if (inStream || !near(out.concat(objs), n, nx, ny)) break;
-        else { bad++; a += .7; }
+      for (let k = 0; k < 12 && d; k++) {  // contre les bords : la direction rebondit (la forme se déforme : très compté) ; un orbe encore à l'écran recouvert : compté
+        if (!inside(nx, ny)) { bad += 4; if (nx < M || nx > OB.PW - M) a = Math.PI - a; if (ny < M || ny > OB.PH - M) a = -a; if (k > 3) a += .7; }
+        else { if (!inStream && near(out.concat(objs), n, nx, ny)) bad += 2; break; }
         nx = x + Math.cos(a) * d; ny = y + Math.sin(a) * d;
       }
       nx = obClamp(nx, M, OB.PW - M); ny = obClamp(ny, M, OB.PH - M);
-      if (!d && (out.length || objs.length)) { nx -= 3; ny -= 3; }  // un orbe empilé : décalé de quelques pixels pour qu'on voie qu'il y en a deux
       const o = {t: n.t, len: 0, kind: 'circle', x: nx, y: ny, combo: ++combo, col, r};
-      if (n.slide) {  // une glissière : à suivre bouton enfoncé, en aller-retour si elle est longue ; sa vitesse dépend du niveau et du style
+      if (n.slide) {  // une glissière dans le sens du mouvement, courbée du même côté que le combo ; en aller-retour si elle est longue
         const total = 50 * (.7 + lv * .09) * st.sv * n.len / beat, reps = Math.max(1, Math.ceil(total / 110)), L = obClamp(total / reps, r * 1.3, 110);
         for (let k = 0; k < 10; k++) {
-          const s = a + (R() - .5) * .9, ex = nx + Math.cos(s) * L, ey = ny + Math.sin(s) * L, bend = R() < .3 ? 0 : (R() - .5) * L * (st.name === 'Glissières' ? 1.2 : .7);
-          const cx = (nx + ex) / 2 - Math.sin(s) * bend, cy = (ny + ey) / 2 + Math.cos(s) * bend;
-          if (inside(ex, ey) && inside(cx, cy)) { Object.assign(o, {kind: 'slide', len: n.len, pts: obPath(nx, ny, cx, cy, ex, ey), reps}); a = reps % 2 ? Math.atan2(ey - cy, ex - cx) : Math.atan2(ny - cy, nx - cx); break; }
-          a += Math.PI / 3; bad++;
+          const sa = a + turn * .35 + (k ? (k % 2 ? 1 : -1) * Math.ceil(k / 2) * Math.PI / 5 : 0), ex = nx + Math.cos(sa) * L, ey = ny + Math.sin(sa) * L, bw = turn * L * (st.name === 'Glissières' ? .45 : .25) * (k > 5 ? 0 : 1);
+          const cx = (nx + ex) / 2 - Math.sin(sa) * bw, cy = (ny + ey) / 2 + Math.cos(sa) * bw;
+          if (inside(ex, ey) && inside(cx, cy)) { Object.assign(o, {kind: 'slide', len: n.len, pts: obPath(nx, ny, cx, cy, ex, ey), reps}); a = reps % 2 ? Math.atan2(ey - cy, ex - cx) : Math.atan2(ny - cy, nx - cx); if (k) bad++; break; }
         }
         if (o.kind !== 'slide') bad += 3;
       }
@@ -1239,7 +1239,7 @@ function obChart(base, c, diff) {
     col = (col + 1) % OB.COLS.length;
     const sig = G.st.name + '|' + G.ns.map(n => (n.k - G.ns[0].k) + (n.slide ? 's' + Math.round(n.len / step) : '')).join(','), was = shapes.get(sig);
     let best = null;
-    for (let c = 0; c < 8; c++) { const R = seeded(gi * 7919 + c * 104729 + base.length), p = place(G, x, y, a + c * Math.PI / 4, c & 1 ? -1 : 1, R, col); if (!best || p.bad < best.bad) best = p; if (!p.bad) break; }
+    for (const sc of [1, .85, .7]) { for (let c = 0; c < 8; c++) { const R = seeded(gi * 7919 + c * 104729 + base.length), p = place(G, x, y, a + c * Math.PI / 4, c & 1 ? -1 : 1, R, col, sc); if (!best || p.bad < best.bad) best = p; if (!p.bad) break; } if (!best.bad) break; }  // une forme trop grande : plus serrée plutôt que tordue contre les bords
     if (was) for (let k = 0; k < 4; k++) { const objs = reuse(was.rel, G.ns, best.objs[0].x, best.objs[0].y, (was.n + k) % 3 + 1, col); if (objs) { const e = obEnd(objs.at(-1)); best = {objs, x: e[0], y: e[1], a: best.a}; break; } }
     if (was) was.n++; else { const o0 = best.objs[0]; shapes.set(sig, {n: 0, rel: best.objs.map(o => ({combo: o.combo, dx: o.x - o0.x, dy: o.y - o0.y, len: o.len, reps: o.reps, pts: o.pts && o.pts.map(([px, py, l]) => [px - o0.x, py - o0.y, l])}))}); }
     out.push(...best.objs); x = best.x; y = best.y; a = best.a;
@@ -1328,11 +1328,33 @@ function obSpin(n, now) {
 }
 const obNeed = n => Math.max(1, n.len * 1.2) * 2 * Math.PI;
 // les dessins : orbes et anneaux en pixels, préparés une fois par couleur et par taille
-function obDisc(col, r) {
-  return cnv(2 * r + 3, 2 * r + 3, b => { const c = r + 1;
-    for (let y = 0; y < 2 * r + 3; y++) for (let x = 0; x < 2 * r + 3; x++) { const d = Math.hypot(x - c, y - c);
-      if (d > r + .5) continue; px(b, d > r - .7 ? '#05010b' : d > r - 2.6 ? '#ffffff' : d > r - 3.6 ? '#05010b' : (x - c) + (y - c) < -r * .4 ? prShade(col, 1.35) : (x + y) % 2 && d > r * .55 ? prShade(col, .8) : col, x, y); } });
+// les skins, au choix dans les réglages : l'allure des orbes (la couleur d'un pixel selon sa distance d au centre), du cercle d'approche, des numéros, du curseur et de sa traînée
+function obTrail(col, k, dots) {  // la traînée : un trait continu (ou des points espacés) qui s'efface
+  const t = rh.trail; for (let i = 1; i < t.length; i++) { const [ax, ay] = t[i - 1], [bx, by] = t[i], n = dots ? 1 : Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / 1.5)); g.globalAlpha = i / t.length * k;
+    for (let j = 0; j < n; j++) px(g, col, ax + (bx - ax) * j / n - 1, ay + (by - ay) * j / n - 1, dots ? 3 : 2, dots ? 3 : 2); }
+  g.globalAlpha = 1;
 }
+const OB_SKINS = [
+  {name: 'Classique', trail: 8, pix: (col, d, r, x, y, c) => d > r - .7 ? '#05010b' : d > r - 2.6 ? '#ffffff' : d > r - 3.6 ? '#05010b' : (x - c) + (y - c) < -r * .4 ? prShade(col, 1.35) : (x + y) % 2 && d > r * .55 ? prShade(col, .8) : col,
+    cur(x, y, down) { obTrail('#ffd84a', .5, true); const cr = down ? 4 : 5; g.drawImage(obRing('#ffd84a', cr), Math.round(x - cr - 1), Math.round(y - cr - 1)); px(g, '#ffffff', x - 1, y - 1, 2, 2); }},
+  {name: 'Épuré', trail: 16, pix: (col, d, r) => d > r - 1.6 ? '#ffffff' : prShade(col, .55), num: '#ffffff', ap: '#ffffff',  // à plat, fin bord blanc, longue traînée nette
+    cur(x, y, down) { obTrail('#ffffff', .45); const cr = down ? 2 : 3; g.drawImage(obRing('#ffffff', cr), Math.round(x - cr - 1), Math.round(y - cr - 1)); px(g, '#ffffff', x - 1, y - 1, 3, 3); }},
+  {name: 'Néon', trail: 10, pix: (col, d, r) => d > r - .7 ? '#000000' : d > r - 2.4 ? col : d > r - 4.2 ? prShade(col, .45) : '#0a0614',  // anneau lumineux sur un centre noir
+    cur(x, y, down) { obTrail('#3fe0ff', .7); const cr = down ? 5 : 7; g.drawImage(obRing('#3fe0ff', cr), Math.round(x - cr - 1), Math.round(y - cr - 1)); g.drawImage(obRing('#ffffff', 2), Math.round(x - 3), Math.round(y - 3)); }},
+  {name: 'Contraste', trail: 0, pix: (col, d, r) => d > r - .7 ? '#000000' : d > r - 3.2 ? '#ffffff' : d > r - 4.4 ? col : '#101014', num: '#ffffff', ap: '#ffffff',  // très lisible : bord blanc épais, une fine bague de couleur ; viseur en croix
+    cur(x, y, down) { const L = down ? 4 : 6; px(g, '#000000', x - L - 1, y - 2, 2 * L + 3, 4); px(g, '#000000', x - 2, y - L - 1, 4, 2 * L + 3); px(g, '#ffffff', x - L, y - 1, 2 * L + 1, 2); px(g, '#ffffff', x - 1, y - L, 2, 2 * L + 1); px(g, '#ff3a4a', x - 1, y - 1, 2, 2); }},
+  {name: 'Aube', trail: 12, pix: (col, d, r) => d > r - .7 ? '#2a1020' : d > r - 2.2 ? '#ffe8d0' : d < r * .5 ? prShade(col, 1.3) : col, num: '#2a1020',  // doux et chaud, centre clair
+    cur(x, y, down) { obTrail('#ffb070', .6, true); const cr = down ? 3 : 4; g.drawImage(obDisc('#ff9a4a', cr), Math.round(x - cr - 1), Math.round(y - cr - 1)); }},
+];
+const obSk = () => OB_SKINS[+$('obSkin').value] || OB_SKINS[0];
+const obDiscs = new Map();
+function obDisc(col, r) {
+  const sk = obSk(), key = sk.name + col + r; if (obDiscs.has(key)) return obDiscs.get(key);
+  const d0 = cnv(2 * r + 3, 2 * r + 3, b => { const c = r + 1;
+    for (let y = 0; y < 2 * r + 3; y++) for (let x = 0; x < 2 * r + 3; x++) { const d = Math.hypot(x - c, y - c); if (d <= r + .5) px(b, sk.pix(col, d, r, x, y, c), x, y); } });
+  obDiscs.set(key, d0); return d0;
+}
+$('obSkin').addEventListener('change', () => { if (rh?.r) { rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r); } });  // changée hors partie : prise tout de suite
 const obRings = new Map();
 function obRing(col, r) {  // un anneau d'épaisseur 1 (le cercle d'approche, le cercle de suivi, la toupie)
   r = Math.max(2, Math.round(r)); const k = col + r; if (obRings.has(k)) return obRings.get(k);
@@ -1394,8 +1416,8 @@ function obDraw() {
       if (gone || (n.missed && after > .3)) continue;
       // l'orbe et son numéro ; le cercle d'approche se resserre jusqu'à lui au bon moment
       g.globalAlpha = n.missed ? .45 : fade * .85; const x = Math.round(X + n.x) + jx, y = Math.round(Y + n.y);
-      g.drawImage(n.missed ? rh.ghost : rh.disc[n.col], x - r - 1, y - r - 1); pxFont(g, String(n.combo), x, y + 4, '#ffffff', 8, 'center');
-      if (!n.missed && after < 0) { const ar = r * (1 + 2 * obClamp(-after / pre, 0, 1)); g.globalAlpha = fade; g.drawImage(obRing(col, ar), Math.round(x - ar - 1), Math.round(y - ar - 1)); }
+      g.drawImage(n.missed ? rh.ghost : rh.disc[n.col], x - r - 1, y - r - 1); pxFont(g, String(n.combo), x, y + 4, obSk().num || '#ffffff', 8, 'center');
+      if (!n.missed && after < 0) { const ar = r * (1 + 2 * obClamp(-after / pre, 0, 1)); g.globalAlpha = fade; g.drawImage(obRing(obSk().ap || col, ar), Math.round(x - ar - 1), Math.round(y - ar - 1)); }
       g.globalAlpha = 1;
     }
   }
@@ -1406,9 +1428,8 @@ function obDraw() {
     pxFont(g, rhStarTxt(rh.stars), W - 4, 13, '#6a5a9a', 6, 'right');
   }
   if (rh.mode === 'play') {  // le curseur et sa traînée
-    rh.trail.push([rh.cx, rh.cy]); if (rh.trail.length > 8) rh.trail.shift();
-    rh.trail.forEach(([x, y], i) => { g.globalAlpha = (i + 1) / 16; px(g, '#ffd84a', x - 1, y - 1, 3, 3); }); g.globalAlpha = 1;
-    const cr = rh.keys.size ? 4 : 5; g.drawImage(obRing('#ffd84a', cr), Math.round(rh.cx - cr - 1), Math.round(rh.cy - cr - 1)); px(g, '#ffffff', rh.cx - 1, rh.cy - 1, 2, 2);
+    const sk = obSk(); rh.trail.push([rh.cx, rh.cy]); while (rh.trail.length > Math.max(1, sk.trail)) rh.trail.shift();
+    sk.cur(rh.cx, rh.cy, rh.keys.size > 0);
   }
   rhScreens(86);
 }
@@ -1454,7 +1475,7 @@ document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.lengt
   const small = obStats('expert', 100).r < obStats('facile', 100).r;
   console.assert(best >= 3 && best <= 33 && small && ok && x.some(o => o.kind === 'slide') && sp.length >= 1 && sp.every((s, i) => !i || s.t - sp[i - 1].t > 20) && hit && miss, 'orbe', ok, hit, miss, sp.length, best, small);
 }
-cv.__rh = {st: () => rh, themes: () => OB_THEMES.map(t => t.name), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
+cv.__rh = {st: () => rh, themes: () => OB_THEMES.map(t => t.name), skins: () => OB_SKINS.map(k => k.name), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
 console.assert(new Set(RH_SONGS.slice(0, 60).map(s => obTheme(rhCompose(s).len).name)).size >= 4, 'orbe : thèmes variés');
 ctx.onOpen(() => rhOpen());
 
