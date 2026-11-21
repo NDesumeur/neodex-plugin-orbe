@@ -10,7 +10,7 @@ const HTML = `<div class="appWrap wide">
       <div class="row obTabs"><button class="btn" id="rhTabSongs">MAPS</button><button class="btn" id="rhTabMine">IMPORTER</button><button class="btn" id="rhTabStats">STATS</button></div>
       <div class="obFilter" id="obFilter"><input class="obSearch" id="obSearch" type="search" placeholder="Chercher une map…" aria-label="Chercher une map"><button class="btn" id="obRand" title="Une chanson au hasard parmi celles affichées">AU HASARD</button>
         <select class="f gSel" id="obFStyle" aria-label="Style"><option value="">Tous les styles</option><option>Sauts</option><option>Streams</option><option>Précision</option><option>Technique</option><option>Glissières</option><option>Mixte</option></select>
-        <select class="f gSel" id="obFSrc" aria-label="Origine"><option value="">Toutes les maps</option><option value="jeu">Chansons du jeu</option><option value="mine">Mes musiques</option><option value="osu">Maps osu!</option></select><select class="f gSel" id="obFStars" aria-label="Étoiles"><option value="">Toutes les étoiles</option><option value="0">1 ★</option><option value="1">2 ★</option><option value="2">3 ★</option><option value="3">4 ★</option><option value="4">5 ★</option><option value="5">6 ★</option><option value="6">7 ★</option><option value="7">8 ★</option><option value="8">9 ★</option><option value="9">10 ★</option><option value="10">10+ ★ (11 et plus)</option></select>
+        <select class="f gSel" id="obFSrc" aria-label="Origine"><option value="">Toutes les maps</option><option value="jeu">Chansons du jeu</option><option value="imp">Sans les chansons du jeu</option><option value="mine">Mes musiques</option><option value="osu">Maps osu!</option></select><select class="f gSel" id="obFStars" aria-label="Étoiles"><option value="">Toutes les étoiles</option><option value="0">1 ★</option><option value="1">2 ★</option><option value="2">3 ★</option><option value="3">4 ★</option><option value="4">5 ★</option><option value="5">6 ★</option><option value="6">7 ★</option><option value="7">8 ★</option><option value="8">9 ★</option><option value="9">10 ★</option><option value="10">10+ ★ (11 et plus)</option></select>
         <select class="f gSel" id="obFBpm" aria-label="Tempo"><option value="">Tous les tempos</option><option value="0-100">Lent (moins de 100 BPM)</option><option value="100-140">Moyen (100 à 140 BPM)</option><option value="140-999">Rapide (140 BPM et plus)</option></select>
         <select class="f gSel" id="obFLen" aria-label="Durée"><option value="">Toutes les durées</option><option value="0-2">Moins de 2 min</option><option value="2-4">2 à 4 min</option><option value="4-99">4 min et plus</option></select>
         <select class="f gSel" id="obSort" aria-label="Ordre"><option value="">Étoiles</option><option value="name">Titre</option><option value="bpm">Tempo</option><option value="len">Durée</option><option value="grade">Meilleure note</option></select></div>
@@ -1195,7 +1195,7 @@ async function obOsuLink(t) {
   let buf = null, err = '';
   for (const u of ['https://catboy.best/d/' + set + 'n', 'https://osu.direct/api/d/' + set]) {
     msg('Téléchargement de la map ' + set + '…');
-    try { const r = await fetch(u, {binary: true}); if (!r.headers.get('content-type')) throw new Error('mets NeoDex à jour pour télécharger des maps');
+    try { const r = await fetch(u, {binary: true}); if (/^text\/plain;charset=UTF-8$/i.test(r.headers.get('content-type') || '')) throw new Error('mets NeoDex à jour (3.3.6 ou plus) pour télécharger des maps');
       if (r.ok) { buf = await r.arrayBuffer(); break; } err = 'le miroir a répondu ' + r.status; } catch (e) { err = e.message; if (/NeoDex à jour/.test(err)) break; }
   }
   if (!buf) throw new Error(err || 'téléchargement impossible');
@@ -1257,7 +1257,8 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 
 function rhOpen() {
   const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
-  for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';  // un choix d'une ancienne version (« 3 à 5 ★ ») : toutes
+  for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';
+  if (games.orbeVar || games.orbeVarSt) { delete games.orbeVar; delete games.orbeVarSt; saveGames(); }  // les variantes de map sont retirées depuis la 1.3.7  // un choix d'une ancienne version (« 3 à 5 ★ ») : toutes
   keysUi(); if (Array.isArray(p.mods)) obModSet = new Set(p.mods.filter(m => OB_MODS.some(x => x[0] === m))); obModsUi(); obDimShow();
   if (Array.isArray(p.keys) && p.keys.length === OB.KEYS.length) keysSet(p.keys);
   rhOffMs = +$('rhOffset').value; obSensShow(); rhInfo();
@@ -1734,7 +1735,8 @@ function obGrade(c, n, acc) {  // les notes d'osu! : SS sans faute, S au-dessus 
 console.assert(obGrade({PARFAIT: 10, BIEN: 0, OK: 0, 'RATÉ': 0}, 10, 1) === 'SS' && obGrade({PARFAIT: 95, BIEN: 5, OK: 0, 'RATÉ': 0}, 100, .96) === 'S'
   && obGrade({PARFAIT: 95, BIEN: 4, OK: 0, 'RATÉ': 1}, 100, .96) === 'A' && obGrade({PARFAIT: 50, BIEN: 50, OK: 0, 'RATÉ': 0}, 100, .67) === 'D', 'obGrade');
 // les maps osu! (.osz) : un zip avec la musique, les difficultés (.osu, du texte), l'image de fond. Seulement le mode standard (les cercles).
-function obUnzip(buf) {  // -> Map nom -> {m, raw} : la méthode (0 stocké, 8 deflate) et les octets, décompressés plus tard (on saute la vidéo)
+function obUnzip(buf) { try { return obUnzip0(buf); } catch (e) { throw e instanceof RangeError ? new Error('fichier .osz abîmé ou incomplet') : e; } }
+function obUnzip0(buf) {  // -> Map nom -> {m, raw} : la méthode (0 stocké, 8 deflate) et les octets, décompressés plus tard (on saute la vidéo)
   const u = new Uint8Array(buf), dv = new DataView(u.buffer, u.byteOffset, u.byteLength), out = new Map(), dec = new TextDecoder();
   let e = u.length - 22; while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
   if (e < 0) throw new Error('ce n\'est pas un fichier .osz');
@@ -2444,11 +2446,16 @@ const OB_CATS = ['1 ★', '2 ★', '3 ★', '4 ★', '5 ★', '6 ★', '7 ★', 
 const obCat = v => v == null ? 11 : v >= 11 ? 10 : obClamp(Math.floor(v) - 1, 0, 9);
 console.assert(obCat(.5) === 0 && obCat(1.99) === 0 && obCat(2) === 1 && obCat(10.5) === 9 && obCat(11) === 10 && obCat(null) === 11, 'obCat');
 const obImpStars = () => gstore('orbeImpStars', {});  // les étoiles de tes musiques, connues dès que le niveau a été préparé une fois
+// les étoiles d'une de tes musiques avant sa première analyse : la moyenne des chansons du jeu de même difficulté et de tempo voisin
+function obEst(d, bpm) {
+  const S = RH_SONGS.map((s, i) => [s.bpm, rhStarCache.get(i + ':' + d)]).filter(x => x[1] != null), near = bpm ? S.filter(x => Math.abs(x[0] - bpm) <= 10) : [], P = near.length >= 5 ? near : S;
+  return P.length ? Math.round(P.reduce((a, x) => a + x[1], 0) / P.length * 100) / 100 : null;
+}
 function obItems() {
   const L = [];
   RH_SONGS.forEach((s, i) => { const sty = RHG.tag(obLen(i)); for (const [d, v] of Object.entries(RH_DIFFS)) L.push({k: i + ':' + d, song: i, diff: d, name: s.name, v, st: rhStarCache.get(i + ':' + d), res: 'rh' + i + d, sty, bpm: s.bpm, len: obLen(i), src: 'jeu', sub: s.style || '', last: !!s.last}); });
   for (const imp of rhImports()) for (const [d, v] of imp.stars ? [['S' + imp.stars, 'Niveau ' + imp.stars + ' ★']] : Object.entries(RH_DIFFS))
-    L.push({k: imp.id + ':' + d, song: imp.id, diff: d, name: imp.name, v, st: obImpStars()[imp.id + ':' + d] ?? (imp.stars || null), res: 'rhx' + imp.id + d, sty: imp.len ? RHG.tag(imp.len) : 'Mixte', bpm: imp.bpm || 0, len: imp.len || 0, src: 'mine', sub: imp.url ? 'ta musique · YouTube' : 'ta musique', imp});
+    L.push({k: imp.id + ':' + d, song: imp.id, diff: d, name: imp.name, v, st: obImpStars()[imp.id + ':' + d] ?? (imp.stars || obEst(d, imp.bpm)), est: obImpStars()[imp.id + ':' + d] == null && !imp.stars, res: 'rhx' + imp.id + d, sty: imp.len ? RHG.tag(imp.len) : 'Mixte', bpm: imp.bpm || 0, len: imp.len || 0, src: 'mine', sub: imp.url ? 'ta musique · YouTube' : 'ta musique', imp});
   for (const s of obOsuSets()) s.diffs.forEach((d, k) => L.push({k: s.id + ':O' + k, song: s.id, diff: 'O' + k, name: s.name, v: d.v, st: d.st, res: 'osu' + s.id + '|' + d.v, sty: d.sy || 'Mixte', bpm: s.bpm, len: d.len || 0, src: 'osu', sub: 'osu!' + (s.creator ? ' · map de ' + s.creator : '')}));
   return L;
 }
@@ -2459,7 +2466,7 @@ function obOrder() {
   const rg = v => v ? v.split('-').map(Number) : null, [B0, B1] = rg(bp) || [], [L0, L1] = rg(ln) || [];
   let L = obItems();
   if (q) L = L.filter(o => obNorm(o.name + ' ' + o.v).includes(q));
-  if (sc) L = L.filter(o => o.src === sc);
+  if (sc) L = L.filter(o => sc === 'imp' ? o.src !== 'jeu' : o.src === sc);
   if (st) L = L.filter(o => o.sty === st);
   if (sr) L = L.filter(o => obCat(o.st) === +sr);
   if (bp) L = L.filter(o => o.bpm >= B0 && o.bpm < B1);
@@ -2549,7 +2556,6 @@ const OB_MEDALS = [
   ['hr', 'Dur', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en HR', H => obMax(obFin(H).filter(h => obModOf(h, 'HR')), h => h.st)],
   ['dt', 'Accéléré', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en DT', H => obMax(obFin(H).filter(h => obModOf(h, 'DT')), h => h.st)],
   ['fl', 'Lampe', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en FL', H => obMax(obFin(H).filter(h => obModOf(h, 'FL')), h => h.st)],
-  ['var', 'Explorateur', [1, 5, 20], v => v + ' autre' + (v > 1 ? 's' : '') + ' variante' + (v > 1 ? 's' : '') + ' finie' + (v > 1 ? 's' : ''), H => new Set(obFin(H).filter(h => /~/.test(h.k)).map(h => h.k)).size],
   ['levels', 'Voyageur', [10, 50, 200], v => v + ' niveaux différents finis', H => new Set(obFin(H).map(h => h.k)).size],
   ['games', 'Habitué', [50, 200, 1000], v => v + ' parties', H => H.length],
   ['time', 'Endurance', [1, 5, 20], v => v + ' h de jeu', H => H.reduce((s0, x) => s0 + (x.t || 0), 0) / 3600],
@@ -2609,7 +2615,12 @@ const obCur = () => obNavTo ?? (rh ? rh.song + ':' + rh.diff : null);
 function obCarAt(y) { const Y = obCar.Y; let a = 0, b = Y.length - 1; while (a < b) { const m = (a + b + 1) >> 1; if (Y[m] <= y) a = m; else b = m - 1; } return a; }
 function obCarousel(rows) {
   const box = $('rhSongs'); let inner = box.querySelector(':scope > .obCarIn');
-  if (!inner) { box.replaceChildren(inner = el('div', 'obCarIn')); obCar.els.clear(); box.onscroll = () => obCarDraw(); }
+  if (!inner) { box.replaceChildren(inner = el('div', 'obCarIn')); obCar.els.clear(); box.onscroll = () => obCarDraw();
+    box.addEventListener('wheel', e => { if (e.ctrlKey) return; e.preventDefault(); box.scrollTop += e.deltaY * (e.deltaMode ? 40 : 1) * 3; }, {passive: false});
+    const jump = e => { const r = box.getBoundingClientRect(); box.scrollTop = obClamp((e.clientY - r.top) / r.height, 0, 1) * (box.scrollHeight - box.clientHeight); };
+    box.addEventListener('contextmenu', e => e.preventDefault());
+    box.addEventListener('pointerdown', e => { if (e.button !== 2) return; e.preventDefault(); box.setPointerCapture(e.pointerId); jump(e); box.onpointermove = jump; });
+    box.addEventListener('pointerup', e => { if (e.button === 2) box.onpointermove = null; }); }
   obCar.rows = rows; obCar.Y = []; let y = 0; for (const r of rows) { obCar.Y.push(y); y += r.cat != null ? OB_HH : OB_CH; }
   obCar.sel = rows.findIndex(r => r.k === obCur());
   for (const e of obCar.els.values()) e.remove(); obCar.els.clear();
@@ -2635,20 +2646,26 @@ function obCatEl(r) {  // le titre d'une catégorie d'étoiles
   return c;
 }
 function obCardEl(o, on) {
-  const r = (games.rhythm || {})[o.res], c = el('div', 'obCard' + (on ? ' on' : '') + (obNavTo === o.k ? ' nav' : '')), top = el('div', 'obCardTop'), chip = el('span', 'obChip', o.st != null ? rhStarTxt(o.st) : '?');
+  const r = (games.rhythm || {})[o.res], c = el('div', 'obCard' + (on ? ' on' : '') + (obNavTo === o.k ? ' nav' : '')), top = el('div', 'obCardTop'), chip = el('span', 'obChip', o.st != null ? (o.est ? '≈ ' : '') + rhStarTxt(o.st) : '?');
   c.style.height = (OB_CH - 6) + 'px'; if (o.st != null) { c.style.setProperty('--sc', obStarCol(o.st)); obChipCol(chip, o.st); }
   const nm = el('b', '', o.name), right = el('span', 'obCardR'); right.append(chip, ...(r ? [el('span', 'obG obG' + r.grade, r.grade)] : []));
   top.append(nm, right);
   c.append(top, el('span', 'hint', [o.sty, o.v, o.bpm && o.bpm + ' BPM', o.len && clock(o.len), o.sub].filter(Boolean).join(' · ')));
-  c.title = o.name + ' [' + o.v + ']' + (r ? ' · ' + r.score + ' points · ' + r.acc + ' %' : '');
+  c.title = o.name + ' [' + o.v + ']' + (o.est ? ' · étoiles estimées, calculées à la première partie' : '') + (r ? ' · ' + r.score + ' points · ' + r.acc + ' %' : '');
   c.onclick = () => { if (rh?.song === o.song && rh.diff === o.diff && rh.mode === 'ready') { obUi('play'); rhPress(); if (rh.mode === 'play') obLock(); } else { obUi('diff'); obGo(o); } };
   return c;
 }
 const obChipCol = (q, v) => { q.style.setProperty('--dc', obStarCol(v)); q.style.setProperty('--dt', v >= 6.5 ? '#ffffff' : '#0a0814'); };  // texte sombre sur les couleurs claires
 const obGo = o => rhSelect(o.song, o.diff).catch(e => toast('Impossible : ' + e.message, true));
 // au clavier : Haut et Bas la carte d'à côté (elle s'allume tout de suite, le niveau se charge quand on s'arrête un quart de seconde), Gauche et Droite l'autre difficulté de la même chanson
-function obNav(delta) {
-  const R = obCar.rows; if (!R.length) return; let k = R.findIndex(r => r.k === obCur()); if (k < 0) k = delta > 0 ? -1 : R.length;
+// Page haut / bas : la première carte de la catégorie d'étoiles d'avant ou d'après
+function obNavCat(delta) {
+  const R = obCar.rows, k0 = R.findIndex(r => r.k === obCur()), H = R.map((r, k) => r.cat != null ? k : -1).filter(k => k >= 0); if (!H.length) return;
+  const cur = H.filter(k => k <= Math.max(0, k0)).at(-1) ?? H[0], h = H[H.indexOf(cur) + delta]; if (h == null || !R[h + 1]) return;
+  obNav(1, h);
+}
+function obNav(delta, from) {
+  const R = obCar.rows; if (!R.length) return; let k = from ?? R.findIndex(r => r.k === obCur()); if (k < 0) k = delta > 0 ? -1 : R.length;
   do k += delta; while (k >= 0 && k < R.length && R[k].cat != null);
   if (k < 0 || k >= R.length) return; const o = R[k];
   obNavTo = o.k; obUi('tick'); obCarousel(R); obCarFocus(true);
@@ -2721,7 +2738,7 @@ function obModsUi() {
   }
   const info = document.createElement('span'); info.className = 'hint obModInfo'; box.append(info);
   // une autre variante de la map : le même niveau, d'autres motifs (son propre classement) ; « la première » revient à l'originale
-  const vb = document.createElement('div'); vb.className = 'obMods'; vb.append('Map ');
+  /* variantes retirées en 1.3.7
   for (const [id, t, f] of [['obVarNext', 'AUTRE VARIANTE', v => v + 1], ['obVarBack', 'LA PREMIÈRE', () => 0]]) {
     const b = document.createElement('button'); b.className = 'btn px'; b.id = id; b.textContent = t; b.style.cssText = 'width:auto;margin:0;padding:2px 8px';
     b.onclick = e => { e.preventDefault(); b.blur(); if (!rh?.info || (rh.mode !== 'ready' && rh.mode !== 'over')) return;
@@ -2733,8 +2750,8 @@ function obModsUi() {
   ss.onchange = () => { ss.blur(); if (!rh?.info || (rh.mode !== 'ready' && rh.mode !== 'over')) return obModsShow();
     const V = gstore('orbeVar', {}), S = gstore('orbeVarSt', {}), k = rh.info.key;
     if (ss.value) { S[k] = ss.value; V[k] ||= 1; } else delete S[k]; saveGames(); rhSelect(rh.song, rh.diff); };
-  const vi = document.createElement('span'); vi.className = 'hint obVarInfo'; vb.append(ss, vi);
-  $('obModBar').append(box, vb); obModsShow();
+  const vi = document.createElement('span'); vi.className = 'hint obVarInfo'; vb.append(ss, vi); */
+  $('obModBar').append(box); obModsShow();
 }
 function obModsShow() {
   document.querySelectorAll('.obMod').forEach(b => b.classList.toggle('main', obModSet.has(b.dataset.m)));
@@ -3140,6 +3157,7 @@ document.addEventListener('keydown', e => {
   if ((m === 'ready' || m === 'load') && rhTab === 'songs') {  // la liste au clavier, comme dans osu! : Haut et Bas la chanson, Gauche et Droite la difficulté, F2 au hasard
     if (k === 'ArrowUp' || k === 'ArrowDown') { e.preventDefault(); return obNav(k === 'ArrowUp' ? -1 : 1); }
     if ((k === 'ArrowLeft' || k === 'ArrowRight') && m === 'ready') { e.preventDefault(); return obNavDiff(k === 'ArrowLeft' ? -1 : 1); }
+    if (k === 'PageUp' || k === 'PageDown') { e.preventDefault(); return obNavCat(k === 'PageUp' ? -1 : 1); }
     if (k === 'F2') { e.preventDefault(); return $('obRand').click(); }
     if (k === 'Enter' && obNavTo != null) { e.preventDefault(); return; }  // pas encore chargée
   }

@@ -67,12 +67,8 @@ module.exports = async ({ pj, sleep }) => {
   const end = await pj(`(() => { const rh = document.getElementById('gc').__rh.st(); return [rh.mode, rh.hist.length, rh.theme?.name || ''].join(','); })()`);
   if (!/^over,200,\S/.test(end)) throw new Error('écran de fin : ' + end);
   const top = await pj(`document.querySelector('#obTop .obLbRow')?.textContent || document.getElementById('obTop').textContent`); if (!/^1/.test(top)) throw new Error('classement du niveau : ' + top);
-  // une autre variante de la map : d'autres motifs, puis retour à la première
-  const pos = `document.getElementById('gc').__rh.st().notes.slice(0, 40).map(n => Math.round(n.x) + ':' + Math.round(n.y)).join(' ')`, v0 = await pj(pos);
-  await pj(`document.getElementById('obVarNext').click(), 0`); await sleep(300); for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(500);
-  const v1 = await pj(pos), vv = await pj(`document.getElementById('gc').__rh.st().var`); if (vv !== 1 || v1 === v0) throw new Error('variante : ' + vv);
-  await pj(`document.getElementById('obVarBack').click(), 0`); await sleep(300); for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(500);
-  if (await pj(pos) !== v0) throw new Error('retour à la première variante');
+  // plus de variantes de map depuis la 1.3.7
+  if (await pj(`!!document.getElementById('obVarNext')`)) throw new Error('les boutons de variante sont encore là');
   // la lampe (FL) et caché (HD) : une partie avec le pilote
   await pj(`['FL', 'HD'].forEach(m => document.querySelector('.obMod[data-m="' + m + '"]').click()), 0`); await sleep(300);
   for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(500);
@@ -116,6 +112,10 @@ module.exports = async ({ pj, sleep }) => {
   const d0 = await pj(`document.getElementById('gc').__rh.st().diff`), side = d0 === 'facile' ? 'ArrowRight' : 'ArrowLeft';
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: '${side}', bubbles: true })), 0`); await sleep(2500);
   const d1 = await pj(`(r => r.song + '|' + r.diff)(document.getElementById('gc').__rh.st())`); if (d1 === s1.split('|')[0] + '|' + d0 || d1.split('|')[0] !== s1.split('|')[0]) throw new Error('flèches Gauche / Droite : ' + d0 + ' -> ' + d1);
+  // Page bas : la première carte de la catégorie d'étoiles d'après
+  const cat = `Math.floor(parseFloat(document.querySelector('#rhSongs .obCard.nav .obChip, #rhSongs .obCard.on .obChip')?.textContent.replace(/[^0-9.]/g, '')))`, c0 = await pj(cat);
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'PageDown', bubbles: true })), 0`); await sleep(2500);
+  const c1 = await pj(cat); if (!(c1 > c0)) throw new Error('Page bas : catégorie ' + c0 + ' -> ' + c1);
   // une map osu! (.osz fabriqué ici : un son de 12 s, cercles, glissières en arc et en Bézier, toupie) déposée sur le jeu : importée, jouée avec ses propres réglages
   const osz = await pj(`(async () => { const sr = 22050, n = sr * 12, pcm = new Int16Array(n); for (let b = 1; b < 24; b++) for (let i = 0; i < 800; i++) pcm[b * sr / 2 + i] = Math.sin(i / 3) * 12000 * Math.exp(-i / 200);
       const wav = new Uint8Array(44 + n * 2), dv = new DataView(wav.buffer), w4 = (o, s) => [...s].forEach((c, i) => wav[o + i] = c.charCodeAt(0));
@@ -133,6 +133,11 @@ module.exports = async ({ pj, sleep }) => {
       for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 250)); const rh = document.getElementById('gc').__rh.st(); if (rh.info?.osu && rh.mode === 'ready') break; }
       const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelector('#rhSongs .obCard.on')?.textContent, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
   if (!/^8\|2\|1\|9\|4\|Mixte\|Test - Essai.*Insane/.test(osz)) throw new Error('map osu! : ' + osz);
+  // « Sans les chansons du jeu » : seulement tes musiques et les maps osu!
+  await pj(`(s => { s.value = 'imp'; s.dispatchEvent(new Event('change')); })(document.getElementById('obFSrc')), 0`); await sleep(500);
+  const imp = await pj(`[...document.querySelectorAll('#rhSongs .obCard > .hint')].map(h => /osu!|ta musique/.test(h.textContent) ? 1 : 0).join('')`);
+  await pj(`(s => { s.value = ''; s.dispatchEvent(new Event('change')); })(document.getElementById('obFSrc')), 0`); await sleep(500);
+  if (!imp || /0/.test(imp)) throw new Error('filtre sans les chansons du jeu : ' + imp);
   await sleep(500); await shot('osu-pret');
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(3500); await shot('osu-jeu');
   await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
