@@ -41,15 +41,15 @@ module.exports = async ({ pj, sleep }) => {
   const hov = await pj(`(rh => { const m = rh.menu; rh.menu = 0; document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); return m; })(document.getElementById('gc').__rh.st())`); await sleep(300); await shot('reprise');
   const rm = await pj(`document.getElementById('gc').__rh.st().mode`);
   if (pm !== 'pause' || rm !== 'resume') throw new Error('pause : ' + pm + ' puis ' + rm + ' (survol ' + hov + ')');
-  await pj(`(() => { const rh = document.getElementById('gc').__rh.st(), c = document.getElementById('gc').getBoundingClientRect(); document.dispatchEvent(new PointerEvent('pointermove', { clientX: c.left + rh.pcx / 320 * c.width, clientY: c.top + rh.pcy / 240 * c.height, bubbles: true }));
+  await pj(`(() => { const rh = document.getElementById('gc').__rh.st(), c = document.getElementById('gc').getBoundingClientRect(); document.dispatchEvent(new PointerEvent('pointermove', { clientX: c.left + rh.pcx / document.getElementById('gc').width * c.width, clientY: c.top + rh.pcy / 240 * c.height, bubbles: true }));
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'w', bubbles: true })); document.dispatchEvent(new KeyboardEvent('keyup', { key: 'w', bubbles: true })); return 0; })()`);
   await sleep(200); const back = await pj(`document.getElementById('gc').__rh.st().mode`); if (back !== 'play') throw new Error('reprise : ' + back);
 
   // un pilote automatique : le curseur va sur chaque orbe et frappe au bon moment, suit les glissières, tourne les toupies
   const pilot = `(() => { const T = document.getElementById('gc').__rh, key = (t, k) => document.dispatchEvent(new KeyboardEvent(t, { key: k, bubbles: true })); let held = false, a = 0;
-    window.__auto = setInterval(() => { const rh = T.st(); if (rh.mode !== 'play') return; const now = T.now(), X = 32, Y = 28;
+    window.__auto = setInterval(() => { const rh = T.st(); if (rh.mode !== 'play') return; const now = T.now(), W = document.getElementById('gc').width, X = (W - 256) / 2, Y = 28;  // la toile fait 400 de large (1.3.9)
       const sl = rh.notes.find(n => n.kind !== 'circle' && now >= n.t && now < n.t + n.len);
-      if (sl) { if (sl.kind === 'spin') { a += .5; rh.cx = 160 + 30 * Math.cos(a); rh.cy = 124 + 30 * Math.sin(a); } else { const [x, y] = T.ball(sl, now); rh.cx = X + x; rh.cy = Y + y; } if (!held) { key('keydown', 'w'); held = true; } return; }
+      if (sl) { if (sl.kind === 'spin') { a += .5; rh.cx = W / 2 + 30 * Math.cos(a); rh.cy = 124 + 30 * Math.sin(a); } else { const [x, y] = T.ball(sl, now); rh.cx = X + x; rh.cy = Y + y; } if (!held) { key('keydown', 'w'); held = true; } return; }
       const n = rh.notes.find(n => !n.judged && n.kind !== 'spin'); if (held) { key('keyup', 'w'); held = false; } if (!n) return;
       rh.cx = X + n.x; rh.cy = Y + n.y; if (now >= n.t - .008) { key('keydown', 'w'); held = true; if (n.kind === 'circle') { key('keyup', 'w'); held = false; } } }, 4); return 0; })()`;
   await pj(pilot); for (const k of [1, 2, 3]) { await sleep(3000); await shot('auto' + k); }

@@ -54,7 +54,7 @@ L'onglet **STATS** commence par ta **carte de joueur** : une image de ton profil
 
 ## Pendant la partie
 
-Les maps osu! s'affichent plus larges (400 × 240 au lieu de 320 × 240) : elles vont jusqu'aux bords du terrain, et le compteur de touches, à droite, ne cache plus les orbes. En haut à droite : le score qui défile, la précision, un camembert qui montre où en est le morceau, et les mods. Si tu as déjà fini ce niveau, un petit chiffre **vert** ou **rouge** sous le score dit si tu es en avance ou en retard sur ton record au même moment. En bas : le combo qui rebondit, et au milieu la **barre d'erreur** (tôt à gauche, tard à droite ; la petite flèche est ta moyenne). À droite, les compteurs **K1 K2 M1 M2** s'allument quand tu appuies.
+Toutes les maps s'affichent en large (400 × 240 au lieu de 320 × 240) : le terrain reste au milieu, et le compteur de touches, à droite, ne cache plus les orbes. En haut à droite : le score qui défile, la précision, un camembert qui montre où en est le morceau, et les mods. Si tu as déjà fini ce niveau, un petit chiffre **vert** ou **rouge** sous le score dit si tu es en avance ou en retard sur ton record au même moment. En bas : le combo qui rebondit, et au milieu la **barre d'erreur** (tôt à gauche, tard à droite ; la petite flèche est ta moyenne). À droite, les compteurs **K1 K2 M1 M2** s'allument quand tu appuies.
 
 ## Thèmes du terrain
 

@@ -54,7 +54,7 @@ The **STATS** tab starts with your **player card**: an image of your profile (ra
 
 ## During the game
 
-osu! maps are shown wider (400 × 240 instead of 320 × 240): they reach the edges of the playfield, and the key counter on the right no longer hides the orbs. Top right: the rolling score, accuracy, a pie showing how far the song has gone, and the mods. If you already finished this level, a small **green** or **red** number under the score tells whether you are ahead of or behind your best at the same moment. Bottom: the bouncing combo, and in the middle the **hit error bar** (early on the left, late on the right; the small arrow is your average). On the right, the **K1 K2 M1 M2** counters light up when you press.
+Every map is shown wide (400 × 240 instead of 320 × 240): the playfield stays in the middle, and the key counter on the right no longer hides the orbs. Top right: the rolling score, accuracy, a pie showing how far the song has gone, and the mods. If you already finished this level, a small **green** or **red** number under the score tells whether you are ahead of or behind your best at the same moment. Bottom: the bouncing combo, and in the middle the **hit error bar** (early on the left, late on the right; the small arrow is your average). On the right, the **K1 K2 M1 M2** counters light up when you press.
 
 ## Playfield themes
 

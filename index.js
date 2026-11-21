@@ -1025,7 +1025,7 @@ let rhTok = 0;
 async function rhSelect(i, diff) { const me = rhTok + 1; rhBar(.03); try { return await rhPrepare(i, diff); } finally { if (me === rhTok) rhBar(null); } }
 async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou identifiant d'une musique importée
   let info, c, base, ready = null; const tok = ++rhTok;
-  obWide(typeof i === 'string' && /^o\w+$/.test(i) && obOsuSets().some(x => x.id === i));
+  obWide(true);  // toutes les maps en large (1.3.9) : le compteur de touches loin du terrain
   if (rh) { try { rh.src?.stop(); } catch {} rh.mode = 'load'; }
   if (typeof i === 'number') {
     const song = RH_SONGS[i] || RH_SONGS[0]; i = RH_SONGS.indexOf(song); c = rhCompose(song); base = rhChart(c, diff); info = {name: song.name, bpm: song.bpm, key: 'rh' + i + diff};
@@ -1259,6 +1259,7 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 }
 
 function rhOpen() {
+  obWide(true);
   const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
   for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';
   obOsuRestar();
@@ -3130,7 +3131,7 @@ function obArrow(x, y, ang, s, col) { for (const k of [-.7, .7]) obLine(x, y, x 
 const obMark = (ok, x, y) => ok ? (obLine(x - 9, y, x - 3, y + 7, '#7ee07a', 3), obLine(x - 3, y + 7, x + 10, y - 8, '#7ee07a', 3)) : (obLine(x - 8, y - 8, x + 8, y + 8, '#ff4a5a', 3), obLine(x + 8, y - 8, x - 8, y + 8, '#ff4a5a', 3));
 // le fond de la map (ou du thème), flouté au réglage « Flou du fond » ; gardé tant que l'image et le réglage ne changent pas
 let obBgC = null;
-// les maps osu! vont jusqu'aux bords du terrain : la toile s'élargit (400 × 240), le terrain reste au milieu et le compteur de touches s'en éloigne
+// la toile élargie (400 × 240) pour toutes les maps : le terrain reste au milieu et le compteur de touches s'en éloigne
 function obWide(on) {
   const w = on ? 400 : 320; if (W === w) return;
   W = w; cv.width = W; g.imageSmoothingEnabled = false; cv.style.aspectRatio = W + '/' + H; cv.classList.toggle('wide', on); OB.X0 = (W - OB.PW) / 2;
