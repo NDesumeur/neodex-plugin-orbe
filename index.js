@@ -7,18 +7,18 @@ const HTML = `<div class="appWrap wide">
       <div class="obLow"><div class="sysCard obLb"><b>CLASSEMENT DU NIVEAU</b><div class="obTop" id="obTop"></div></div>
       <div class="sysCard obProf"><div class="obProfTop" id="obProf"></div><div class="gStats" id="gStats"></div></div></div></div>
     <div class="gSide">
-      <div class="row obTabs"><button class="btn" id="rhTabSongs">CHANSONS</button><button class="btn" id="rhTabMine">MES MUSIQUES</button><button class="btn" id="rhTabStats">STATS</button></div>
-      <div class="obFilter" id="obFilter"><input class="obSearch" id="obSearch" type="search" placeholder="Chercher une chanson…" aria-label="Chercher une chanson"><button class="btn" id="obRand" title="Une chanson au hasard parmi celles affichées">AU HASARD</button>
+      <div class="row obTabs"><button class="btn" id="rhTabSongs">MAPS</button><button class="btn" id="rhTabMine">IMPORTER</button><button class="btn" id="rhTabStats">STATS</button></div>
+      <div class="obFilter" id="obFilter"><input class="obSearch" id="obSearch" type="search" placeholder="Chercher une map…" aria-label="Chercher une map"><button class="btn" id="obRand" title="Une chanson au hasard parmi celles affichées">AU HASARD</button>
         <select class="f gSel" id="obFStyle" aria-label="Style"><option value="">Tous les styles</option><option>Sauts</option><option>Streams</option><option>Précision</option><option>Technique</option><option>Glissières</option><option>Mixte</option></select>
-        <select class="f gSel" id="obFStars" aria-label="Étoiles"><option value="">Toutes les étoiles</option><option value="0-3">Moins de 3 ★</option><option value="3-5">3 à 5 ★</option><option value="5-7">5 à 7 ★</option><option value="7-99">7 ★ et plus</option></select>
+        <select class="f gSel" id="obFSrc" aria-label="Origine"><option value="">Toutes les maps</option><option value="jeu">Chansons du jeu</option><option value="mine">Mes musiques</option><option value="osu">Maps osu!</option></select><select class="f gSel" id="obFStars" aria-label="Étoiles"><option value="">Toutes les étoiles</option><option value="0">1 ★</option><option value="1">2 ★</option><option value="2">3 ★</option><option value="3">4 ★</option><option value="4">5 ★</option><option value="5">6 ★</option><option value="6">7 ★</option><option value="7">8 ★</option><option value="8">9 ★</option><option value="9">10 ★</option><option value="10">10+ ★ (11 et plus)</option></select>
         <select class="f gSel" id="obFBpm" aria-label="Tempo"><option value="">Tous les tempos</option><option value="0-100">Lent (moins de 100 BPM)</option><option value="100-140">Moyen (100 à 140 BPM)</option><option value="140-999">Rapide (140 BPM et plus)</option></select>
         <select class="f gSel" id="obFLen" aria-label="Durée"><option value="">Toutes les durées</option><option value="0-2">Moins de 2 min</option><option value="2-4">2 à 4 min</option><option value="4-99">4 min et plus</option></select>
-        <select class="f gSel" id="obSort" aria-label="Ordre"><option value="">Ordre du jeu</option><option value="name">Titre</option><option value="bpm">Tempo</option><option value="len">Durée</option><option value="grade">Meilleure note</option></select></div>
-      <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="obOszBtn">IMPORTER UNE MAP OSU!</button><input type="file" id="obOsz" accept=".osz" hidden><button class="btn" id="obOsuWeb">CATALOGUE OSU!</button></div><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
+        <select class="f gSel" id="obSort" aria-label="Ordre"><option value="">Étoiles</option><option value="name">Titre</option><option value="bpm">Tempo</option><option value="len">Durée</option><option value="grade">Meilleure note</option></select></div>
+      <div class="sysCard rhImport" id="rhImport" style="display:none"><div class="row"><button class="btn main" id="obOszBtn">IMPORTER UNE MAP OSU!</button><input type="file" id="obOsz" accept=".osz" hidden><button class="btn" id="obOsuWeb">CATALOGUE OSU!</button></div><div class="row"><input class="f" id="obOsuUrl" placeholder="Lien d'une map osu! (osu.ppy.sh/beatmapsets/…)" style="flex:1;min-width:0"><button class="btn" id="obOsuGet">TÉLÉCHARGER</button></div><div class="row"><button class="btn main" id="rhFileBtn">IMPORTER UN FICHIER AUDIO</button><input type="file" id="rhFile" accept="audio/*,.mp3,.m4a,.ogg,.opus,.wav,.flac,.webm" hidden></div><div class="row"><select class="f" id="rhMuList"></select><button class="btn" id="rhMuBtn">CRÉER LE NIVEAU</button></div><div class="row"><label>Difficulté <select class="f" id="rhStars"><option value="1">1 ★</option><option value="2">2 ★</option><option value="3" selected>3 ★</option><option value="4">4 ★</option><option value="5">5 ★</option><option value="6">6 ★</option><option value="7">7 ★</option><option value="8">8 ★</option><option value="9">9 ★</option><option value="10">10 ★</option></select></label></div><span class="hint" id="rhImpMsg">Un fichier ou une musique de NeoMusic : le jeu trouve son tempo et ses temps forts et en fait un niveau.</span></div>
       <div class="hint obScan" id="obScanMsg" hidden></div>
       <div id="rhSongs"></div>
       <div class="obBottom"><button class="btn main" id="gNew">JOUER</button><button class="btn" id="obOptBtn">OPTIONS</button><button class="btn" id="obHelpBtn">AIDE</button></div>
-      <div class="sysCard rhOpts" id="obOpts" hidden><div class="row"><button class="btn" id="obOskBtn">IMPORTER UN SKIN OSU!</button><input type="file" id="obOsk" accept=".osk" hidden><button class="btn" id="obOskDel" hidden>RETIRER LE SKIN</button><span class="hint" id="obOskMsg">Un skin osu! (.osk) : ses cercles, son curseur, ses chiffres, ses couleurs et ses sons.</span></div><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="-1">Son des clics</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
+      <div class="sysCard rhOpts" id="obOpts" hidden><div class="row"><button class="btn" id="obOskBtn">IMPORTER UN SKIN OSU!</button><input type="file" id="obOsk" accept=".osk" hidden><button class="btn" id="obOskDel" hidden>RETIRER LE SKIN</button><span class="hint" id="obOskMsg">Un skin osu! (.osk) : ses cercles, son curseur, ses chiffres, ses couleurs et ses sons.</span></div><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="-1">Son des clics</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label title="Floute l'image de fond, comme dans osu!">Flou du fond <input type="range" id="obBlur" min="0" max="8" step="1" value="0"></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
       <div class="obHelp" id="obHelp" hidden><div class="hint">Un cercle se resserre sur chaque orbe : vise-le avec la souris et clique (ou W / X) quand le cercle touche l'orbe. Touche-les dans l'ordre de leurs numéros.</div><div class="hint">Glissière : touche son orbe, puis garde le bouton enfoncé et suis la boule jusqu'au bout (et au retour). Toupie : garde appuyé et fais tourner la souris autour du centre avant que l'anneau se referme.</div><div class="hint">Comme dans osu! : une barre de vie (le mod NF empêche de perdre), des mods (EZ, NF, HT, HR, DT, HD, FL), les notes SS à D et le classement de chaque niveau. Garde ² appuyé pour recommencer tout de suite ; Espace passe une longue intro.</div><div class="hint">La difficulté de chaque niveau est calculée sur ses notes : de 1★ à 10★.</div></div>
     </div></div>
 </div>`;
@@ -77,9 +77,12 @@ const CSS = `.gMain{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
 .obCar .obCard:hover{background:#1c1634;box-shadow:inset 0 0 0 2px #544680,inset 6px 0 0 var(--sc,#3a3058)}
 .obCar .obCard.on{background:#1e1834;box-shadow:inset 0 0 0 2px #3fe0ff,inset 6px 0 0 #3fe0ff,0 0 0 2px #0a0814}
 .obCar .obCard.nav{box-shadow:inset 0 0 0 2px #ffd84a,inset 6px 0 0 var(--sc,#3a3058)}
-.obCar .obCard .hint{line-height:18px}
+.obCar .obCard .hint{line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .obCar .obCard .obCardTop{min-height:22px}
 .obDots{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.obCatH{position:absolute;left:6px;right:6px;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;color:var(--sc);box-shadow:inset 0 -2px 0 var(--sc)}
+.obCatH b{zoom:1.25}
+.obCardR{display:flex;gap:8px;align-items:center;flex:none}
 .obChip{padding:1px 6px 2px;background:var(--dc,#3a3058);color:var(--dt,#e8e0ff);box-shadow:0 0 0 2px #0a0814;line-height:18px}
 .obCar .obCardTop b{zoom:1.25}
 .obChip .pxI{width:10px!important;height:10px!important;margin:0 0 0 3px}
@@ -980,7 +983,15 @@ function rhStars(notes, len, factor = 1) {
   return Math.max(1, Math.min(10, Math.round((.55 * dens + .45 * peak) * (1 + .35 * jumps) * 1.15 * factor * 10) / 10));
 }
 console.assert(rhStars([], 60) === 1 && rhStars(Array.from({length: 600}, (_, i) => ({t: i * .2, lane: i % 4})), 120) > rhStars(Array.from({length: 120}, (_, i) => ({t: i, lane: 0})), 120), 'rhStars');
+// les étoiles des chansons du jeu, calculées d'avance (outils-publication/gen-orbe-stars.js) : 2 caractères par difficulté (centièmes en base 36)
+const obStarsEnc = L => L.map(v => Math.min(1295, Math.max(0, Math.round(v * 100))).toString(36).padStart(2, '0')).join('');
+const OB_STARS_T = '547e7qa35i71ahcm4a71a3az4o9bb6bd6h9tc2d96m9vepew4a6v97au4m6793924z8c9zb14f708la84w7xa6bt5h8jbibt4p8q9ybg497wadbs4l8yb7ck5k8fbcc35vaca8bp648cb0cd4x8obye861albjdr509ddbdm689eb3dh5s9kbldr6kaedhe56a8ucyde6s92c6er5q9lekey6vavf4gf6i9leifa62age8g477c1f6gr6j9ndkft7cbfdzg76sajdwgf74bwemhh81cof4is7watbwf57ydpfgio8bcrg7kk8wd4f7hx486c8o9o4h7v8n9q486s8p9e516q8ja14r7f8t9l4t738taa4l7q99a4508a9vag4p829iaf4s5w7y93567g889w4v7n9kba538d91ac538ab4b7598baybo5d9cbsd3579zbdc65a86aobf5f8e9uav5889aqbu4o5z9p9m4p7d9mci598dbndc5p98b3c05o9baabv5c7c9md55m8yb1bz5tadd7e0649kbkcp68abc9e0587yb6dp5i89c0di6aa0ckdq6c9ydnf04s71aabr69addpeo6lacdpey71b1doga5r9ecfd874awe7f46wamcddf6t8fcjgd6y9zcje36nagcue471bbdnf66pacetfq5q9vcmf572c8fjhg7gayf2fw7nbpg1hc678mdlga5y9sgzhm7gchh4iy7kave6f76m8wbsgc7ocqeeh57lb9dsfs81cwf7iw7havd9hr7nbpdphc3j5l6p7m6298cnd65890azbn5o8ibacu7fb3fpgu6cbpe0ee435g757t70bjdyes7lb4erg23t5b78833m4v5z704a7c9tap4z7ra8au63abe4f47mc4gghj6mazbpe33o677p9g70bcg8h87eboejgo3s4r6e6z455n778b4u7i9qat57839sat649ub7c77nbsg8hi4v89aac74e6d8a8w6favdbf57rcnf1gj454w797v3h5869714w8f9zb35t91aebr5qaicmdc75bmf6fz6c8pb3ce455n6x8671auf4fv7ud0fugq3y56707m475k738j4t91axbn5596afb4569gbcdy6yc2fzgk5t74abb54j7s9a9k7bbsetg07cb6dneu466m7f8s3h435k6w5n8ib2cg5i8t9yba5zasdve27vc3f8g05kawcbdp4a5v758n6xb9e7ez6qahdpfq4i5n7n8b3z6c7j8e5fa7c3cl5b8c9qb86mald7ef7rchhiiy6aaicicy4m6y959q5f9zdof673b5fhhk425a797j304k5w795d8cb4c4568oaobc5z90cxe168bdgzhx4v8lbecw4w6r7z8y6waxdufj79c9emge335a5n7a415m79824p6u9ray4t96bfdw5ya2cfcq7ybwf4g26caqbrdb456l848s74c3effy6zbuech13s5u6r7s3r4x6u7d4q7ka0bk568ka4b163aoc4d76parfvje5x9cbjck3r6a808i72bgemfd7lcsfzh64c5z7c8b4w80a7b34l70828t5fa6bicp8acsejhb3x51647m6jaid6eu6caccee33t5y777y76bcdjir5g889pb14s7k90a4527wa2ax6eaaemh23n526p8162a0bkcj5x9hbece6qa9e5ec88cpg5hj5q9yc2d54y8oa9b83n6a8uag304s74905s8obxcn80cde3hx2z3m5d5n6jaudoe66daibhd13j556k8k87dhgkhi5l90avbv557s8k914v92aybv6uawgkhy3a4u5x6y6ebgdfei4z85bccy5y7ub1d87wcveyij5caabwd65o7pb2c74d7ea6bc3q4l7g855q8e9iat7td8glhh3k51667b6eaedfdp6ladbwdy3g4o636s80d1elhy5599c7dv54709yap546c9vbf6ubiegg94d608l9o61arcgd96dawd8dr639sc1d67hccf1h25o8rabb55p8davc64o5z9aau3i5d6i715d9gcld075acg7ih3f4i5p6h62akchdr5vatcke6344q5b628aclenhr5r8wb7c54x7n9rar507w9sak7md0fhhd3u6b747w5q8vbrcl5q9fazcp5sadcsd57rbmfth95c8vaqbt5m94aubb5d8xagbu40576z7k5i9cb0bv7mcxfeiv3s55798b6ia5dxee609idafc3c516c6j8kdpf4io4t88axbz4o689fa0537xabb377boedfb3n4n6j7k6xand3e25s8pbabr66bwdhel7ebsfygz59a7bcds4k7b9ya94j7fabb8486n7t8t5q8parb176bogyic3w69757j6kapdeei6pbocvfg3z5e787s7qbqg0h7517m9gar407f9ob84g6w9kbl7cbmergq4a6i818f5yagdedx5xaabyci6kaed3e37mbbglhb5ha6c7de5v93arcq567caob7373v6k7e5t9kbsco7uczexg93d4i646v5p90chew6eaadieq3z5r707x7yd6ffie5792albz5380anc04v7qa7az70boeugg3k5a788068a6bxdi5q90b8c46tancxea7vbzgei55i8ubrc65x8ybech4y7d94a332536p75579mbnc57zcxgphw3g4y5w77629odbdo659rc1dd385k6v7e77ajgpiq5c8sambp436d8jae577v9ea86vaeflfm496j7r9p6393c8cx5ha4bwd36wbcdrfe7scvfghl6498asc34u869uao4t7ya0av3o5r6r7m4v8lbpde7kcpf4gn3j5n6y7l5x90c6d35zagcze03r50656x7pcpe4h14z87adba517r93ad4z8caabb6b9lfph64b5r879r569ic4ck609zc5cr6yb1dpek7mcnelft5d92b6cb4t8wbbcr5284a2ai3r5a6f7g5u9ubpcs7ucshmi33m5f6y7i6ca7bqcr6aaabsdm394s646s82dugiju60aycvdq4r7a9k9v558mawcw73bxfphi3t51777u6m9ydce2619mb5cl68ard3ej6jaegii85ua4cle04s8vagc45masc2dq436g72855l8fahbl84c9g9hd45626r7i6dagcodi618jduev415l7c8i7scmebgk558va6bj4g73859e5c99b5bx73axdfex3s4v6i7c6a9pcle35l9tb0bs6x9ydbey7nc2g7hg5k9xb8d05p9wawbg5d8wbyc73s5m6p7c6098cace7ocag0gu3j475k6s5k8xdeet6b9qctdt3x5y7b7x7jbpdngv5m9hblcs547kamao567pa0ak7ccbfwi54o5z8g9263aecmd95z97bscs6195bjdc7tb7hahm609wbkcr5r9yaybz517u9mag3o5o67715ya1bkd16damg1io34495v6g6kabcwe85o9fd2co3b4j5n6y7qcnhjir4y77ayc85886a8ax4z899sb07dbyf4g94c70828t598ibuec6e9mbmch67a9d7dq7wd2gchs5k86bdbk5986aub25977alde4b5o7z8c5e8vb1bh7abhh2ik3w4t5x6w5r8uc0cn6yb1cge23d4u6n7a7vcpgqhj5u9bb9bu4s7c8s9k5g8a9sb97qcmfth93r4q6r7q5l9kcfd25x8hbacg6l9pdqev6haaephn5f94albo4r8r98aw4y7397a5446a7k7t5m8zakbg68a7fshj3l41676m6dbae3es5q91cydq3m54617487d9g2ka4l84b4cz51738c944i7g99a870ayecfy4c6e6z825590bcdx68a1bocs6pbae5gg7tccdzfq5m8kbkbw598qaias4t8j9mbb406h7t8c5vapctdu6kbadcig3s4d5z746h93cgdd6lbydnf33r4j5z7182cvfbh64p80apca4v818ya45h8d9xau7vcmg4ha3l5l7i945uawcyea5ta3c1ck6v9ccxf27scjg5h35p9abfcb5c8jajc85783a2bg3o5j7q8y5e8ob5cx8ecmgak03u5v797k6sagd3e66ea4ejf034496i7582crezj75893blbz4y7e9cba4s6q8uao74b1ezg24b5w7d7n67a7cpcv6hbacue86ca8c8d07fc2heii579gakba5i9qbwcd5d84afcj415c7s8m5n9aagb479badrfq4b5x7h92699sbyd46ha4e9eq3d576p8d84cmeuht548cblcy4l5y868u486q94ag6ubdf2gl3y5i6i7960apchd85vaac6db6sate7ep89cpgziu5k92bcc14w8xalbr558c9ub93l5m7r8q5oa5b2cf7ocjfeh23r576m7h5m8sb9dc6i9zc2f4435a7u927zcngkhy5d8eahat4l7a9b9v58929has6vbhfige40506o7l5u9tcnep5y9ubkcl69b1d2ek7ibvg7hr5d9daac24q7b999c5395awbc445u7b8763a3btcf6vabgfi93g5e6q7o63a3ced56997bod3364h5l6k7ucxfvi95a8maubn568raiak55819pat6zanekg23y5r7e8k5ka3d9e75g9lcgdt6jajc9d57cccfth05u9dbkcu599iarc6547s9oay415s748h5y9eagby7tdegjhm3m51667f679sbbcx6c97cjdf3q5e6s7h89cyeuh656879zb14p6v8b98577e7y9t77bhdifb4b6u83905z9obpd65s9ubqcp6ia3cfdr80c0gqht5v8wb8bx5r8wb1bi5b8xajbn2z4c616t5z98b1c688cieki83o5e6h795za0bjc664ahbudc3a5b6r7f8rcgeghs5i88aod04w7j8q9z4y6p9bar6pbsf5gv426a7a8t6a9zc7d15y8wb2d55ha7cxer7pbkeigv629obte95c7ta2b15u9haobu3x65849l4s7vapcg7vcvg2il3c415b5y6a9hc6ct65ajc2e03o596l7u7ebweair5i9vaoc84z7wa1as4o7994a961a6evgh3u547d8d5uawcgdd61agazck7nbnfsgl7fafe4ft5j93bqcj5f9vbxcq4z7s9sa53l657u8l5ja2blcw84cvephg3y556w7o5m9dcedl608najct3m506d777vc6gghh527qbidv4s7798a1497692ak6qa5ebfq3s5v7h8a5z9qdbdm5ta7c3e16t9mcydl7hcoh6ix5v8fawbp43799daj57859gaw436g7o8f5o93bmc687cmfegb3b4s6q7b5j9rdwes5h96coer3f54646v7rc5g2hc5d9jaxcw5i7a8y9x4z7u8z9w7dbng6gr455s7p8s69abbxdi568sbpch6nacdrex6pa9g9is5qahbjca598sahab5a9pb0bl4h5y7q885p9bbtcj7ucgekhq405w7g7u6hajcwe86abxeeg03s516j7q83czeign5k8narbo4z8a8va756889oar71b7ekh43w5e6a8g6jagckdq5tamc1dt6haqc5dr84buemij628ia0bl4u7x9dac5d8dasb34f6f7q8s5i8fb7c37pcuh0i039596r7u5x8mctex699zdlff3j4q5r718ddtflhw4x859ba54j79959s5l9bbdbm7kcnflgz42657s8d6q9bdkep68aibucf5y9qblc87qbifmh16998b6ct5p97btby5b8razbe30516g775q9wc7cx83cgfshr3w5h627c6bbpc6cv6gaqebfu373x5r687lchfhhb5h9fbgcc4t709r9y4w788sa16ybvewgv4a6m868h5s85chey5y9tbkcm6rabe2fa78bsegfn5a929saw4t8vb1c74x7wb6c93r4y759w5n9ibcbv7hbug4hn48667z8h65bbdkek6fa2d2eo3a4n6a7b6nbmcrj9528bavb84y7r9s9w4w7x9tau7ebkftg64a5v6e7t5797c1f8649gc9dg6qb4dzeq6ta5fvhj578eagc058809eao5b6q989k4h718b8s5e9xc3cs7sayf1gc445a75825saccrdf6faee6fs3c526y8a7uc3epi25g8rambb4y7z9waq4u7x9nab75aucvfb4j6d849p6d9md8e8689ib0cl6ob5emgi70akg8j45b8gaxbr517697a74x8mafbh3c566u825d9kaoby7yd7glhu394s5z706faecbdz6eahe5fy3u5q6x7g6xbsdwk15l80bsc84x7v9gao568i9xb877bee8fn4f69838n5n8ubccm5u8wcrdu6p9vcled7kc0fdh56aabbkck4q7xambm5a7uancb3r4l7n8a568yaac080cwg0ky3t5a6x7u60a8dde46hb7dveu3y5178846k9kdmi25589bdci4w7o85934w749ja26xawevft4i5b74855o9fbocn579fbecq6ib0f1fk79byglh34y7gaxbi588qaobn5b7m9laa3p66757a5j99azc67ncyg9h63o5i6f77649wcod86p9lcoec3r4t616m83cfe3h9538eb5bn4z7x99a14a6x9eap7db6foga3v5s77825wabaxca66aib3cy6rb5djet7sc4i3hy4x8mb4bp4k8oa3bg578g9raz3q5f6g7i5w9baxbr7nb1f2g83y4r5w6p5tatc9cr6h9ldsep3b4i5y728dcqenh45i8uauc14n75939p567f9tb376bgdzfm4d688na25h8zc9cv5h9jc5ee6ranbtdl88cbechk5n97aucj5e9fa9bs5m84beck3g4x6u7u5u9qboc879c6gwi13v5i6i735395csdg558xbtds324a5y738fdneoi85i73ajbw4s62809d5b86awc379baf6h33q5d6m826sane8fa5v8tbpcr5z8rdhfm83cxe8hc5t9hb1cl5o8sb9ck5a8kbfde3q4y5t6u638xchdq7wdfgmht3m4z6l795e9nc2da6kahdce73p5i6d717wd1f8h45f8hbcc1547s9zb04o858yae74bbfmgb416f7y8z5m9hbtcd5o8makbq6f9canc282djfci35v9ac2cv5g87b7ch4x7n9aae3x5h7g8t5wa6c2cx7ccjfuge3z536p7w69abbpcs6gawc1dw3r5g6q728cc3f0j04t82b3bi49768s9a598z9ram6maqf1ft4i6j7t8z6gaicldy5ya8chdc6q9wfgf27qbwfggt5m8fb5c85i85acao5e7fawcd3w5g6o7l5h99bhc86zb1dof63z5b7c8r6ha8cudl61ald8e33e4z656r8jctegha5582asb44q6c898z4j6v909r7oc4fth6445j7b82689nc4cp5v9oc4d37cbcdof383cxf4im5l9pbick4j7m9haj507x9dad3u5b7w9i5q8maybq76bpethg3m4n66745z9nazcj65a8d2d63g5466728ad2ffhf5aa6bsck415k8i9g4z6x9waz7lbdf3gb3u67717x5w9icre15r8fb1bk6saoe7gk7c9zezi05t9fb1d6518aaic0567mafb54c6n7f855592b5dt84c4gahq3g4t5p6z6fa1chei5b9mczet3s5h6o7l7yd9fki35c8sazcp4h758p9h508hadbc7abve6g03i516j766fb3duec5n8ubec26fb6cmd378bsgshf5e9ibic95g8m9taz557x9sb63k546v7s5p95btcs73algxje3f4q5i6j679wcndq6mare1fo3m5d6k778bcceegz5496bbbm5b839wat4m7m9qae7fbkepfp3q506v7y60afcadm6a9vbbcm6v9ud3e17ybug0hb5g8ka2b54m6o9kao557a8z9z3l5p7r7v6ka9bocp6gawg6hh2z484w5z6cb0d5e46pa3dof83p4v616w89dbf9ix4s9hbsd44v759ba85d8z9yau7dbyf1gc3w4s6m7b64b4c6ei5g9vbeci618w9zbo7abjhei05w9bchcj5j8qa6b25b8d9xaw3k5p6t7p6398b8c77wcug2hf3x566x7b6jbacbde6jabd8g53n4c5w6l84dugnki4f759kah4u8394a6406l8xan78b6dbft466e808q6b9xcnet5ya8ckdh699cbxce7jc9etgk5s93azc15090albi4u7ga0ah3f4p6q7l5oa6bic879avfxgr3y5s767w69a8d1ds6aa7c3df3m5i6v7d85cpfnhl5c8nbjc15b7ya4b1568o9fbj73ahfrfv3r6m7y9a69albwdf6c93bbc66j8ze1e47xcwfvhb4q85bncd5h8eakbc4x97b2bz3q4p6m7j5da7btcu7jbue1fu315o6p7g6a92bqcc5q9tbldj3l4q646w6wbfgeim558qacbo518sa6b44s798r9o74b6dtfh3s5h6l806cavbsd46j9vbecc6q8ucddh7mbkh0id5w9ibwcj4v8d8ja85a83anb33t5v7f855m8xb1cl6raigpk83r4u6k6z6hb5d4eh649oc2dl455m777t83ctfwhs5a9cb5c04y7l93ad547x9jah75cfeugi425g6n7p6daecbdi598kbodh6k9ccbd16f9tf1i35xatcjd85e8vbpd0569danbf3t4u6o7c619sanbu7jc9hdi236436n6t699gc9df5lapdbfg3z6276867mcrffil5f8zaobg4e627w95598g9sb37gckg8h94f6h80946ka3bwdi679ibqct6pajdkel6rakd2iw5b95aybt4w749naw5b7va5bp335m718b5m8ubncs7lbxg3hc3y536v7o6d9ucwdh72a6cneg3h50626v88d9f1h55o8oatbz4l758x9l4x7h8k9o7fcjejg245506d7l6cb6cndp659lbmcn6magdpev7td2ghhh4w8lbxd3547saibz5n8q9maq405r677v629mbwcg83czgtip3q4p5l6w629nbpco6rbgdgfa3u5s6l7c7wd4g4h35k9zbrcr4d6t8c995j859ebl5w9ofngy3x6d8194588kbie4609db7c16baccbdj7mcgfigv5o9ybpct5m9xb4bd5o90c4d93p5h819061apcye77vblf8h03o5p7a7o5z9ncme26a9ycdem3e4t5n6h6nale1j15b82a3b84m6o8y9g4v8a9ead7abqenfo3r526f796gadc3de6g96afby6m9xegfp6db2g4hh609ybmdm324g4q64';
+const OB_LEN_T = '2sb425np2fjj29lv1t2c1lbi2r9w2ufy2mep2mep2lhp2dz92cgy2aaz2aaz27l023to1zv220ej1yaf1ws71yaf1vtb1qxt1tyf1oy31pq81pc21lbi1mpu1jcc1lbi1j0y1j0y1i3k1g1v1gmd1dds1d4p1dds32oo307529ef3e6n2vjm2ufy24d5372e2oao2mep1yjp34vi2h5w2fjj1seu2vyp2bqi2cgy1q8w2sft25np26xj1n9c2j62238c20y91kza2h411zv21xs31i2h2bgp1uvf1vc91ee229qj1smm1rcp1dds23z21q4k1okb1b6i222o1o6o1nt819g01zea1lbi1jnv16kk1wia1jzi1ipp15dr1tud1h7a1gmd14p71seu5vn24dbq4zzr4zkn41kv6egb5e053drk3wna6gsy5ah53o0h4frn4ocm3t0k5si65sxd418r48my57sk5npc4cp14cp14gs43p2f56qp4uai3h723xxs6g1f5ah54frn4j3k48un3k125d8j4qaa43604yhp4xs05e0549ql49ql5n3u40j9627b59hp4axc3wna59xm5yph4dbq3x3d50y040qq5xfm556o47664f3259hp5iqh4dbq4sll49mv49996r2057bb38eh4aid6uww6fhc4dbq4cp14vl03o9x68384mgi3y264uu05snr52wd3o0h4eqa4klx3zwy57y6533r3fgg4e0w5snr5p4m418r4frn4s9k4cv257y65sxd3u9s4zkn5qa651mh3ubx3sxz3g5a4su843ki4u4o3z7k45dj3qzt5gao3izf4cbp445c38nh556o518u4gkc41286hc05nc93uw04j7p3nor4wd7445c4gea3tke3i9g423y4hcl47ob4eqa4v6b4dya5p2x5f2w3ntr3ipf6bf553f6380p4hfz3pc05vn2393p4d7h40xe3kww4eqa53co44u93l545zby48un5az04o3a4bll423y5sc053f63szi48i7392k5prf40t14jba45cc37zu3sxz4cp145n7410w4yhp37qo5ch5582u3kjg45i95gnn556o47a03yy73mcr5qcl3r6643244qxu3ktp3pgt4z2w3k7e3d654e0w3cru4smp5kqh3zaq4ocm5eqb53f64nyi4bf93g8257sk36kp4vag4klx42vd3kyv5fva3uw03mg15tq746dj5rro6dep3vfm3ipf59xm4avr3o9x4w2t3ktp3xm13z3j52i2465f40dr37qo4qns4n133kar5meu4abk5o0n4ur349mb3nmb6fvu5aop3pqt4qfp3t0k4zkn42z04m894pb9469j38yj5ijs3pc03y9f4ocm44qc62kv53xb4a55445c6iou570o49x5462b3g7252ks3zq54ljl3s5z48r24i9a556o3pqt3q265jfi38hk4laf5gdd3xxs3lyd59xm4y7341584w2t3g5p5clc3nor4jzb48un396g4c3u5ln94lep37ld4wd73gc74w834ocm480241pw5exk50fq460u3w213nhq5qtw3l2h4a3g4su83veq44u9445c3tke3og852nc3ay95fwc5oxs44ku4ocm5vn25bol4xs04r6h3j3y5d8j38eh53rs472l3erh48i75fo14mae3rvj4m103nf756o066804jed3pkr6ise3w8k3drk491n3vyr5dh63ynt4klx4pb93tke46w453gd3xm140to5hj43m1y4qpu6ixq3v5n407r6bx556uq44zz50cr3n7t4dya3qeq4rrl4ocm3l3m3qyr536z4amc3zsh5exk3ri25w2f6ciy3t963fgg5adl4xs0472l4f703vgl4v6b44pj4vq1456d3of83pgt49nx3vdx3hvl4eqa45ue5vn26hdu4gxn3whh5x4y4n133ke83ri23gue5t2w3dkl4n315m0q3ywx3imf5k004pb93ti452ua3xd24r6h5yk53xxs4glq5ol348474c6i4glq3b9s4t5s3i304pb93lc340xe48i74r8v41wj4dci556o42fb5fe468gt4bq23pqt6stk4ls94m10445c3cfe4qkd3mdc4qj35amr3erh41m64nn33o9x36v15hj448un4iyo5snr4pb94g5s556o3s9o4eqa50im3qoh57l93o9x4ocm4qkd48dq3qzt4gv93ugf46jd4deo3vx15tvk679u46e541i35u054qns4w5h4x9s38eh5d8j35yk4njr445c42wn42ta5ron4f9c44mb4i1c3uw04wd752f63mpw41285mwd4y73445c4jxn3qoh4icr3fgg4zec52i239a83fgg3zda4rjg4by14qaa44r75yr35u273vfm3ddr58dm4qxu3wuf4ngz3n345vn231fe49mv4rd63zp23ees5b5q3s9o3jjm5cef3dkl4zb14q3g3yy73zv267k242764ocm4eqa3s0f525e3p3o4jzb52ks32hw4dbq4i9a476646324eqa41tc5v7b65pv3ofo3va95tc8570o4klx3w213p60625w3ged4b1e4gb548dq4huc5r373s1z3y9f5e7v39kt6b7a6lhm49993vp94zgh4sll4e3253jo3um94tyn3vx14fve4zec3okq3y724wj53z0j4aid5rro45s65cu55olz4hrr4dv2556o4dr03pi744s53fgg5vn23ctw4lu54iql3p603ugf5b173qoh3mkv4xs04bhz523k4zkn3tbu3wxr5prf4rpt4ocm4ea03bw052c43a7b516s3s5z42xv4b7b4x4t49ql3eq54yhp4jed601s5utr47ik3ktp6i924oxv3meu44s53aio4mxe3t6a4p2y528u3gv93gir5eqb43e43qgs4iap3p864ret5pgl3mul445c6qfa462b3o9x3va93sga5cef43ki4ryh4g5s46nq3gn65r374e7t3wna5hj43uja5b5q4pr43o9x3qoh5vn258w04k534p7y3rnq5tjv37qo4nv64qhk3qhq3pqt4e7t3tgg3w2q41ng3lrj5gxy5ph93uw03c4c6fhc4lox4v6b407r3l3m5vn23u745amr3pc03t3k4abk4iyo3s9o47y35dlp3heg651061k643ph3w2168cx4pw745wu4n5p3s0f506i3vk657wp4qkd46nq4d8e4dok4k6o3nku5g2u3efq4xek68ry3pva4klx5nvg4m5b57sk4o2f38yj68gt3pwi56jc3u743tbu4e8z5loq3s1z3ikz5bkk3pkr4q08506i4klx3pqt5o814pb94b5l4hag3epo5mjo3p3o4hdj4wmz3beq45g4556o4brh3yzo5t5f3heg5xc06fhc44ke4f61556o4m103tke4g2q37vs556o3iea4wd73lc33fgg46w44t3w4lep42764gn53dnk4w2t5rph44ke4mcp5j6v4fn53sga3ri23qoh5j063m1y4c32556o3i9g3va95t6v4rjg3oyc5kfp3nmb5hj4601s48r249996f224u2o3nyy50o236sk5qtw3pc04ww65d8j3udp3t6a5jr03c103l164h143ynt5prf5hp448dq4oxv65k751xp4q654qfp43876b5s388x52ai5j063x6v3pqt538i3jft3ti452wd47sh5prf6fso4cxq4e8z6ejc5k0045wu3z623pfb5exk3xs65avt3wai3zp24klx4d063yg73nse4xs03kbf5o0n4okz4hrr3pkr5bx341i34s9k46k23yg74gb53lrj4fxl3q6x3p0844t54k533d5d3o3u4da44dya66um5utr4klx3ktp6hq95ddn3ab944r738eh584i3fgg49ft4ulq32pi3kyv4pb93w8k3rk64qkd42ct4gea6kgu3vfm4fp8699z445c3ke83yom3t964wd73xm14x8y4mec40hh46nq4oom3ugf445c4ory3yg764z74qxu42fb4j7p51mh4lox4mo049kg3fgg4xs03nvh516s5j0643bv3hsb481p3wcn3ul95hj43rw36b024y0a4ojv4bf96elw3w8k445c51zq3cl34xs039yx4kwr57va3i9g3oin5vn24abk48i74abk4abk5tvk5jmr45v03imf5hyg4iu23api42763uls4cht3cng4o3a4x4t38eh47ob4plx4fas41og5qtw3l2h601s4yss3j1n44s55grc556o4e0w4hfz3z3j57sk3i304y48506i445c42ta556o4zkn3fgg506i3k3j5p2x6ozt3vyr4iu25gv358te3dtz44r73ucu4pb93i9g4zql4s573sk73ktp4fas4abk3jv64ist45s659pa52nc3w733jpp4xmk3tke4ory3uhi3ws85clc393p4rrl506i421542a44td544wu3kq53z7k3nvh59pa5ku2477s46nq6e8a5doh3w0n4deo3cmv3wai3jeo4n314b5l3wzr3hjs556o3r1445km5sc048bv4vxc4qpu3um93w216elw43hq3s884uh03kga6ac53gf643ki48un3gue43gn4v0d3pc04axc4m6x3cru5h4s56gn4eqa3yom2292';  // la durée de chaque chanson, en millisecondes (4 caractères en base 36)
 const rhStarCache = new Map();  // 'i:diff' -> étoiles (les morceaux du jeu donnent toujours les mêmes notes)
+{ const D = Object.keys(RH_DIFFS); if (OB_STARS_T.length === RH_SONGS.length * D.length * 2) RH_SONGS.forEach((_, i) => D.forEach((d, k) => { const j = (i * D.length + k) * 2; rhStarCache.set(i + ':' + d, parseInt(OB_STARS_T.slice(j, j + 2), 36) / 100); })); }
+if (OB_LEN_T.length === RH_SONGS.length * 4) RH_SONGS.forEach((_, i) => { RH_LEN[i] = parseInt(OB_LEN_T.slice(i * 4, i * 4 + 4), 36) / 1000; });
+console.assert(obStarsEnc([1.234, 12.95, 0]) === '3fzz00', 'obStarsEnc');
+setTimeout(() => { const c = rhCompose(RH_SONGS[5]), v = obStars(obChart(rhChart(c, 'normal'), c, 'normal')); console.assert(Math.abs(v - rhStarCache.get('5:normal')) < .011 && Math.abs(RH_LEN[5] - c.len) < .001, 'OB_STARS_T à refaire : node outils-publication/gen-orbe-stars.js', v); }, 8000);
 function rhSongStars(i, diff) {
   const k = i + ':' + diff; if (!rhStarCache.has(k)) { const c = rhCompose(RH_SONGS[i]); rhStarCache.set(k, (RHG.stars || rhStars)(RHG.chart(rhChart(c, diff), c, diff), c.len, RHG.factor)); }
   return rhStarCache.get(k);
@@ -1028,7 +1039,9 @@ async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou iden
   rh = rhHook(rh || {raf: 0, tick: 0});
   Object.assign(rh, {mode: 'ready', song: i, diff, c, info, notes, stars: (RHG.stars || rhStars)(notes, c.len, RHG.factor), src: null, t0: 0, score: 0, combo: 0, maxCombo: 0,
     counts: {PARFAIT: 0, BIEN: 0, OK: 0, RATÉ: 0}, dts: [], fx: [], sparks: [], record: false, grade: '', acc: 0, adj: 0, overAt: 0});
-  RHG.reset(); games.rhythmLast = {song: i, diff}; saveGames(); rhList();
+  RHG.reset(); games.rhythmLast = {song: i, diff};
+  if (rhImports().some(x => x.id === i)) obImpStars()[i + ':' + diff] = Math.round(rh.baseStars * 100) / 100;  // ta musique : ses étoiles pour la liste
+  saveGames(); rhList();
   gameLoop(rh, RHG.key, RHG.update, rhDrawAll); obPreview();
 }
 const rhFull = on => { try { if (on && !document.fullscreenElement) cv.parentElement.requestFullscreen?.().catch(() => {}); if (!on && document.fullscreenElement) document.exitFullscreen(); } catch {} };
@@ -1136,17 +1149,15 @@ function rhPager(order) {  // 1200 chansons : 50 par page (sinon la liste est tr
 }
 function rhList() {
   $('rhTabSongs').classList.toggle('main', rhTab === 'songs'); $('rhTabMine').classList.toggle('main', rhTab === 'mine'); $('rhTabStats')?.classList.toggle('main', rhTab === 'stats');
-  $('rhTabMine').textContent = 'MES MUSIQUES · ' + (rhImports().length + obOsuSets().length); $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
+  $('rhTabMine').textContent = 'IMPORTER · ' + (rhImports().length + obOsuSets().length); $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
   $('obFilter').hidden = rhTab !== 'songs'; $('rhSongs').classList.toggle('obCar', rhTab === 'songs'); if (rhTab !== 'songs') $('obScanMsg').hidden = true;
   if (rhTab === 'stats') return void $('rhSongs').replaceChildren(...obStatsPage());
   if (rhTab === 'mine' && !$('rhMuList').options.length) rhFillNeoMusic();
   if (rhTab === 'songs') {
-    const res = games?.rhythm || {}, done = RH_SONGS.filter((_, i) => Object.keys(RH_DIFFS).some(d => res['rh' + i + d])).length;
-    $('rhTabSongs').textContent = 'CHANSONS · ' + done + ' / ' + RH_SONGS.length;
-    const {L: order, pending} = obOrder(), msg = $('obScanMsg');
-    msg.hidden = !pending && !!order.length; msg.textContent = pending ? 'Calcul des étoiles : encore ' + pending + ' chansons…' : 'Aucune chanson ne correspond à ces filtres.';
-    if (pending) obStarScan();
-    return obCarousel(order);
+    const res = games?.rhythm || {}, {L, rows} = obOrder(), all = obItems();
+    $('rhTabSongs').textContent = 'MAPS · ' + all.filter(o => res[o.res]).length + ' / ' + all.length;
+    const msg = $('obScanMsg'); msg.hidden = !!L.length; msg.textContent = 'Aucune map ne correspond à ces filtres.';
+    return obCarousel(rows);
   }
   const list = rhImports(), osu = obOsuCards();
   $('rhSongs').replaceChildren(...osu, ...(list.length || osu.length ? list.map(imp => {
@@ -1171,6 +1182,29 @@ const obOszTry = f => obOszImport(f).catch(err => { $('rhImpMsg').textContent = 
 $('obOszBtn').onclick = () => $('obOsz').click();
 $('obOsz').onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (f) obOszTry(f); };
 $('obOsuWeb').onclick = () => host.newTab('https://osu.ppy.sh/beatmapsets');  // le catalogue d'osu! : télécharge une map (.osz), puis importe-la ici
+// un lien osu! collé : le numéro de la map, puis le .osz téléchargé sur un miroir public (catboy.best, sinon osu.direct)
+function obOsuSetId(t) {
+  t = String(t).trim(); const m = /beatmapsets\/(\d+)/.exec(t) || /osu\.ppy\.sh\/s\/(\d+)/.exec(t) || /^(\d+)$/.exec(t); if (m) return {set: +m[1]};
+  const b = /osu\.ppy\.sh\/(?:b|beatmaps)\/(\d+)/.exec(t); return b ? {map: +b[1]} : null;
+}
+console.assert(obOsuSetId('https://osu.ppy.sh/beatmapsets/39804#osu/129891').set === 39804 && obOsuSetId('osu.ppy.sh/b/129891').map === 129891 && obOsuSetId(' 1873393 ').set === 1873393 && !obOsuSetId('bonjour'), 'obOsuSetId');
+async function obOsuLink(t) {
+  const msg = x => { $('rhImpMsg').textContent = x; }, q = obOsuSetId(t); if (!q) throw new Error('ce n\'est pas un lien de map osu! (osu.ppy.sh/beatmapsets/…)');
+  let set = q.set;
+  if (!set) { msg('Recherche de la map…'); const r = await fetch('https://catboy.best/api/v2/b/' + q.map); set = r.ok && (await r.json()).beatmapset_id; if (!set) throw new Error('map introuvable sur le miroir'); }
+  let buf = null, err = '';
+  for (const u of ['https://catboy.best/d/' + set + 'n', 'https://osu.direct/api/d/' + set]) {
+    msg('Téléchargement de la map ' + set + '…');
+    try { const r = await fetch(u, {binary: true}); if (!r.headers.get('content-type')) throw new Error('mets NeoDex à jour pour télécharger des maps');
+      if (r.ok) { buf = await r.arrayBuffer(); break; } err = 'le miroir a répondu ' + r.status; } catch (e) { err = e.message; if (/NeoDex à jour/.test(err)) break; }
+  }
+  if (!buf) throw new Error(err || 'téléchargement impossible');
+  await obOszImport({name: set + '.osz', arrayBuffer: async () => buf});
+}
+const obOsuGet = () => { const t = $('obOsuUrl').value; $('obOsuGet').blur(); $('obOsuGet').disabled = true;
+  obOsuLink(t).then(() => { $('obOsuUrl').value = ''; }, e => { $('rhImpMsg').textContent = 'Import impossible : ' + e.message; }).finally(() => { $('obOsuGet').disabled = false; }); };
+$('obOsuGet').onclick = obOsuGet;
+$('obOsuUrl').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') obOsuGet(); });
 view.addEventListener('dragover', e => { if ([...(e.dataTransfer?.items || [])].some(i => i.kind === 'file')) e.preventDefault(); });
 view.addEventListener('drop', e => { const all = [...(e.dataTransfer?.files || [])], fs = all.filter(f => /\.osz$/i.test(f.name)), sk = all.find(f => /\.osk$/i.test(f.name)); if (!fs.length && !sk) return; e.preventDefault();
   if (sk) obOskTry(sk); if (fs.length) { rhTab = 'mine'; rhList(); fs.reduce((p, f) => p.then(() => obOszTry(f)), Promise.resolve()); } });
@@ -1192,7 +1226,7 @@ $('rhClick').onchange = () => { rhAudio(); rhCtx.resume(); rhClick(); };  // le 
 $('rhVol').oninput = () => { if (rhOut) rhOut.gain.value = +$('rhVol').value / 100 * .6; };
 $('obVolHs').oninput = () => { if (rhHs) rhHs.gain.value = +$('obVolHs').value / 100 * .6; };
 $('obVolUi').addEventListener('change', () => obUi('tick'));  // pour l'entendre
-for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
+for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
 setInterval(() => { if (rhCtx?.state === 'running' && (!view.classList.contains('on') || (rh?.mode !== 'play' && rh?.mode !== 'fail' && !(rh?.mode === 'ready' && rh.pv)))) rhCtx.suspend(); }, 200);  // l'aperçu du départ tourne aussi  // la musique s'arrête avec la partie
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) rhPause(); });  // Échap sort du plein écran : on met en pause
 $('gNew').onclick = () => { if (rh) rhSelect(rh.song, rh.diff); $('gNew').blur(); };
@@ -1222,7 +1256,8 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 }
 
 function rhOpen() {
-  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
+  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
+  for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';  // un choix d'une ancienne version (« 3 à 5 ★ ») : toutes
   keysUi(); if (Array.isArray(p.mods)) obModSet = new Set(p.mods.filter(m => OB_MODS.some(x => x[0] === m))); obModsUi(); obDimShow();
   if (Array.isArray(p.keys) && p.keys.length === OB.KEYS.length) keysSet(p.keys);
   rhOffMs = +$('rhOffset').value; obSensShow(); rhInfo();
@@ -1687,7 +1722,7 @@ const OB_EXCL = {EZ: ['HR'], HR: ['EZ'], HT: ['DT'], DT: ['HT'], NF: ['SD', 'PF'
 let obModSet = new Set();
 const obMod = m => obModSet.has(m), obModTxt = () => OB_MODS.map(m => m[0]).filter(obMod).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obMod(m[0]) ? m[2] : 1), 1);
 function obStatsM(diff, len) {  // les réglages du niveau avec les mods : EZ les divise par deux, HR les multiplie par 1,4 (la taille par 1,3), jamais plus de 10
-  const O = rh?.info?.osu, s0 = obStats(diff, len, rh?.info && obVarStyle(rh.info.key), rh?.notes && rh.diff === diff ? rh.baseStars : null), s = O ? {...s0, ...O, st: {...s0.st, name: 'osu!'}} : s0, f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
+  const O = rh?.info?.osu, s0 = obStats(diff, len, rh?.info && obVarStyle(rh.info.key), rh?.notes && rh.diff === diff ? rh.baseStars : null), s = O ? {...s0, ...O, st: {...s0.st, name: O.sy || 'osu!'}} : s0, f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
   const ar = obClamp(s.ar * f, 0, 10), od = obClamp(s.od * f, 0, 10), hp = obClamp((O ? O.hp : obClamp(2 + s.lv * .55 + s.st.od, 2, 9)) * f, 0, 10);
   return {...s, cs, ar, od, hp, r: Math.max(6, Math.round(27.2 - 2.24 * cs)), pre: (ar < 5 ? 1800 - 120 * ar : 1200 - 150 * (ar - 5)) / 1000, pk: .045 / ((80 - 6 * od) / 1000)};
 }
@@ -1754,14 +1789,18 @@ function obOsuPts(raw, len) {
   const p = pts.at(-1);
   if (p[2] < L - .5 && pts.length > 1) { const q = pts.at(-2), d = p[2] - q[2] || 1, k = (L - q[2]) / d; pts[pts.length - 1] = [q[0] + (p[0] - q[0]) * k, q[1] + (p[1] - q[1]) * k, L]; }
   if (pts.length === 1) pts.push([p[0] + .01, p[1], .01]);
-  return pts;
+  const D = [pts[0]];  // un point tous les 2 pixels au plus : le corps est tamponné point par point (sinon une ligne droite n'aurait que ses deux bouts)
+  for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], k = Math.max(1, Math.ceil((b[2] - a[2]) / 2)); for (let j = 1; j <= k; j++) D.push(a.map((v, q) => v + (b[q] - v) * j / k)); }
+  return D;
 }
 // un fichier .osu -> {meta, cs, ar, od, hp, notes (au format d'Orbe), bg, audio, step, beat0} ; null si ce n'est pas le mode standard
 function obOsuParse(txt) {
   const S = {}; let sec = '';
   for (const l of txt.replace(/^﻿/, '').split(/\r?\n/)) { const t = l.trim(); if (!t || t.startsWith('//')) continue; const h = /^\[(\w+)\]$/.exec(t); if (h) S[sec = h[1]] = []; else S[sec]?.push(t); }
   const kv = s => Object.fromEntries((S[s] || []).map(l => { const i = l.indexOf(':'); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
-  const G = kv('General'), M = kv('Metadata'), D = kv('Difficulty');
+  const G = kv('General'), M = kv('Metadata'), D = kv('Difficulty'), CO = kv('Colours');
+  const hx = v => { const c = String(v || '').split(',').map(Number); return c.length >= 3 && c.slice(0, 3).every(x => x >= 0 && x <= 255) ? '#' + c.slice(0, 3).map(x => Math.round(x).toString(16).padStart(2, '0')).join('') : null; };
+  const cols = Object.keys(CO).filter(k => /^Combo\d+$/.test(k)).sort((a, b) => a.slice(5) - b.slice(5)).map(k => hx(CO[k])).filter(Boolean);  // les couleurs de combo de la map
   if ((+G.Mode || 0) !== 0) return null;
   const num = (v, d) => v == null || v === '' || isNaN(+v) ? d : +v;
   const od = num(D.OverallDifficulty, 5), cs = num(D.CircleSize, 5), ar = num(D.ApproachRate, od), hp = num(D.HPDrainRate, 5), svm = num(D.SliderMultiplier, 1.4);
@@ -1777,8 +1816,10 @@ function obOsuParse(txt) {
     if (type & 4 || prevSpin) { combo = 0; col += 1 + ((type >> 4) & 7); } prevSpin = false;
     const o = {t: t / 1000, len: 0, kind: 'circle', x: x / 2, y: y / 2, combo: ++combo, col, hs, kiai};
     if (type & 2) {
-      const [ct, ...cp] = f[5].split('|'), P = [[x, y], ...cp.map(s => s.split(':').map(Number))], reps = Math.max(1, +f[6] || 1), len = +f[7] || 0;
-      const raw = obOsuCurve(ct, P), pts = obOsuPts(raw.length > 1 ? raw : [[x, y], [x + 1, y]], len || 1);
+      const [ct, ...cp] = f[5].split('|'), reps = Math.max(1, +f[6] || 1), len = +f[7] || 0, segs = [{t: ct[0], p: [[x, y]]}];
+      // les maps d'osu! lazer changent de type de courbe en route (« B|…|P|… ») : chaque morceau repart du dernier point du précédent
+      for (const c of cp) { if (/^[A-Z]/.test(c)) { const e = segs.at(-1).p.at(-1); if (segs.at(-1).p.length < 2) segs.pop(); segs.push({t: c[0], p: [e]}); } else { const q = c.split(':').map(Number); if (q.length === 2 && q.every(Number.isFinite)) segs.at(-1).p.push(q); } }
+      const raw = segs.flatMap(sg => sg.p.length > 1 ? obOsuCurve(sg.t, sg.p) : []), pts = obOsuPts(raw.length > 1 ? raw : [[x, y], [x + 1, y]], len || 1);
       Object.assign(o, {kind: 'slide', len: Math.max(.03, (pts.at(-1)[2] * 2) / (svm * 100 * sv) * bl * reps / 1000), pts, reps, shape: 'osu'});
     }
     notes.push(o);
@@ -1786,7 +1827,7 @@ function obOsuParse(txt) {
   if (!notes.length) throw new Error('la map est vide');
   const main = reds.map((p, i) => [p, (reds[i + 1]?.t ?? notes.at(-1).t * 1000) - p.t]).sort((a, b) => b[1] - a[1])[0][0];  // le tempo qui dure le plus
   return {src: txt, title: M.Title || M.TitleUnicode || '?', artist: M.Artist || '', creator: M.Creator || '', version: M.Version || '?', set: +M.BeatmapSetID > 0 ? +M.BeatmapSetID : 0,
-    audio: G.AudioFilename || '', bg: bgm ? bgm[1].trim() : '', preview: num(G.PreviewTime, -1) / 1000, cs, ar, od, hp, notes, step: main.bl / 4000, beat0: main.t / 1000, bpm: Math.round(60000 / main.bl)};
+    audio: G.AudioFilename || '', bg: bgm ? bgm[1].trim() : '', cols, border: hx(CO.SliderBorder), track: hx(CO.SliderTrackOverride), preview: num(G.PreviewTime, -1) / 1000, cs, ar, od, hp, notes, step: main.bl / 4000, beat0: main.t / 1000, bpm: Math.round(60000 / main.bl)};
 }
 { // contrôle : une petite map (cercle, glissière en arc, Bézier coupée, toupie), les combos, la durée des glissières, la longueur à ÷ 2
   const m = obOsuParse('osu file format v14\n[General]\nAudioFilename: a.mp3\nMode: 0\n[Metadata]\nTitle:T\nVersion:Hard\nBeatmapSetID:7\n[Difficulty]\nHPDrainRate:5\nCircleSize:4\nOverallDifficulty:8\nApproachRate:9\nSliderMultiplier:1.4\n'
@@ -1798,9 +1839,37 @@ function obOsuParse(txt) {
     && b.kiai && Math.abs(s.len - 1) < 1e-9 && e.hs === 8, 'obOsuParse', m.notes);
   const arc = obOsuPts(obOsuCurve('P', [[0, 0], [100, 100], [200, 0]]), 300), mid = arc.find(q => q[2] >= 75);  // un demi-cercle de rayon 100 (50 dans Orbe), coupé à 150
   console.assert(Math.abs(arc.at(-1)[2] - 150) < .01 && Math.abs(Math.hypot(mid[0] - 50, mid[1]) - 50) < .5, 'arc', arc.at(-1));
+  // une glissière d'osu! lazer (une ligne puis un arc) : des points finis, serrés, coupés à la longueur
+  const z = obOsuParse('osu file format v14\n[General]\nMode: 0\n[Difficulty]\nSliderMultiplier:1.4\n[TimingPoints]\n0,500,4,2,0,50,1,0\n[HitObjects]\n0,0,0,2,0,B|100:0|P|150:50|200:0,1,250\n')?.notes[0];
+  console.assert(z && z.pts.every(q => q.every(Number.isFinite)) && Math.abs(z.pts.at(-1)[2] - 125) < .6 && z.pts.every((q, i) => !i || q[2] - z.pts[i - 1][2] <= 2.01), 'glissière lazer', z?.pts);
 }
 // les maps osu! importées : la liste (dans les données du jeu), les fichiers (musique, fond, difficultés) dans le dossier du plugin, synchronisés avec les autres PC
 const obDfName = () => RH_DIFFS[rh.diff] || (rh.info?.ver ? (rh.info.ver.length > 14 ? rh.info.ver.slice(0, 13) + '…' : rh.info.ver) : 'Perso');  // le nom du niveau (celui du mappeur pour une map osu!)
+// le style d'une map osu!, d'après ses motifs : streams (suites de notes serrées), sauts (notes éloignées), glissières, technique (rythmes variés), précision (petits cercles, OD élevé)
+function obOsuStyle(m) {
+  const N = m.notes.filter(n => n.kind !== 'spin'); if (N.length < 20) return 'Mixte';
+  const beat = 60 / (m.bpm || 120), r = 27.2 - 2.24 * m.cs, q = beat / 4 * 1.15;
+  let stream = 0, run = 0, jump = 0, pairs = 0, odd = 0, sl = 0, dist = 0;
+  for (let k = 1; k < N.length; k++) {
+    const a = N[k - 1], b = N[k], gap = b.t - a.t;
+    if (b.kind === 'slide') sl++;
+    if (a.kind === 'circle' && gap <= q) { if (++run === 3) stream += 4; else if (run > 3) stream++; } else run = 0;
+    if (a.kind === 'circle' && gap > q && gap <= beat * .6) { pairs++; const d = Math.hypot(b.x - a.x, b.y - a.y); dist += d; if (d >= r * 4.5) jump++; }
+    const f = gap / beat * 12;  // en douzièmes de temps : 3 (1/4), 6 (1/2), 12 (1) sont simples ; 4 (1/3), 2 (1/6), 9 (3/4) le sont moins
+    if (gap < beat * 2 && Math.abs(f - Math.round(f)) < .3 && [2, 4, 8, 9].includes(Math.round(f))) odd++;
+  }
+  const n = N.length, sc = {Streams: stream / n * 2.4, Sauts: jump / n * 2.2, 'Glissières': sl / n * 1.6 - .7, Technique: odd / n * 3,
+    'Précision': (m.od >= 9 ? .3 : m.od >= 8 ? .15 : 0) + (m.cs >= 5 ? .25 : 0) + (pairs && dist / pairs < r * 2.5 ? .15 : 0)};
+  const [best, v] = Object.entries(sc).sort((a, b) => b[1] - a[1])[0];
+  return v >= .35 ? best : 'Mixte';
+}
+{ const ns = [...Array(40)].map((_, k) => ({t: k * .125, kind: 'circle', x: 100 + k % 2 * 4, y: 100})); console.assert(obOsuStyle({notes: ns, bpm: 120, cs: 4, od: 8}) === 'Streams' && obOsuStyle({notes: ns.slice(0, 5), bpm: 120, cs: 4, od: 8}) === 'Mixte', 'obOsuStyle'); }
+// les maps importées avant la 1.3.6 : leur style, retrouvé une fois depuis leurs fichiers
+async function obOsuStyleFill() {
+  let ch = false;
+  for (const s of obOsuSets()) for (const d of s.diffs) if (!d.sy) try { const m = obOsuParse(new TextDecoder().decode(await obFileBytes(d.f))); if (m) { d.sy = obOsuStyle(m); ch = true; } } catch {}
+  if (ch) { saveGames(); rhList(); }
+}
 const obOsuSets = () => gstore('orbeOsu', []);
 const obOsuCache = new Map();  // id -> {buffer, bg}, pour cette session
 const obB64 = u => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(String(fr.result).split(',')[1] || ''); fr.onerror = () => ko(fr.error); fr.readAsDataURL(new Blob([u])); });
@@ -1828,13 +1897,14 @@ async function obOszImport(f) {
   for (const m of maps) {
     const k = diffs.length, r = Math.round(27.2 - 2.24 * m.cs), st = obStarsX(m.notes.filter(n => n.kind !== 'spin').map(n => ({...n, r})), m.od).stars;
     await folder.writeFile(id + '-' + k + '.osu', await obB64(new TextEncoder().encode(m.src)));
-    diffs.push({v: m.version, f: id + '-' + k + '.osu', st: Math.round(st * 100) / 100, cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, n: m.notes.length, len: Math.round(m.notes.at(-1).t + (m.notes.at(-1).len || 0))});
+    diffs.push({v: m.version, f: id + '-' + k + '.osu', st: Math.round(st * 100) / 100, sy: obOsuStyle(m), cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, n: m.notes.length, len: Math.round(m.notes.at(-1).t + (m.notes.at(-1).len || 0))});
   }
   diffs.sort((a, b) => a.st - b.st);
   const L = obOsuSets(), e = {id, name: (m0.artist ? m0.artist + ' - ' : '') + m0.title, creator: m0.creator, set: m0.set, audio: id + '-audio.' + ext, bg, bpm: m0.bpm, preview: m0.preview, diffs, d: Date.now()};
   const old = L.findIndex(x => x.id === id); if (old >= 0) L[old] = e; else L.push(e);
-  obOsuCache.delete(id); saveGames(); rhTab = 'mine'; rhList();
+  obOsuCache.delete(id); saveGames(); rhTab = 'songs'; rhList();
   msg('« ' + e.name + ' » : ' + diffs.length + ' difficulté' + (diffs.length > 1 ? 's' : '') + ' importée' + (diffs.length > 1 ? 's' : '') + '.');
+  toast($('rhImpMsg').textContent);
   await rhSelect(id, 'O' + Math.max(0, diffs.findLastIndex(d => d.st < 6)));
 }
 async function obOsuDrop(id, keepEntry) {  // les fichiers d'une map (et sa ligne dans la liste, sauf keepEntry)
@@ -1854,9 +1924,9 @@ async function obOsuLoad(id, diff) {  // -> {c, info, notes} pour rhPrepare
     obOsuCache.set(id, C);
   }
   const m = obOsuParse(new TextDecoder().decode(await obFileBytes(d.f))), r = Math.round(27.2 - 2.24 * m.cs), end = Math.max(...m.notes.map(n => n.t + (n.len || 0)));
-  for (const n of m.notes) { n.r = r; n.col %= OB.COLS.length; }
+  const nc = m.cols.length || OB.COLS.length; for (const n of m.notes) { n.r = r; n.col = (n.col % nc + nc) % nc; }  // les couleurs de la map si elle en a
   return {notes: m.notes, c: {events: [], lead: [], len: Math.min(C.buffer.duration, end + 1), step: m.step, beat0: m.beat0, buffer: C.buffer},
-    info: {name: s.name + ' [' + d.v + ']', ver: d.v, bpm: m.bpm, key: 'osu' + id + '|' + d.v, preview: s.preview, bg: C.bg, osu: {cs: m.cs, ar: m.ar, od: m.od, hp: m.hp}}};
+    info: {name: s.name + ' [' + d.v + ']', ver: d.v, bpm: m.bpm, key: 'osu' + id + '|' + d.v, preview: s.preview, bg: C.bg, osu: {cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, sy: d.sy || obOsuStyle(m), cols: m.cols, border: m.border, track: m.track}}};
 }
 function obOsuCards() {  // les maps osu! dans MES MUSIQUES : une carte par map, un bouton par difficulté (avec ses étoiles)
   const res = games.rhythm || {};
@@ -1927,7 +1997,7 @@ function obTint(bm, col) {  // l'image en gris teintée de la couleur du combo (
   if (!c) { c = document.createElement('canvas'); c.width = bm.width; c.height = bm.height; const x = c.getContext('2d'); x.drawImage(bm, 0, 0); x.globalCompositeOperation = 'multiply'; x.fillStyle = col; x.fillRect(0, 0, c.width, c.height); x.globalCompositeOperation = 'destination-in'; x.drawImage(bm, 0, 0); m.set(col, c); }
   return c;
 }
-const obOskCol = n => { const C = obOsk.cols?.length ? obOsk.cols : OSK_COLS; return C[(n.col || 0) % C.length]; };
+const obOskCol = n => { const C = rh?.info?.osu?.cols?.length ? rh.info.osu.cols : obOsk.cols?.length ? obOsk.cols : OSK_COLS; return C[(n.col || 0) % C.length]; };  // celles de la map d'abord, comme dans osu!
 function obOskImg(K, k, x, y, r, tint, rot) {  // une image du skin à la taille d'osu! : 128 pixels (256 en @2x) pour un cercle de rayon r
   const e = obOsk.img[k]; if (!e) return false; const s = r / 64 / (e.x2 ? 2 : 1), w = e.bm.width * s, h = e.bm.height * s, src = tint ? obTint(e.bm, tint) : e.bm;
   if (rot) { K.save(); K.translate(x, y); K.rotate(rot); K.drawImage(src, -w / 2, -h / 2, w, h); K.restore(); } else K.drawImage(src, x - w / 2, y - h / 2, w, h);
@@ -1941,18 +2011,32 @@ function obOskCirc(K, x, y, r, col, combo) {
   const k = r / 64 * .8, ws = ds.map(e => e.bm.width / (e.x2 ? 2 : 1) * k), ov = obOsk.overlap * k, tot = ws.reduce((a, b) => a + b, 0) - ov * (ws.length - 1);
   let cx = x - tot / 2; ds.forEach((e, i) => { const h = e.bm.height / (e.x2 ? 2 : 1) * k; K.drawImage(e.bm, cx, y - h / 2, ws[i], h); cx += ws[i] - ov; });
 }
-const obShade = (hex, k) => '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * k).toString(16).padStart(2, '0')).join('');
+const obShade = (hex, k) => '#' + [1, 3, 5].map(i => Math.round(Math.min(255, parseInt(hex.slice(i, i + 2), 16) * k)).toString(16).padStart(2, '0')).join('');
+// le corps d'une glissière comme dans osu! : tracé à part puis posé d'un coup (les morceaux qui se croisent ne s'additionnent pas), un bord opaque,
+// un fond un peu transparent qui va du bord (couleur assombrie) au milieu (éclaircie) ; gardé en mémoire une fois la glissière entière
+let obOskScr = null;  // pendant qu'elle se dessine, la glissière est tracée sur une toile réutilisée
+function obOskBody(K, n, pts, col, full, alpha) {
+  const r = rh.r, T = K.getTransform(), sx = T.a, sy = T.d, O = rh.info?.osu || {}, border = O.border || obOsk.border || '#ffffff', base = O.track || obOsk.track || col, key = sx + '|' + sy + '|' + border + base;
+  let B = full && n.oskB?.key === key ? n.oskB : null;
+  if (!B) {
+    const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), pad = r * 1.1, x0 = Math.min(...xs) - pad, y0 = Math.min(...ys) - pad, w = Math.max(...xs) + pad - x0, h = Math.max(...ys) + pad - y0;
+    const c = full ? document.createElement('canvas') : (obOskScr ??= document.createElement('canvas')); c.width = Math.max(1, Math.ceil(w * sx)); c.height = Math.max(1, Math.ceil(h * sy));
+    const q = c.getContext('2d'); q.setTransform(sx, 0, 0, sy, -x0 * sx, -y0 * sy); q.lineCap = q.lineJoin = 'round';
+    const line = (st, lw) => { q.beginPath(); pts.forEach(([x, y], i) => i ? q.lineTo(x, y) : q.moveTo(x, y)); q.strokeStyle = st; q.lineWidth = lw; q.stroke(); };
+    line('rgba(0,0,0,.25)', r * 2.04); line(border, r * 1.9);
+    q.globalCompositeOperation = 'destination-out'; q.globalAlpha = .3; line('#000000', r * 1.66);  // le fond à 70 %
+    q.globalCompositeOperation = 'source-atop'; q.globalAlpha = 1;
+    for (let i = 0; i < 7; i++) line(obShade(base, .91 + .59 * i / 6), r * 1.66 * (1 - i / 7));
+    B = {key, c, x0, y0, w, h}; if (full) n.oskB = B;
+  }
+  K.globalAlpha = alpha; K.drawImage(B.c, OB.X0 + B.x0, OB.Y0 + B.y0, B.w, B.h); K.globalAlpha = 1;
+}
 function obOskSlider(K, n, now, after, col) {  // le corps tracé net (bord et fond aux couleurs du skin), les tics, la flèche de retour, la boule et le cercle de suivi
   const r = rh.r, X = OB.X0, Y = OB.Y0, pre = rh.pre, end = n.t + n.len; if (now > end + .2) return;
   const grow = obClamp((now - (n.t - pre)) / (pre * .45), 0, 1), out = now > end ? 1 - (now - end) / .2 : 1;
   const a = obMod('HD') ? obClamp((now - (n.t - pre)) / (pre * .4), 0, 1) * obClamp(1 - (now - (n.t - pre * .6)) / (pre * .6 + n.len), 0, 1) : obClamp((now - (n.t - pre)) / (.4 * Math.min(1, pre / .45)), 0, 1);
   const L = n.pts.at(-1)[2] * grow, pts = n.pts.filter(p => p[2] <= L); pts.push(obAt(n.pts, grow));
-  const path = () => { K.beginPath(); pts.forEach(([x, y], i) => i ? K.lineTo(X + x, Y + y) : K.moveTo(X + x, Y + y)); };
-  K.save(); K.globalAlpha = a * out * .9; K.lineCap = K.lineJoin = 'round';
-  path(); K.strokeStyle = obOsk.border || '#ffffff'; K.lineWidth = r * 1.9; K.stroke();
-  path(); K.strokeStyle = obOsk.track || obShade(col, .45); K.lineWidth = r * 1.66; K.stroke();
-  path(); K.strokeStyle = obOsk.track ? 'rgba(255,255,255,.1)' : obShade(col, .7); K.lineWidth = r * .8; K.stroke();
-  K.restore(); if (now > end) return;
+  obOskBody(K, n, pts, col, grow >= 1, a * out); if (now > end) return;
   K.globalAlpha = a; const pass = after < 0 ? 0 : Math.floor(obClamp(after / n.len, 0, .999) * n.reps);
   for (const p of n.parts) if (p.kind === 'tick' && p.t > now && Math.floor((p.t - n.t) / n.len * n.reps) === pass) { const [x, y] = obBall(n, p.t); if (!obOskImg(K, 'sliderscorepoint', X + x, Y + y, r)) { K.fillStyle = '#ffffff'; K.beginPath(); K.arc(X + x, Y + y, r * .12, 0, 7); K.fill(); } }
   const rep = n.parts.find(p => p.kind === 'rep' && p.t > now);
@@ -1988,7 +2072,7 @@ function obHiEnd(K) {  // le reste (le HUD, les écrans) recopié par-dessus, pu
   if (obOsk.img.cursortrail) rh.trail.forEach(([x, y], i) => { K.globalAlpha = (i + 1) / rh.trail.length * .8; obOskImg(K, 'cursortrail', x, y, sz); });
   K.globalAlpha = 1; obOskImg(K, 'cursor', rh.cx, rh.cy, sz); obOskImg(K, 'cursormiddle', rh.cx, rh.cy, sz);
 }
-obOskLoad().catch(() => {});
+obOskLoad().catch(() => {}); obOsuStyleFill().catch(() => {});
 const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
   get help() { const o = rh?.ob; return [...(o ? [[o.st.name + ' · ' + (rh.theme?.name || '') + ' · CS ' + o.cs.toFixed(1) + ' · AR ' + o.ar.toFixed(1) + ' · OD ' + o.od.toFixed(1) + ' · HP ' + o.hp.toFixed(1), '#3fe0ff']] : []),
     ...(rh?.mods ? [['Mods ' + rh.mods + ' · points ×' + obModMult().toFixed(2), '#ffd84a']] : []), ...(rh?.var ? [['Variante ' + (rh.var + 1) + ' de la map', '#b0f4ff']] : []),
@@ -1996,7 +2080,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
   chart: obChart, stars: obStars, tag: len => obStyle(len).name,
   reset() {
     if (rh.starsFor !== rh.notes) { rh.starsFor = rh.notes; rh.baseStars = obStars(rh.notes); }  // les étoiles de la map sans mods : elles donnent l'AR
-    const o = obStatsM(rh.diff, rh.c.len); rh.theme = obTheme(rh.c.len); OB.COLS = rh.theme.cols;
+    const o = obStatsM(rh.diff, rh.c.len); rh.theme = obTheme(rh.c.len); OB.COLS = rh.info?.osu?.cols?.length ? rh.info.osu.cols : rh.theme.cols;
     Object.assign(rh, {keys: new Set(), cx: rh.cx ?? W / 2, cy: rh.cy ?? H / 2, trail: [], pops: [], ob: o, pre: o.pre, r: o.r, pk: o.pk, shake: 0, rate: obMod('DT') ? 1.5 : obMod('HT') ? .75 : 1, mods: obModTxt(),
       hp: 1, hpHist: [], hpT: -9, failed: false, errs: [], kc: {K1: 0, K2: 0, M1: 0, M2: 0}, dScore: 0, cPop: 0, lastCombo: 0, lastNow: null, menu: 0, retryAt: 0, retrying: false, rank: 0, sliding: false, spinning: 0, noSave: obMod('AT'), ai: 0, pp: 0, resT: 0, resSnd: 0, pick: null, aim: [], tl: [], tlNext: 0, run: (games.orbeRun || {})[rh.info ? obKey() : ''] || null, var: rh.info ? (games.orbeVar || {})[rh.info.key] || 0 : 0});
     rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r);
@@ -2355,41 +2439,41 @@ const OB_GRADES = ['SS', 'S', 'A', 'B', 'C', 'D'];
 const obBestGrade = key => { const res = games.rhythm || {}; let b = null; for (const d of Object.keys(RH_DIFFS)) { const g0 = res[key + d]?.grade; if (g0 && (!b || OB_GRADES.indexOf(g0) < OB_GRADES.indexOf(b))) b = g0; } return b; };
 const obLen = i => RH_LEN[i] ??= RH_SONGS[i].len ?? rhCompose(RH_SONGS[i]).len;
 const obNorm = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-// les chansons à afficher : la recherche et les filtres (style de la map, étoiles, tempo, durée), puis l'ordre choisi.
-// Les étoiles se calculent à la demande : celles pas encore connues sont comptées dans « pending » (le calcul continue en fond)
+// la liste, comme dans osu! : une carte par difficulté (les chansons du jeu, tes musiques et les maps osu! ensemble), rangées par étoiles : 1 ★ à 10 ★, puis 10+ (11 ★ et plus)
+const OB_CATS = ['1 ★', '2 ★', '3 ★', '4 ★', '5 ★', '6 ★', '7 ★', '8 ★', '9 ★', '10 ★', '10+ ★'];
+const obCat = v => v == null ? 11 : v >= 11 ? 10 : obClamp(Math.floor(v) - 1, 0, 9);
+console.assert(obCat(.5) === 0 && obCat(1.99) === 0 && obCat(2) === 1 && obCat(10.5) === 9 && obCat(11) === 10 && obCat(null) === 11, 'obCat');
+const obImpStars = () => gstore('orbeImpStars', {});  // les étoiles de tes musiques, connues dès que le niveau a été préparé une fois
+function obItems() {
+  const L = [];
+  RH_SONGS.forEach((s, i) => { const sty = RHG.tag(obLen(i)); for (const [d, v] of Object.entries(RH_DIFFS)) L.push({k: i + ':' + d, song: i, diff: d, name: s.name, v, st: rhStarCache.get(i + ':' + d), res: 'rh' + i + d, sty, bpm: s.bpm, len: obLen(i), src: 'jeu', sub: s.style || '', last: !!s.last}); });
+  for (const imp of rhImports()) for (const [d, v] of imp.stars ? [['S' + imp.stars, 'Niveau ' + imp.stars + ' ★']] : Object.entries(RH_DIFFS))
+    L.push({k: imp.id + ':' + d, song: imp.id, diff: d, name: imp.name, v, st: obImpStars()[imp.id + ':' + d] ?? (imp.stars || null), res: 'rhx' + imp.id + d, sty: imp.len ? RHG.tag(imp.len) : 'Mixte', bpm: imp.bpm || 0, len: imp.len || 0, src: 'mine', sub: imp.url ? 'ta musique · YouTube' : 'ta musique', imp});
+  for (const s of obOsuSets()) s.diffs.forEach((d, k) => L.push({k: s.id + ':O' + k, song: s.id, diff: 'O' + k, name: s.name, v: d.v, st: d.st, res: 'osu' + s.id + '|' + d.v, sty: d.sy || 'Mixte', bpm: s.bpm, len: d.len || 0, src: 'osu', sub: 'osu!' + (s.creator ? ' · map de ' + s.creator : '')}));
+  return L;
+}
+// la liste à afficher : la recherche et les filtres (d'où vient la map, style, étoiles, tempo, durée), l'ordre choisi dans chaque catégorie d'étoiles,
+// et les titres des catégories entre les cartes (rows : {cat, n} pour un titre, sinon une carte)
 function obOrder() {
-  const q = obNorm($('obSearch').value.trim()), st = $('obFStyle').value, sr = $('obFStars').value, bp = $('obFBpm').value, ln = $('obFLen').value, so = $('obSort').value;
-  const rg = v => v ? v.split('-').map(Number) : null, [S0, S1] = rg(sr) || [], [B0, B1] = rg(bp) || [], [L0, L1] = rg(ln) || [];
-  let L = RH_SONGS.map((_, i) => i), pending = 0;
-  if (q) L = L.filter(i => obNorm(RH_SONGS[i].name).includes(q));
-  if (st) L = L.filter(i => RHG.tag(obLen(i)) === st);
-  if (bp) L = L.filter(i => RH_SONGS[i].bpm >= B0 && RH_SONGS[i].bpm < B1);
-  if (ln) L = L.filter(i => obLen(i) >= L0 * 60 && obLen(i) < L1 * 60);
-  obScanList = sr ? L.slice() : [];
-  if (sr) L = L.filter(i => { const v = Object.keys(RH_DIFFS).map(d => rhStarCache.get(i + ':' + d)); if (v.some(x => x == null)) { pending++; return false; } return v.some(x => x >= S0 && x < S1); });
-  const gr = i => { const b = obBestGrade('rh' + i); return b ? OB_GRADES.indexOf(b) : 9; };
-  const by = {name: (a, b) => RH_SONGS[a].name.localeCompare(RH_SONGS[b].name), bpm: (a, b) => RH_SONGS[a].bpm - RH_SONGS[b].bpm, len: (a, b) => obLen(a) - obLen(b), grade: (a, b) => gr(a) - gr(b) || RH_SONGS[a].name.localeCompare(RH_SONGS[b].name)}[so]
-    || ((a, b) => !!RH_SONGS[a].last - !!RH_SONGS[b].last || RH_SONGS[a].bpm - RH_SONGS[b].bpm);
-  return {L: L.sort(by), pending};
+  const q = obNorm($('obSearch').value.trim()), sc = $('obFSrc').value, st = $('obFStyle').value, sr = $('obFStars').value, bp = $('obFBpm').value, ln = $('obFLen').value, so = $('obSort').value;
+  const rg = v => v ? v.split('-').map(Number) : null, [B0, B1] = rg(bp) || [], [L0, L1] = rg(ln) || [];
+  let L = obItems();
+  if (q) L = L.filter(o => obNorm(o.name + ' ' + o.v).includes(q));
+  if (sc) L = L.filter(o => o.src === sc);
+  if (st) L = L.filter(o => o.sty === st);
+  if (sr) L = L.filter(o => obCat(o.st) === +sr);
+  if (bp) L = L.filter(o => o.bpm >= B0 && o.bpm < B1);
+  if (ln) L = L.filter(o => o.len >= L0 * 60 && o.len < L1 * 60);
+  const res = games.rhythm || {}, gr = o => { const g0 = res[o.res]?.grade; return g0 ? OB_GRADES.indexOf(g0) : 9; }, nm = (a, b) => a.name.localeCompare(b.name) || (a.st ?? 99) - (b.st ?? 99);
+  const by = {name: nm, bpm: (a, b) => a.bpm - b.bpm || nm(a, b), len: (a, b) => a.len - b.len || nm(a, b), grade: (a, b) => gr(a) - gr(b) || nm(a, b)}[so] || ((a, b) => (a.st ?? 99) - (b.st ?? 99) || nm(a, b));
+  L.sort((a, b) => obCat(a.st) - obCat(b.st) || by(a, b));
+  const rows = []; let c = -1;
+  for (const o of L) { if (obCat(o.st) !== c) { c = obCat(o.st); rows.push({cat: c, n: 0}); } rows.at(-1).n++; rows.push(o); }
+  return {L, rows};
 }
-// le calcul des étoiles en fond (pour le filtre) : par petits morceaux sans figer l'écran, la liste se remplit au fur et à mesure
-let obScanList = [], obScanT = 0;
-function obStarScan() {
-  if (obScanT) return;
-  let last = performance.now();
-  const step = () => {
-    if (rh?.mode === 'play' || rh?.mode === 'fail') { obScanT = setTimeout(step, 1000); return; }
-    const t = performance.now(), todo = obScanList.flatMap(i => Object.keys(RH_DIFFS).filter(d => !rhStarCache.has(i + ':' + d)).map(d => [i, d]));
-    while (todo.length && performance.now() - t < 14) { const [i, d] = todo.shift(); rhSongStars(i, d); }
-    if (!todo.length || !view.isConnected) { obScanT = 0; if (rhTab === 'songs') rhList(); return; }
-    if (performance.now() - last > 1500 && rhTab === 'songs') { last = performance.now(); obScanT = -1; rhList(); }
-    obScanT = setTimeout(step, 20);
-  };
-  obScanT = setTimeout(step, 20);
-}
-{ let tm = 0; $('obSearch').addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => { rhPage = null; rhList(); }, 200); }); }
-for (const id of ['obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => { rhPage = null; rhList(); });
-$('obRand').onclick = () => { $('obRand').blur(); const {L} = obOrder(); if (!L.length) return; const i = L[Math.random() * L.length | 0]; rhPage = null; rhSelect(i, RH_DIFFS[rh?.diff] ? rh.diff : 'normal'); };
+{ let tm = 0; $('obSearch').addEventListener('input', () => { clearTimeout(tm); tm = setTimeout(() => rhList(), 200); }); }
+for (const id of ['obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => rhList());
+$('obRand').onclick = () => { $('obRand').blur(); const {L} = obOrder(); if (!L.length) return; obUi('rand'); obGo(L[Math.random() * L.length | 0]); };
 $('obOptBtn').onclick = () => { $('obOpts').hidden = !$('obOpts').hidden; $('obOptBtn').classList.toggle('main', !$('obOpts').hidden); $('obOptBtn').blur(); };
 $('obHelpBtn').onclick = () => { $('obHelp').hidden = !$('obHelp').hidden; $('obHelpBtn').classList.toggle('main', !$('obHelp').hidden); $('obHelpBtn').blur(); };
 $('obPrev').addEventListener('change', () => { if (+$('obPrev').value) obPreview(); else if (rh?.mode === 'ready') { try { rh.src?.stop(); } catch {} rh.pv = null; } });
@@ -2468,11 +2552,47 @@ const OB_MEDALS = [
   ['var', 'Explorateur', [1, 5, 20], v => v + ' autre' + (v > 1 ? 's' : '') + ' variante' + (v > 1 ? 's' : '') + ' finie' + (v > 1 ? 's' : ''), H => new Set(obFin(H).filter(h => /~/.test(h.k)).map(h => h.k)).size],
   ['levels', 'Voyageur', [10, 50, 200], v => v + ' niveaux différents finis', H => new Set(obFin(H).map(h => h.k)).size],
   ['games', 'Habitué', [50, 200, 1000], v => v + ' parties', H => H.length],
-  ['time', 'Endurance', [1, 5, 20], v => v + ' h de jeu', H => H.reduce((s0, x) => s0 + (x.t || 0), 0) / 3600]];
+  ['time', 'Endurance', [1, 5, 20], v => v + ' h de jeu', H => H.reduce((s0, x) => s0 + (x.t || 0), 0) / 3600],
+  // depuis la 1.3.6
+  ['ss', 'Perfection', [1, 10, 50], v => v + ' note' + (v > 1 ? 's' : '') + ' SS', H => obFin(H).filter(h => h.g === 'SS').length],
+  ['sgr', 'Série de S', [5, 25, 100], v => v + ' notes S ou mieux', H => obFin(H).filter(h => h.g === 'S' || h.g === 'SS').length],
+  ['fcst', 'Combo étoilé', [3, 5, 7], v => 'Un full combo sur un niveau de ' + v + '★', H => obMax(H.filter(h => h.F), h => h.st)],
+  ['ssst', 'SS étoilé', [2, 4, 6], v => 'Un SS sur un niveau de ' + v + '★', H => obMax(obFin(H).filter(h => h.g === 'SS'), h => h.st)],
+  ['accst', 'Tireur d\'élite', [3, 5, 7], v => '98 % sur un niveau de ' + v + '★', H => obMax(obFin(H).filter(h => h.a >= 98), h => h.st)],
+  ['legend', 'Légende', [8, 9, 10], v => 'Finir un niveau de ' + v + '★', H => obMax(obFin(H), h => h.st)],
+  ['ur', 'Métronome', [-150, -100, -80], v => 'Un UR sous ' + -v + ' sur un niveau fini', H => -Math.min(999, ...obFin(H).filter(h => h.ur > 0).map(h => h.ur))],
+  ['ez', 'Facile', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en EZ', H => obMax(obFin(H).filter(h => obModOf(h, 'EZ')), h => h.st)],
+  ['ht', 'Ralenti', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en HT', H => obMax(obFin(H).filter(h => obModOf(h, 'HT')), h => h.st)],
+  ['sd', 'Mort subite', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en SD', H => obMax(obFin(H).filter(h => obModOf(h, 'SD')), h => h.st)],
+  ['pf', 'Sans faute', [2, 4, 6], v => 'Finir un niveau de ' + v + '★ en PF', H => obMax(obFin(H).filter(h => obModOf(h, 'PF')), h => h.st)],
+  ['mods', 'Cocktail', [2, 3, 4], v => 'Finir un niveau avec ' + v + ' mods parmi HD, HR, DT et FL', H => obMax(obFin(H), h => ['HD', 'HR', 'DT', 'FL'].filter(m => obModOf(h, m)).length)],
+  ['osu', 'Importateur', [1, 10, 50], v => v + ' map' + (v > 1 ? 's' : '') + ' osu! finie' + (v > 1 ? 's' : ''), H => new Set(obFin(H).filter(h => /^osu/.test(h.k)).map(h => h.k)).size],
+  ['mine', 'Ta musique', [1, 5, 20], v => v + ' niveau' + (v > 1 ? 'x' : '') + ' de tes musiques fini' + (v > 1 ? 's' : ''), H => new Set(obFin(H).filter(h => /^rhx/.test(h.k)).map(h => h.k)).size],
+  ['styles', 'Polyvalent', [3, 5, 6], v => 'Finir des niveaux de ' + v + ' styles différents', H => new Set(obFin(H).map(obHistStyle).filter(x => OB_STYLES.some(y => y.name === x))).size],
+  ['streams', 'Streamer', [3, 5, 7], v => 'Finir un niveau Streams de ' + v + '★', H => obMax(obFin(H).filter(h => obHistStyle(h) === 'Streams'), h => h.st)],
+  ['jumps', 'Sauteur', [3, 5, 7], v => 'Finir un niveau Sauts de ' + v + '★', H => obMax(obFin(H).filter(h => obHistStyle(h) === 'Sauts'), h => h.st)],
+  ['tech', 'Technicien', [3, 5, 7], v => 'Finir un niveau Technique de ' + v + '★', H => obMax(obFin(H).filter(h => obHistStyle(h) === 'Technique'), h => h.st)],
+  ['slide', 'Glisseur', [3, 5, 7], v => 'Finir un niveau Glissières de ' + v + '★', H => obMax(obFin(H).filter(h => obHistStyle(h) === 'Glissières'), h => h.st)],
+  ['prec', 'Orfèvre', [3, 5, 7], v => 'Finir un niveau Précision de ' + v + '★', H => obMax(obFin(H).filter(h => obHistStyle(h) === 'Précision'), h => h.st)],
+  ['expert', 'Expert', [10, 50, 200], v => v + ' niveaux Expert finis', H => obFin(H).filter(h => /expert/.test(h.k)).length],
+  ['all4', 'Collectionneur', [1, 10, 50], v => v + ' chanson' + (v > 1 ? 's' : '') + ' finie' + (v > 1 ? 's' : '') + ' dans ses 4 difficultés', H => { const m = new Map(); for (const h of obFin(H)) { const x = /^rh(\d+)(facile|normal|difficile|expert)$/.exec(h.k); if (x) m.set(x[1], (m.get(x[1]) || new Set()).add(x[2])); } return [...m.values()].filter(v => v.size === 4).length; }],
+  ['songs', 'Discothèque', [25, 100, 400], v => v + ' chansons différentes finies', H => new Set(obFin(H).map(h => h.n)).size],
+  ['retry', 'Persévérant', [10, 25, 50], v => 'Jouer ' + v + ' fois le même niveau', H => { const m = new Map(); for (const h of H) m.set(h.k, (m.get(h.k) || 0) + 1); return Math.max(0, ...m.values()); }],
+  ['fails', 'Tenace', [10, 50, 200], v => 'Perdre ' + v + ' parties (et revenir)', H => H.filter(h => h.f).length],
+  ['long', 'Marathon', [180, 300, 480], v => 'Finir une partie de ' + v / 60 + ' min', H => obMax(obFin(H), h => h.t)],
+  ['score', 'Score total', [1e7, 1e8, 1e9], v => obNum(v) + ' points en tout', H => obFin(H).reduce((x, h) => x + (h.s || 0), 0)],
+  ['clicks', 'Cliqueur', [1e4, 1e5, 1e6], v => obNum(v) + ' clics', H => H.reduce((x, h) => x + (h.cl || 0), 0)],
+  ['days', 'Assidu', [7, 30, 100], v => 'Jouer ' + v + ' jours différents', H => new Set(H.map(h => new Date(h.d).toDateString())).size],
+  ['streak', 'Semaine de feu', [3, 7, 30], v => 'Jouer ' + v + ' jours de suite', H => { const D = [...new Set(H.map(h => Math.floor((h.d - new Date(h.d).getTimezoneOffset() * 6e4) / 864e5)))].sort((a, b) => a - b); let b = 0, c = 0; D.forEach((d, i) => { c = i && d === D[i - 1] + 1 ? c + 1 : 1; b = Math.max(b, c); }); return b; }],
+  ['night', 'Oiseau de nuit', [1], () => 'Finir un niveau entre minuit et 5 h', H => obFin(H).filter(h => new Date(h.d).getHours() < 5).length],
+  ['dawn', 'Lève-tôt', [1], () => 'Finir un niveau entre 5 h et 8 h', H => obFin(H).filter(h => (x => x >= 5 && x < 8)(new Date(h.d).getHours())).length]];
 const obMedals = H => OB_MEDALS.map(([id, name, tiers, desc, val]) => { const v = val(H), tier = tiers.filter(t => v >= t).length;
   return {id, name, tiers, desc, v, tier, on: tier > 0, col: !tier ? '#3a3058' : OB_TIER[tiers.length > 1 ? tier - 1 : 2][1], next: tiers[tier]}; });
 { const M = Object.fromEntries(obMedals([{f: 0, g: 'S', st: 5.2, a: 99.1, c: 600, pp: 1, m: 'HDDT', k: 'x', t: 4000}]).map(m => [m.id, m.tier]));
   console.assert(M.first === 1 && M.grade === 2 && M.stars === 2 && M.acc === 2 && M.combo === 1 && M.hd === 2 && M.dt === 2 && M.hr === 0 && M.time === 1 && M.fc === 0, 'obMedals', JSON.stringify(M)); }
+{ const d0 = new Date(2026, 0, 10, 12).getTime(), h = (k, x) => ({f: 0, g: 'S', st: 3, a: 97, c: 10, pp: 1, k, n: 'x', d: d0 + x * 864e5, t: 60, ur: 90, s: 1, cl: 5}), H = [h('rh1facile', 0), h('rh1normal', 1), h('rh1difficile', 2), h('rh1expert', 4), {...h('rh2normal', 2), f: 1}];
+  const M = Object.fromEntries(obMedals(H).map(m => [m.id, m.v]));
+  console.assert(M.all4 === 1 && M.streak === 3 && M.days === 4 && M.ur === -90 && M.expert === 1 && M.fails === 1 && M.retry === 1 && M.sgr === 4, 'obMedals 1.3.6', JSON.stringify(M)); }
 // les sons du menu (avec leur volume) : changer de chanson, de difficulté, la note qui tombe, une médaille
 function obUi(k) {
   const v = +$('obVolUi').value / 100; if (!v) return; const b = (f, d, t, sl, at = 0) => setTimeout(() => beep(f, d, t, sl, .07 * v), at);
@@ -2480,85 +2600,63 @@ function obUi(k) {
     grade: () => { b(523, .1, 'square'); b(659, .1, 'square', 0, 90); b(784, .22, 'square', 0, 180); }, low: () => { b(392, .12, 'triangle'); b(330, .2, 'triangle', 0, 120); },
     fail: () => b(330, .5, 'sawtooth', 110), medal: () => { b(988, .08, 'square'); b(1319, .25, 'square', 0, 90); }}[k] || (() => {}))();
 }
-// le carrousel des chansons, comme dans osu! : une seule longue liste qu'on fait défiler à la molette (seules les cartes à l'écran existent),
-// les cartes s'écartent en arc autour du milieu, la chanson choisie s'ouvre sur ses difficultés (un clic sur la difficulté choisie : jouer)
-const OB_CH = 96, OB_DH = 38;
-const obCar = {L: [], sel: -1, els: new Map(), last: null, job: 0};
+// le carrousel, comme dans osu! : une seule longue liste qu'on fait défiler à la molette (seules les cartes à l'écran existent), les cartes s'écartent en arc
+// autour du milieu ; un clic choisit la difficulté, un 2e clic sur la carte choisie lance la partie
+const OB_CH = 66, OB_HH = 36;
+const obCar = {rows: [], Y: [], sel: -1, els: new Map(), last: null};
 let obNavTo = null, obNavT = 0;
-const obCur = () => obNavTo ?? rh?.song;
-const obCarY = k => k * OB_CH + (obCar.sel >= 0 && k > obCar.sel ? Object.keys(RH_DIFFS).length * OB_DH + 8 : 0);
-function obCarAt(y) {
-  const S = obCar.sel; let k = Math.floor(y / OB_CH);
-  if (S >= 0 && k > S) k = y < obCarY(S + 1) ? S : S + 1 + Math.floor((y - obCarY(S + 1)) / OB_CH);
-  return obClamp(k, 0, Math.max(0, obCar.L.length - 1));
-}
-function obCarousel(order) {
+const obCur = () => obNavTo ?? (rh ? rh.song + ':' + rh.diff : null);
+function obCarAt(y) { const Y = obCar.Y; let a = 0, b = Y.length - 1; while (a < b) { const m = (a + b + 1) >> 1; if (Y[m] <= y) a = m; else b = m - 1; } return a; }
+function obCarousel(rows) {
   const box = $('rhSongs'); let inner = box.querySelector(':scope > .obCarIn');
   if (!inner) { box.replaceChildren(inner = el('div', 'obCarIn')); obCar.els.clear(); box.onscroll = () => obCarDraw(); }
-  obCar.L = order; obCar.sel = order.indexOf(obCur());
+  obCar.rows = rows; obCar.Y = []; let y = 0; for (const r of rows) { obCar.Y.push(y); y += r.cat != null ? OB_HH : OB_CH; }
+  obCar.sel = rows.findIndex(r => r.k === obCur());
   for (const e of obCar.els.values()) e.remove(); obCar.els.clear();
-  inner.style.height = (obCarY(order.length) + 200) + 'px';
-  const key = obCur() + '|' + order.length; if (key !== obCar.last) { obCar.last = key; obCarFocus(false); }
+  inner.style.height = (y + 200) + 'px';
+  const key = obCur() + '|' + rows.length; if (key !== obCar.last) { obCar.last = key; obCarFocus(false); }
   obCarDraw();
 }
-function obCarFocus(smooth) {
-  const box = $('rhSongs'); if (obCar.sel < 0) return;
-  const y = obCarY(obCar.sel) + (OB_CH + Object.keys(RH_DIFFS).length * OB_DH) / 2 - box.clientHeight / 2;
-  box.scrollTo({top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto'});
-}
+function obCarFocus(smooth) { const box = $('rhSongs'); if (obCar.sel >= 0) box.scrollTo({top: Math.max(0, obCar.Y[obCar.sel] + OB_CH / 2 - box.clientHeight / 2), behavior: smooth ? 'smooth' : 'auto'}); }
 function obCarDraw() {
-  const box = $('rhSongs'), inner = box.querySelector(':scope > .obCarIn'); if (!inner || !box.classList.contains('obCar')) return;
-  const top = box.scrollTop, h = box.clientHeight || 600, a = Math.max(0, obCarAt(top) - 1), b = Math.min(obCar.L.length - 1, obCarAt(top + h) + 1), want = new Set();
+  const box = $('rhSongs'), inner = box.querySelector(':scope > .obCarIn'), R = obCar.rows; if (!inner || !box.classList.contains('obCar') || !R.length) return;
+  const top = box.scrollTop, h = box.clientHeight || 600, a = Math.max(0, obCarAt(top) - 1), b = Math.min(R.length - 1, obCarAt(top + h) + 1), want = new Set();
   for (let k = a; k <= b; k++) {
-    want.add(k); let c = obCar.els.get(k);
-    if (!c) { c = obCardEl(obCar.L[k], k === obCar.sel); obCar.els.set(k, c); inner.append(c); }
-    const y = obCarY(k), mid = y + (k === obCar.sel ? OB_CH + Object.keys(RH_DIFFS).length * OB_DH : OB_CH) / 2, d = obClamp((mid - top - h / 2) / (h / 2), -1.3, 1.3);
-    c.style.top = y + 'px'; c.style.transform = 'translateX(' + Math.round(d * d * 22 - (k === obCar.sel ? 14 : 0)) + 'px)';
+    want.add(k); let c = obCar.els.get(k); const r = R[k];
+    if (!c) { c = r.cat != null ? obCatEl(r) : obCardEl(r, k === obCar.sel); obCar.els.set(k, c); inner.append(c); }
+    const y = obCar.Y[k]; c.style.top = y + 'px';
+    if (r.cat == null) { const d = obClamp((y + OB_CH / 2 - top - h / 2) / (h / 2), -1.3, 1.3); c.style.transform = 'translateX(' + Math.round(d * d * 22 - (k === obCar.sel ? 14 : 0)) + 'px)'; }
   }
   for (const [k, e] of obCar.els) if (!want.has(k)) { e.remove(); obCar.els.delete(k); }
-  obCarStars();
 }
-function obCardEl(i, open) {
-  const s = RH_SONGS[i], c = el('div', 'obCard' + (open ? ' on' : '') + (obNavTo === i ? ' nav' : '')), top = el('div', 'obCardTop'), bg = obBestGrade('rh' + i), dots = el('div', 'obDots'), D = Object.keys(RH_DIFFS);
-  c.style.height = (open ? OB_CH - 6 + D.length * OB_DH + 8 : OB_CH - 6) + 'px';
-  const known = D.map(d => rhStarCache.get(i + ':' + d)).filter(Boolean); if (known.length) c.style.setProperty('--sc', obStarCol(Math.max(...known)));
-  top.append(el('b', '', s.name), ...(bg ? [el('span', 'obG obG' + bg, bg)] : []));
-  for (const d of D) { const v = rhStarCache.get(i + ':' + d), q = el('span', 'obChip', v ? rhStarTxt(v) : '…'); q.dataset.star = i + ':' + d; q.title = RH_DIFFS[d]; if (v) obChipCol(q, v); dots.append(q); }
-  c.append(top, el('span', 'hint', RHG.tag(obLen(i)) + ' · ' + (s.style ? s.style + ' · ' : '') + s.bpm + ' BPM · ' + clock(obLen(i))), dots);
-  if (open) {
-    const res = games.rhythm || {}, box = el('div', 'obDiffs');
-    for (const [d, label] of Object.entries(RH_DIFFS)) {
-      const v = rhStarCache.get(i + ':' + d), r = res['rh' + i + d], row = el('div', 'obDiffRow' + (rh?.song === i && rh.diff === d ? ' on' : '')), sq = el('i');
-      row.dataset.star = i + ':' + d; if (v) row.style.setProperty('--dc', obStarCol(v));
-      const chip = el('span', 'obChip', v ? rhStarTxt(v) : '…'); if (v) obChipCol(chip, v);
-      row.append(sq, el('span', '', label), chip, r ? el('span', 'obG obG' + r.grade, r.grade) : el('span', 'hint', ''));
-      row.onclick = e => { e.stopPropagation(); if (rh?.song === i && rh.diff === d && rh.mode === 'ready') { obUi('play'); rhPress(); if (rh.mode === 'play') obLock(); } else { obUi('diff'); rhSelect(i, d); } };
-      box.append(row);
-    }
-    c.append(box);
-  }
-  c.onclick = () => { if (rh?.song !== i) { obUi('tick'); rhSelect(i, RH_DIFFS[rh?.diff] ? rh.diff : 'normal'); } };
+function obCatEl(r) {  // le titre d'une catégorie d'étoiles
+  const c = el('div', 'obCatH'); c.style.setProperty('--sc', obStarCol(r.cat + 1.5));
+  c.append(el('b', '', r.cat > 10 ? 'Étoiles pas encore calculées' : OB_CATS[r.cat]), el('span', 'hint', r.n + ' map' + (r.n > 1 ? 's' : '')));
+  return c;
+}
+function obCardEl(o, on) {
+  const r = (games.rhythm || {})[o.res], c = el('div', 'obCard' + (on ? ' on' : '') + (obNavTo === o.k ? ' nav' : '')), top = el('div', 'obCardTop'), chip = el('span', 'obChip', o.st != null ? rhStarTxt(o.st) : '?');
+  c.style.height = (OB_CH - 6) + 'px'; if (o.st != null) { c.style.setProperty('--sc', obStarCol(o.st)); obChipCol(chip, o.st); }
+  const nm = el('b', '', o.name), right = el('span', 'obCardR'); right.append(chip, ...(r ? [el('span', 'obG obG' + r.grade, r.grade)] : []));
+  top.append(nm, right);
+  c.append(top, el('span', 'hint', [o.sty, o.v, o.bpm && o.bpm + ' BPM', o.len && clock(o.len), o.sub].filter(Boolean).join(' · ')));
+  c.title = o.name + ' [' + o.v + ']' + (r ? ' · ' + r.score + ' points · ' + r.acc + ' %' : '');
+  c.onclick = () => { if (rh?.song === o.song && rh.diff === o.diff && rh.mode === 'ready') { obUi('play'); rhPress(); if (rh.mode === 'play') obLock(); } else { obUi('diff'); obGo(o); } };
   return c;
 }
 const obChipCol = (q, v) => { q.style.setProperty('--dc', obStarCol(v)); q.style.setProperty('--dt', v >= 6.5 ? '#ffffff' : '#0a0814'); };  // texte sombre sur les couleurs claires
-function obCarStars() {  // les étoiles des cartes à l'écran, calculées petit à petit (la couleur des carrés et de la bande)
-  const job = ++obCar.job;
-  const step = () => { if (job !== obCar.job) return; if (rh?.mode === 'play' || rh?.mode === 'fail') return void setTimeout(step, 1000); const t = performance.now();
-    for (const [, c] of obCar.els) for (const q of c.querySelectorAll('[data-star]')) { if (q.style.getPropertyValue('--dc')) continue; if (performance.now() - t > 12) return void setTimeout(step, 30);
-      const [i, d] = q.dataset.star.split(':'), v = rhSongStars(+i, d); q.style.setProperty('--dc', obStarCol(v)); if (q.classList.contains('obChip')) { obChipCol(q, v); q.textContent = rhStarTxt(v); }
-      const lab = q.classList.contains('obDiffRow') && q.children[2]; if (lab) { lab.textContent = rhStarTxt(v); obChipCol(lab, v); }
-      const all = Object.keys(RH_DIFFS).map(x => rhStarCache.get(i + ':' + x)).filter(Boolean); c.style.setProperty('--sc', obStarCol(Math.max(...all))); } };
-  setTimeout(step, 40);
-}
-// au clavier : la carte suivante s'allume tout de suite, le niveau se charge quand on s'arrête (un quart de seconde)
+const obGo = o => rhSelect(o.song, o.diff).catch(e => toast('Impossible : ' + e.message, true));
+// au clavier : Haut et Bas la carte d'à côté (elle s'allume tout de suite, le niveau se charge quand on s'arrête un quart de seconde), Gauche et Droite l'autre difficulté de la même chanson
 function obNav(delta) {
-  const L = obCar.L; if (!L.length) return; const cur = L.indexOf(obCur()), nx = L[obClamp(cur < 0 ? 0 : cur + delta, 0, L.length - 1)]; if (nx === obCur()) return;
-  obNavTo = nx; obUi('tick'); obCarousel(L); obCarFocus(true);
-  clearTimeout(obNavT); obNavT = setTimeout(() => { const d = RH_DIFFS[rh?.diff] ? rh.diff : 'normal'; rhSelect(nx, d).finally(() => { if (obNavTo === nx) { obNavTo = null; rhList(); } }); }, 260);
+  const R = obCar.rows; if (!R.length) return; let k = R.findIndex(r => r.k === obCur()); if (k < 0) k = delta > 0 ? -1 : R.length;
+  do k += delta; while (k >= 0 && k < R.length && R[k].cat != null);
+  if (k < 0 || k >= R.length) return; const o = R[k];
+  obNavTo = o.k; obUi('tick'); obCarousel(R); obCarFocus(true);
+  clearTimeout(obNavT); obNavT = setTimeout(() => { obGo(o).finally(() => { if (obNavTo === o.k) { obNavTo = null; rhList(); } }); }, 260);
 }
 function obNavDiff(delta) {
-  if (!rh || typeof rh.song !== 'number') return; const D = Object.keys(RH_DIFFS), k = D.indexOf(rh.diff), nd = D[obClamp(k + delta, 0, D.length - 1)];
-  if (nd !== rh.diff) { obUi('diff'); rhSelect(rh.song, nd); }
+  if (!rh) return; const D = obItems().filter(o => o.song === rh.song).sort((a, b) => (a.st ?? 99) - (b.st ?? 99)), k = D.findIndex(o => o.diff === rh.diff), o = D[obClamp(k + delta, 0, D.length - 1)];
+  if (o && o.diff !== rh.diff) { obUi('diff'); obGo(o); }
 }
 // la carte de joueur : une image de ton profil (rang, pp, précision, meilleures performances, médailles), à enregistrer ou copier
 function obPlayerCard() {
@@ -2580,7 +2678,7 @@ function obPlayerCard() {
       pxFont(q, x.g, 136, y, {SS: '#ffffff', S: '#ffd84a', A: '#7ee07a', B: '#3fe0ff', C: '#b46aee', D: '#ff4a5a'}[x.g] || '#ffffff', 6, 'center'); pxFont(q, nm + ' · ' + x.df, 146, y, '#e8e0ff', 6); pxFont(q, Math.round(x.pp) + ' pp', w - 12, y, '#ffd84a', 6, 'right'); });
     if (!L.length) pxFont(q, 'Pas encore de partie finie', 130, 112, '#5a4a8a', 6);
     pxFont(q, 'MÉDAILLES · ' + md.filter(m => m.on).length + ' / ' + md.length, 130, 172, '#a8a0c8', 6);
-    md.forEach((m, k) => q.drawImage(obBadge(m.col, m.tier, m.on), 130 + k * 17, 178, 16, 16));
+    md.filter(m => m.on).sort((a, b) => b.tier - a.tier).slice(0, 15).forEach((m, k) => q.drawImage(obBadge(m.col, m.tier, m.on), 130 + k * 17, 178, 16, 16));  // les 15 plus belles (49 ne tiennent pas)
     const d = new Date(); pxFont(q, String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear(), w - 12, h - 10, '#5a4a8a', 6, 'right');
   }
   return c;
@@ -2762,6 +2860,13 @@ function obFlashCnv(R) {
 function obLine(x0, y0, x1, y1, col, w = 1) { const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0))); for (let i = 0; i <= n; i++) px(g, col, x0 + (x1 - x0) * i / n - (w >> 1), y0 + (y1 - y0) * i / n - (w >> 1), w, w); }
 function obArrow(x, y, ang, s, col) { for (const k of [-.7, .7]) obLine(x, y, x - Math.cos(ang + k) * 5 * s, y - Math.sin(ang + k) * 5 * s, col, 2); }  // une flèche (chevron) qui pointe vers ang
 const obMark = (ok, x, y) => ok ? (obLine(x - 9, y, x - 3, y + 7, '#7ee07a', 3), obLine(x - 3, y + 7, x + 10, y - 8, '#7ee07a', 3)) : (obLine(x - 8, y - 8, x + 8, y + 8, '#ff4a5a', 3), obLine(x + 8, y - 8, x - 8, y + 8, '#ff4a5a', 3));
+// le fond de la map (ou du thème), flouté au réglage « Flou du fond » ; gardé tant que l'image et le réglage ne changent pas
+let obBgC = null;
+function obBgPic() {
+  const b = rh.info?.bg || obBg(rh.theme || OB_THEMES[0]), v = +$('obBlur').value; if (!v) return b;
+  if (obBgC?.b !== b || obBgC.v !== v) obBgC = {b, v, c: cnv(W, H, q => { q.filter = 'blur(' + v + 'px)'; q.drawImage(b, -2 * v, -2 * v, W + 4 * v, H + 4 * v); })};
+  return obBgC.c;
+}
 // le dessin, à chaque image de l'écran ; le jeu y avance aussi (obLogic) pour juger au plus près, même à 144 images par seconde
 function obDraw() {
   if (rh.mode !== 'play' && obLocked()) try { document.exitPointerLock(); } catch {}  // pause, fin de partie : la souris est rendue
@@ -2769,7 +2874,7 @@ function obDraw() {
   if (rh.mode === 'play') { obLogic(rhNow()); rh.pcx = rh.cx; rh.pcy = rh.cy; }
   const now = !live ? -2 : rh.mode === 'fail' ? rh.failNow : rhNow(), brk = live && obBreak(now);
   if (rh.combo > rh.lastCombo) rh.cPop = 6; rh.lastCombo = rh.combo; if (rh.cPop) rh.cPop--;
-  g.drawImage(rh.info?.bg || obBg(rh.theme || OB_THEMES[0]), 0, 0);
+  g.drawImage(obBgPic(), 0, 0);
   if (live) { g.fillStyle = 'rgba(0,0,0,' + (+$('obDim').value / 100 * (brk ? .5 : 1)) + ')'; g.fillRect(0, 0, W, H); }  // le fond assombri (moins pendant une pause du morceau)
   const K = live && obOskOn() ? obHi() : (obHiC && !obHiC.hidden && (obHiC.hidden = true), null); if (K) g.clearRect(0, 0, W, H);  // un skin osu! : ses objets sur la couche nette
   if (live) {
@@ -2784,7 +2889,7 @@ function obDraw() {
       // l'apparition comme dans osu! : en 0,4 s (moins si les orbes viennent très vite) ; caché (HD) : il s'efface avant le bon moment
       const fade = hd ? obClamp((now - (n.t - pre)) / (pre * .4), 0, 1) * obClamp(1 - (now - (n.t - pre * .6)) / (pre * .3), 0, 1) : obClamp((now - (n.t - pre)) / (.4 * Math.min(1, pre / .45)), 0, 1);
       if (n.kind === 'spin') { spin = n; continue; }
-      if (K) { obOskNote(K, n, now, after, fade * .92, jx); continue; }
+      if (K) { obOskNote(K, n, now, after, fade, jx); continue; }
       if (n.kind === 'slide') obDrawSlider(n, now, after);
       const gone = n.judged && !n.missed;
       if (gone && n.hitAt != null && now - n.hitAt < .24) {  // touché : l'orbe grossit et s'efface

@@ -100,6 +100,8 @@ module.exports = async ({ pj, sleep }) => {
   // la recherche et les filtres de la liste : « néon » trouve la chanson ; puis la liste entière, la carte choisie à l'écran
   await pj(`document.getElementById('rhTabSongs').click(), (i => { i.value = 'néon'; i.dispatchEvent(new Event('input')); })(document.getElementById('obSearch')), 0`); await sleep(600);
   const found = await pj(`[...document.querySelectorAll('.obCard b')].map(b => b.textContent).join('|')`); if (!/Lever de néon/.test(found)) throw new Error('recherche : ' + found.slice(0, 200));
+  // une carte par difficulté, sous le titre de sa catégorie d'étoiles
+  const cats = await pj(`[...document.querySelectorAll('#rhSongs .obCatH b')].map(b => b.textContent).join('|')`); if (!/★.*★/.test(cats)) throw new Error('catégories : ' + cats);
   await pj(`(s => { s.value = 'Streams'; s.dispatchEvent(new Event('change')); })(document.getElementById('obFStyle')), 0`); await sleep(400);
   const tags = await pj(`[...document.querySelectorAll('.obCard > .hint')].map(b => b.textContent.split(' · ')[0])`); if (!tags.length || tags.some(t => t !== 'Streams')) throw new Error('filtre de style : ' + tags);
   await pj(`(s => { s.value = ''; s.dispatchEvent(new Event('change')); })(document.getElementById('obFStyle')), (i => { i.value = ''; i.dispatchEvent(new Event('input')); })(document.getElementById('obSearch')), 0`); await sleep(600);
@@ -110,8 +112,10 @@ module.exports = async ({ pj, sleep }) => {
   const s0 = await pj(`document.getElementById('gc').__rh.st().song`);
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })), 0`); await sleep(2500);
   const s1 = await pj(`(r => r.song + '|' + r.mode)(document.getElementById('gc').__rh.st())`); if (s1.split('|')[0] == s0) throw new Error('flèche Bas : ' + s0 + ' -> ' + s1);
-  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })), 0`); await sleep(2500);
-  const d1 = await pj(`document.getElementById('gc').__rh.st().diff`); if (d1 === 'normal') throw new Error('flèche Droite : ' + d1);
+  // une carte par difficulté : Gauche et Droite passent à l'autre difficulté de la même chanson
+  const d0 = await pj(`document.getElementById('gc').__rh.st().diff`), side = d0 === 'facile' ? 'ArrowRight' : 'ArrowLeft';
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: '${side}', bubbles: true })), 0`); await sleep(2500);
+  const d1 = await pj(`(r => r.song + '|' + r.diff)(document.getElementById('gc').__rh.st())`); if (d1 === s1.split('|')[0] + '|' + d0 || d1.split('|')[0] !== s1.split('|')[0]) throw new Error('flèches Gauche / Droite : ' + d0 + ' -> ' + d1);
   // une map osu! (.osz fabriqué ici : un son de 12 s, cercles, glissières en arc et en Bézier, toupie) déposée sur le jeu : importée, jouée avec ses propres réglages
   const osz = await pj(`(async () => { const sr = 22050, n = sr * 12, pcm = new Int16Array(n); for (let b = 1; b < 24; b++) for (let i = 0; i < 800; i++) pcm[b * sr / 2 + i] = Math.sin(i / 3) * 12000 * Math.exp(-i / 200);
       const wav = new Uint8Array(44 + n * 2), dv = new DataView(wav.buffer), w4 = (o, s) => [...s].forEach((c, i) => wav[o + i] = c.charCodeAt(0));
@@ -127,8 +131,8 @@ module.exports = async ({ pj, sleep }) => {
       const dt = new DataTransfer(); dt.items.add(new File([...parts, ...cen, e], 'Test - Essai.osz'));
       document.getElementById('rhSongs').dispatchEvent(new DragEvent('drop', {dataTransfer: dt, bubbles: true, cancelable: true}));
       for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 250)); const rh = document.getElementById('gc').__rh.st(); if (rh.info?.osu && rh.mode === 'ready') break; }
-      const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelectorAll('#rhSongs .rhSong').length, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
-  if (!/^8\|2\|1\|9\|4\|osu!/.test(osz)) throw new Error('map osu! : ' + osz);
+      const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelector('#rhSongs .obCard.on')?.textContent, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
+  if (!/^8\|2\|1\|9\|4\|Mixte\|Test - Essai.*Insane/.test(osz)) throw new Error('map osu! : ' + osz);
   await sleep(500); await shot('osu-pret');
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(3500); await shot('osu-jeu');
   await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
@@ -159,7 +163,7 @@ module.exports = async ({ pj, sleep }) => {
   if (await pj(`document.getElementById('obSkin').value`) === 'osk') throw new Error('skin osu! : pas retiré');
   // l'onglet des statistiques (laissé ouvert pour la capture de fin)
   await pj(`document.getElementById('rhTabStats').click(), 0`); await sleep(400);
-  const stt = await pj(`document.getElementById('rhSongs').textContent`); await shot('stats-page'); if (!/PROFIL/.test(stt) || !/pp/.test(stt) || !/PAR STYLE ET DIFFICULTÉ/.test(stt) || !/TEMPS DE JEU ET ACTIVITÉ/.test(stt) || !/osu!/.test(stt)) throw new Error('statistiques : ' + stt.replace(/\s+/g, ' ').slice(0, 1500));
+  const stt = await pj(`document.getElementById('rhSongs').textContent`); await shot('stats-page'); if (!/PROFIL/.test(stt) || !/pp/.test(stt) || !/PAR STYLE ET DIFFICULTÉ/.test(stt) || !/TEMPS DE JEU ET ACTIVITÉ/.test(stt) || !/Mixte/.test(stt)) throw new Error('statistiques : ' + stt.replace(/\s+/g, ' ').slice(0, 1500));
   await pj(`[...document.querySelectorAll('#rhSongs .sysCard > b')].find(b => b.textContent === 'PAR STYLE ET DIFFICULTÉ')?.parentElement.scrollIntoView(), 0`); await sleep(300);
   const errs2 = await pj(`__e`); if (errs2.length) throw new Error(errs2.join(' | '));
   return 'carte des temps ' + tm.join('/') + ', plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
