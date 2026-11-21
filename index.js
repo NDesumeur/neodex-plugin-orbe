@@ -86,7 +86,8 @@ const CSS = `.gMain{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
 .obCardR{display:flex;gap:8px;align-items:center;flex:none}
 .obChip{padding:1px 6px 2px;background:var(--dc,#3a3058);color:var(--dt,#e8e0ff);box-shadow:0 0 0 2px #0a0814;line-height:18px}
 .obCar .obCardTop{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
-.obCar .obCardTop b{zoom:1.25;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  /* un long titre : coupé avec « … » (le titre entier dans l’infobulle) */
+.obCar .obCardTop b{zoom:1.25;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obCard .obCardTop b .pxT,.obCard .hint .pxT{white-space:nowrap}  /* les lettres en pixels ne reviennent pas à la ligne : le titre reste dans sa carte */  /* un long titre : coupé avec « … » (le titre entier dans l’infobulle) */
 .obChip .pxI{width:10px!important;height:10px!important;margin:0 0 0 3px}
 .obDiffRow>span:nth-child(2){zoom:1.25}
 .obDiffs{display:flex;flex-direction:column;gap:4px;margin-top:6px}
@@ -1975,7 +1976,7 @@ const OB_MODS = [['EZ', 'Facile : orbes plus grands et plus lents, précision et
 const OB_EXCL = {EZ: ['HR'], HR: ['EZ'], HT: ['DT', 'NC', 'DC'], DT: ['HT', 'NC', 'DC'], NC: ['DT', 'HT', 'DC'], DC: ['DT', 'HT', 'NC'], NF: ['SD', 'PF', 'AT'], SD: ['NF', 'PF', 'RX', 'AP', 'AT'], PF: ['NF', 'SD', 'RX', 'AP', 'AT'],
   RX: ['AP', 'AT', 'SD', 'PF'], AP: ['RX', 'AT', 'SD', 'PF'], AT: ['NF', 'SD', 'PF', 'RX', 'AP']};
 let obModSet = new Set();
-const obMod = m => obModSet.has(m) || (m === 'DT' && obModSet.has('NC')) || (m === 'HT' && obModSet.has('DC')), obModTxt = () => OB_MODS.map(m => m[0]).filter(m => obModSet.has(m)).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obModSet.has(m[0]) ? m[2] : 1), 1);
+const obMod = m => obModSet.has(m) || (m === 'DT' && obModSet.has('NC')) || (m === 'HT' && obModSet.has('DC')), obModTxt = () => OB_MODS.map(m => m[0]).filter(m => obModSet.has(m)).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obModSet.has(m[0]) ? m[2] : 1), 1), obModMultOf = s => (String(s).match(/../g) || []).reduce((k, c) => k * (OB_MODS.find(m => m[0] === c)?.[2] ?? 1), 1);
 function obStatsM(diff, len) {  // les réglages du niveau avec les mods : EZ les divise par deux, HR les multiplie par 1,4 (la taille par 1,3), jamais plus de 10
   const O = rh?.info?.osu, s0 = obStats(diff, len, rh?.info && obVarStyle(rh.info.key), rh?.notes && rh.diff === diff ? rh.baseStars : null), s = O ? {...s0, ...O, st: {...s0.st, name: O.sy || 'osu!'}} : s0, f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
   const ar = obClamp(s.ar * f, 0, 10), od = obClamp(s.od * f, 0, 10), hp = obClamp((O ? O.hp : obClamp(2 + s.lv * .55 + s.st.od, 2, 9)) * f, 0, 10);
@@ -2269,13 +2270,22 @@ function obTint(bm, col) {  // l'image en gris teintée de la couleur du combo (
 }
 const obOskCol = n => { const C = rh?.info?.osu?.cols?.length ? rh.info.osu.cols : obOsk.cols?.length ? obOsk.cols : OSK_COLS; return C[(n.col || 0) % C.length]; };  // celles de la map d'abord, comme dans osu!
 // le compteur de touches du skin : son cadre (inputoverlay-background, couché à la verticale) et ses touches, comme dans osu!
+function obTrim(e) {  // -> [x, y, l, h] : la partie visible de l'image (sans ses bords transparents), calculée une fois
+  if (e.trim) return e.trim;
+  const c = document.createElement('canvas'), w = c.width = e.bm.width, h = c.height = e.bm.height, q = c.getContext('2d', {willReadFrequently: true}); q.drawImage(e.bm, 0, 0);
+  const d = q.getImageData(0, 0, w, h).data; let x0 = w, y0 = h, x1 = -1, y1 = -1;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 16) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  return e.trim = x1 < 0 ? [0, 0, w, h] : [x0, y0, x1 - x0 + 1, y1 - y0 + 1];
+}
 function obOskKeys(K, held) {
-  const kb = obOsk.img['inputoverlay-key'], bg = obOsk.img['inputoverlay-background'], s = 14 / kb.bm.width, x = W - 15;
-  if (bg) { K.save(); K.translate(x, 92 + 30); K.rotate(Math.PI / 2); const w = bg.bm.width * s, h = bg.bm.height * s; K.drawImage(bg.bm, -w / 2 + 6, -h / 2, w, h); K.restore(); }
+  const kb = obOsk.img['inputoverlay-key'], bg = obOsk.img['inputoverlay-background'], x = W - 15, y0 = 92, step = 15, B = 13;  // 4 cases de 15, une touche de 13 au plus
+  if (bg) { const [sx, sy, sw, sh] = obTrim(bg); K.save(); K.translate(x, y0 + 1.5 * step + 6); K.rotate(Math.PI / 2); K.drawImage(bg.bm, sx, sy, sw, sh, -(4 * step + 4) / 2, -9, 4 * step + 4, 18); K.restore(); }  // le cadre couché, à la taille de la colonne
+  const [sx, sy, sw, sh] = obTrim(kb), f = B / Math.max(sw, sh);
   ['K1', 'K2', 'M1', 'M2'].forEach((k, i) => {
-    const y = 92 + i * 15 + 6, on = held[k], z = on ? .85 : 1, w = kb.bm.width * s * z, h = kb.bm.height * s * z;
-    K.drawImage(on ? obTint(kb.bm, k[0] === 'K' ? '#ffde00' : '#f800ff') : kb.bm, x - w / 2, y - h / 2, w, h);
-    K.font = 'bold 6px sans-serif'; K.textAlign = 'center'; K.textBaseline = 'middle'; K.fillStyle = on ? '#000000' : '#ffffff'; K.fillText(rh.kc[k] ? String(rh.kc[k]) : k, x, y + .5);
+    const y = y0 + i * step + 6, on = held[k], z = on ? .85 : 1, w = sw * f * z, h = sh * f * z;
+    K.drawImage(on ? obTint(kb.bm, k[0] === 'K' ? '#ffde00' : '#f800ff') : kb.bm, sx, sy, sw, sh, x - w / 2, y - h / 2, w, h);
+    const s = rh.kc[k] ? String(rh.kc[k]) : k; K.font = 'bold ' + (s.length > 3 ? 4 : s.length > 2 ? 5 : 6) + 'px sans-serif';  // un grand nombre de frappes reste dans sa touche
+    K.textAlign = 'center'; K.textBaseline = 'middle'; K.fillStyle = on ? '#000000' : '#ffffff'; K.fillText(s, x, y + .5);
   });
 }
 function obOskImg(K, k, x, y, r, tint, rot) {  // une image du skin à la taille d'osu! : 128 pixels (256 en @2x) pour un cercle de rayon r
@@ -2402,7 +2412,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     if (H.length > 1000) H.splice(0, H.length - 1000);
     if (!rh.failed) { const L = (gstore('orbeTop', {})[obKey()] ??= []), e = {s: rh.score, a, g: rh.grade, c: rh.maxCombo, x: c['RATÉ'], m: rh.mods, pp: rh.pp, d: Date.now()};
       L.push(e); L.sort((p, q) => q.s - p.s); L.length = Math.min(L.length, 10); rh.rank = L.indexOf(e) + 1;
-      if (rh.rank === 1) gstore('orbeRun', {})[obKey()] = [...rh.tl, rh.score]; }  // le n° 1 : son score au fil du morceau, pour la comparaison en partie
+      if (rh.rank === 1) gstore('orbeRun', {})[obKey()] = {m: rh.mods, r: [...rh.tl, rh.score]}; }  // le n° 1 : son score au fil du morceau, pour la comparaison en partie
     const hd = H.at(-1).d, pp1 = obProfile().pp, ms = rh.he.filter(h => h[1] == null).map(h => Math.round(h[0] * 10) / 10);
     for (const v of OB_PPM) if (pp0 < v && pp1 >= v) setTimeout(() => toast('Palier atteint : ' + v + ' pp !'), 3200);
     obRpSave({song: rh.song, diff: rh.diff, mods: [...obModSet], key: obKey(), n: rh.info.name, df: H.at(-1).df, s: rh.score, a, g: rh.failed ? 'F' : rh.grade, c: [c.PARFAIT, c.BIEN, c.OK, c['RATÉ']], cb: rh.maxCombo, fc: rh.fc, pp: rh.pp, d: hd, ms})
@@ -3418,7 +3428,8 @@ function obHud(now, brk) {
   if (obMod('NF')) pxFont(g, 'NF', 122, 10, '#7a6aa0', 6);
   rh.dScore += Math.ceil((rh.score - rh.dScore) * .3);
   if (rh.mode === 'play') { while (now >= rh.tlNext) { rh.tl.push(rh.score); rh.tlNext += 2; }  // ton score toutes les 2 s du morceau
-    const R = rh.run; if (R && !rh.noSave && now > 0) { const f = now / 2, a0 = R[Math.min(R.length - 1, Math.floor(f))] || 0, a1 = R[Math.min(R.length - 1, Math.ceil(f))] ?? a0, d = rh.score - Math.round(a0 + (a1 - a0) * (f - Math.floor(f)));
+    const Q = rh.run, R = Array.isArray(Q) ? Q : Q?.r, km = obModMult() / obModMultOf(Q?.m || '');  // un ancien record (sans ses mods) : compté sans mod
+    if (R?.length && !rh.noSave && now > 0) { const f = now / 2, a0 = R[Math.min(R.length - 1, Math.floor(f))] || 0, a1 = R[Math.min(R.length - 1, Math.ceil(f))] ?? a0, d = rh.score - Math.round((a0 + (a1 - a0) * (f - Math.floor(f))) * km);  // shortcut: le multiplicateur ne touche que la part du combo, l'échelle est approchée
       obMono((d >= 0 ? '+' : '-') + obNum(Math.abs(d)), W - 4, 52, d >= 0 ? '#7ee07a' : '#ff6a7a', 6, 'right'); } }
   obMono(String(rh.dScore).padStart(8, '0'), W - 4, 18, '#ffffff', 16, 'right');
   const acc = RHG.acc(); obMono((acc * 100).toFixed(2) + '%', W - 4, 30, '#e8e0ff', 8, 'right');
