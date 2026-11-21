@@ -121,18 +121,21 @@ module.exports = async ({ pj, sleep }) => {
       const wav = new Uint8Array(44 + n * 2), dv = new DataView(wav.buffer), w4 = (o, s) => [...s].forEach((c, i) => wav[o + i] = c.charCodeAt(0));
       w4(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); w4(8, 'WAVEfmt '); dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, sr, true); dv.setUint32(28, sr * 2, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); w4(36, 'data'); dv.setUint32(40, n * 2, true); wav.set(new Uint8Array(pcm.buffer), 44);
       const osu = ['osu file format v14', '[General]', 'AudioFilename: audio.wav', 'PreviewTime: 2000', 'Mode: 0', '[Metadata]', 'Title:Essai', 'Artist:Test', 'Creator:Orbe', 'Version:Insane', 'BeatmapSetID:-1', '[Difficulty]', 'HPDrainRate:4', 'CircleSize:4', 'OverallDifficulty:8', 'ApproachRate:9', 'SliderMultiplier:1.6', 'SliderTickRate:1',
+        '[Events]', 'Sprite,Background,Centre,"SB/dot.png",320,240', ' F,0,0,10000,1', ' M,0,0,10000,100,100,500,300',
         '[TimingPoints]', '500,500,4,2,0,60,1,0', '[HitObjects]', '100,100,1000,5,0', '300,100,1500,1,8', '400,300,2000,2,2,P|300:350|200:300,1,160', '100,200,3000,6,0,B|150:150|150:150|250:200,2,140', '256,192,5000,12,0,6500', '300,250,7000,5,4', '200,250,7250,1,0', '100,250,7500,1,0'].join('\\n');
-      const files = [['audio.wav', wav], ['Test - Essai (Orbe) [Insane].osu', new TextEncoder().encode(osu)]], parts = [], cen = []; let off = 0;
+      const png = new Uint8Array(await (await new Promise(r => { const c = document.createElement('canvas'); c.width = c.height = 8; c.getContext('2d').fillRect(0, 0, 8, 8); c.toBlob(r); })).arrayBuffer());  // 1.4.0 : une image de storyboard
+      const files = [['audio.wav', wav], ['Test - Essai (Orbe) [Insane].osu', new TextEncoder().encode(osu)], ['sb/dot.png', png]], parts = [], cen = []; let off = 0;
       for (const [name, d] of files) { const nb = new TextEncoder().encode(name), h = new Uint8Array(30), c = new Uint8Array(46), hv = new DataView(h.buffer), cv = new DataView(c.buffer);
         hv.setUint32(0, 0x04034b50, true); hv.setUint32(18, d.length, true); hv.setUint32(22, d.length, true); hv.setUint16(26, nb.length, true);
         cv.setUint32(0, 0x02014b50, true); cv.setUint32(20, d.length, true); cv.setUint32(24, d.length, true); cv.setUint16(28, nb.length, true); cv.setUint32(42, off, true);
         parts.push(h, nb, d); cen.push(c, nb); off += 30 + nb.length + d.length; }
-      const cl = cen.reduce((a, x) => a + x.length, 0), e = new Uint8Array(22), ev = new DataView(e.buffer); ev.setUint32(0, 0x06054b50, true); ev.setUint16(10, 2, true); ev.setUint32(12, cl, true); ev.setUint32(16, off, true);
+      const cl = cen.reduce((a, x) => a + x.length, 0), e = new Uint8Array(22), ev = new DataView(e.buffer); ev.setUint32(0, 0x06054b50, true); ev.setUint16(10, files.length, true); ev.setUint32(12, cl, true); ev.setUint32(16, off, true);
       const dt = new DataTransfer(); dt.items.add(new File([...parts, ...cen, e], 'Test - Essai.osz'));
       document.getElementById('rhSongs').dispatchEvent(new DragEvent('drop', {dataTransfer: dt, bubbles: true, cancelable: true}));
       for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 250)); const rh = document.getElementById('gc').__rh.st(); if (rh.info?.osu && rh.mode === 'ready') break; }
-      const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelector('#rhSongs .obCard.on')?.textContent, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
+      const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelector('#rhSongs .obCard.on')?.textContent, document.getElementById('rhImpMsg').textContent, 'sb' + (rh.info.sb?.img?.filter(Boolean).length || 0)].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
   if (!/^8\|2\|1\|9\|4\|Mixte\|Test - Essai.*Insane/.test(osz)) throw new Error('map osu! : ' + osz);
+  if (!/\|sb1$/.test(osz)) throw new Error('storyboard : ' + osz);
   // une map osu! : la toile s'élargit (le terrain au milieu, le compteur de touches loin des orbes)
   const wide = await pj(`document.getElementById('gc').width`); if (wide !== 400) throw new Error('map osu! : toile de ' + wide + ' de large');
   // « Sans les chansons du jeu » : seulement tes musiques et les maps osu!
@@ -143,6 +146,43 @@ module.exports = async ({ pj, sleep }) => {
   await sleep(500); await shot('osu-pret');
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(3500); await shot('osu-jeu');
   await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
+  // 1.4.0 : le replay de la partie sur la map osu! est gardé, l'analyse s'affiche sous le jeu, le .osr se fabrique
+  for (let i = 0; i < 20 && !await pj(`document.getElementById('gc').__rh.st().rpD`); i++) await sleep(250);
+  const rp = await pj(`(async () => { const T = document.getElementById('gc').__rh, rh = T.st(); if (!rh.rpD) return 'pas de replay';
+    const R = await T.rpLoad(rh.rpD), a = document.getElementById('obAna'); return [R.f.length > 50, R.e.length > 2, R.song === rh.song, a.hidden ? 'cachée' : 'visible', document.querySelectorAll('#obAnaBtns button').length, T.osr(R, 'd41d8cd98f00b204e9800998ecf8427e') > 300].join(','); })()`);
+  if (rp !== 'true,true,true,visible,3,true') throw new Error('replay : ' + rp);
+  // revoir : le curseur et les frappes rejoués touchent des orbes, sans tes clics
+  await pj(`[...document.querySelectorAll('#obAnaBtns button')].find(b => /REVOIR/.test(b.textContent)).click(), 0`); await sleep(9000);
+  const rw = await pj(`(rh => [!!rh.replay, rh.mode, rh.counts.PARFAIT + rh.counts.BIEN + rh.counts.OK].join(','))(document.getElementById('gc').__rh.st())`);
+  await pj(`(g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1200);
+  if (!/^true,(play|over),[1-9]/.test(rw)) throw new Error('revoir le replay : ' + rw);
+  // DT garde la hauteur (musique étirée), NC la change
+  for (const [m, want] of [['DT', '1.5,1'], ['NC', '1.5,1.5']]) {
+    await pj(`document.querySelector('.obMod[data-m="${m}"]').click(), 0`); for (let i = 0; i < 40 && await pj(`document.querySelector('.rhBar')?.hidden === false`); i++) await sleep(300); await sleep(800);
+    await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(2500);
+    const v = await pj(`(rh => rh.rate + ',' + rh.pr)(document.getElementById('gc').__rh.st())`);
+    await pj(`(g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), document.querySelector('.obMod[data-m="${m}"]').click(), 0`); await sleep(1500);
+    if (v !== want) throw new Error(m + ' : taux, vitesse du son = ' + v);
+  }
+  // la boucle sur un passage : seulement ses notes, au ralenti
+  await pj(`document.getElementById('gc').__rh.sec(1, 4), 0`); await sleep(3000);
+  const sc = await pj(`(rh => [!!rh.section, rh.rate, rh.notes.every(n => n.t >= 1 && n.t <= 4), rh.notes.length].join(','))(document.getElementById('gc').__rh.st())`);
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })), 0`); await sleep(300);
+  await pj(`(g => { if (g.__rh.st().mode === 'play') g.__rh.finish(g.__rh.st().hist || []); })(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1000);
+  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })), 0`); await sleep(1500);
+  if (!/^true,0.75,true,[1-9]/.test(sc)) throw new Error('boucle : ' + sc);
+  // un exercice : des streams générés sur une batterie
+  await pj(`document.getElementById('rhTabTrain').click(), 0`); await sleep(300);
+  await pj(`(s => { s.value = 'stream'; s.dispatchEvent(new Event('change')); })(document.getElementById('obExK')), [...document.querySelectorAll('#rhSongs button')].find(b => /EXERCICE/.test(b.textContent)).click(), 0`);
+  for (let i = 0; i < 40 && await pj(`document.getElementById('gc').__rh.st().info?.ver !== 'Exercice'`); i++) await sleep(300);
+  const ex = await pj(`(rh => [rh.info.ver, rh.notes.length > 100, rh.ob.ar].join(','))(document.getElementById('gc').__rh.st())`); if (ex !== 'Exercice,true,9') throw new Error('exercice : ' + ex);
+  // un ami : son code collé l'ajoute au classement
+  await pj(`document.getElementById('rhTabStats').click(), 0`); await sleep(600);
+  const fr = await pj(`(async () => { const code = document.getElementById('gc').__rh.code().replace(/^ORBE1:(.*)$/, (m, b) => 'ORBE1:' + btoa(unescape(encodeURIComponent(JSON.stringify({...JSON.parse(decodeURIComponent(escape(atob(b)))), n: 'Ami test'})))));
+    const inp = [...document.querySelectorAll('#rhSongs input')].find(i => /code d'un ami/.test(i.placeholder)); inp.value = code; [...document.querySelectorAll('#rhSongs button')].find(b => b.textContent === 'AJOUTER').click();
+    await new Promise(r => setTimeout(r, 400)); return /Ami test/.test(document.getElementById('rhSongs').textContent) + ',' + /PALIERS DE PP/.test(document.getElementById('rhSongs').textContent) + ',' + /REPLAYS/.test(document.getElementById('rhSongs').textContent); })()`);
+  if (fr !== 'true,true,true') throw new Error('amis, paliers, replays : ' + fr);
+  await pj(`document.getElementById('rhTabSongs').click(), 0`); await sleep(300);
   // un skin osu! (.osk fabriqué ici : cercle, contour, cercle d'approche, curseur, chiffres, deux couleurs) déposé sur le jeu : la partie se dessine nette par-dessus
   const osk = await pj(`(async () => { const png = async (w, h, f) => { const c = document.createElement('canvas'); c.width = w; c.height = h; f(c.getContext('2d'), w, h); return new Uint8Array(await (await new Promise(r => c.toBlob(r, 'image/png'))).arrayBuffer()); };
       const ring = (lw, fill) => (x, w) => { x.beginPath(); x.arc(w / 2, w / 2, w / 2 - lw, 0, 7); if (fill) { x.fillStyle = '#c0c0c0'; x.fill(); } x.lineWidth = lw; x.strokeStyle = '#ffffff'; x.stroke(); };
@@ -175,5 +215,5 @@ module.exports = async ({ pj, sleep }) => {
   const stt = await pj(`document.getElementById('rhSongs').textContent`); await shot('stats-page'); if (!/PROFIL/.test(stt) || !/pp/.test(stt) || !/PAR STYLE ET DIFFICULTÉ/.test(stt) || !/TEMPS DE JEU ET ACTIVITÉ/.test(stt) || !/Mixte/.test(stt)) throw new Error('statistiques : ' + stt.replace(/\s+/g, ' ').slice(0, 1500));
   await pj(`[...document.querySelectorAll('#rhSongs .sysCard > b')].find(b => b.textContent === 'PAR STYLE ET DIFFICULTÉ')?.parentElement.scrollIntoView(), 0`); await sleep(300);
   const errs2 = await pj(`__e`); if (errs2.length) throw new Error(errs2.join(' | '));
-  return 'carte des temps ' + tm.join('/') + ', plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
+  return 'replay ' + rp + ', revu ' + rw + ', boucle ' + sc + ', exercice ok, amis ok, carte des temps ' + tm.join('/') + ', plein écran ok, compte « ' + count + ' », ' + sons + ' sons joués, ' + Math.round(1000 / avg) + ' i/s, 95e centile ' + s[Math.floor(s.length * .95)].toFixed(1) + ' ms';
 };

@@ -18,7 +18,7 @@ const HTML = `<div class="appWrap wide">
       <div class="hint obScan" id="obScanMsg" hidden></div>
       <div id="rhSongs"></div>
       <div class="obBottom"><button class="btn main" id="gNew">JOUER</button><button class="btn" id="obOptBtn">OPTIONS</button><button class="btn" id="obHelpBtn">AIDE</button></div>
-      <div class="sysCard rhOpts" id="obOpts" hidden><div class="row"><button class="btn" id="obOskBtn">IMPORTER UN SKIN OSU!</button><input type="file" id="obOsk" accept=".osk" hidden><button class="btn" id="obOskDel" hidden>RETIRER LE SKIN</button><span class="hint" id="obOskMsg">Un skin osu! (.osk) : ses cercles, son curseur, ses chiffres, ses couleurs et ses sons.</span></div><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="-1">Son des clics</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label title="Floute l'image de fond, comme dans osu!">Flou du fond <input type="range" id="obBlur" min="0" max="8" step="1" value="0"></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
+      <div class="sysCard rhOpts" id="obOpts" hidden><div class="row"><button class="btn" id="obOskBtn">IMPORTER UN SKIN OSU!</button><input type="file" id="obOsk" accept=".osk" hidden><button class="btn" id="obOskDel" hidden>RETIRER LE SKIN</button><span class="hint" id="obOskMsg">Un skin osu! (.osk) : ses cercles, son curseur, ses chiffres, ses couleurs et ses sons.</span></div><label title="Le refrain de la chanson choisie, avant de jouer">Écouter avant de jouer <select class="f gSel" id="obPrev"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="La musique">Musique <input type="range" id="rhVol" min="0" max="100" value="70"></label><label title="Les sons de frappe, des glissières et des toupies">Frappes <input type="range" id="obVolHs" min="0" max="100" value="70"></label><label title="Les sons du menu : changer de chanson, de difficulté, la note de fin, les médailles">Menu <input type="range" id="obVolUi" min="0" max="100" value="60"></label><label>Son des clics <select class="f gSel" id="rhClick"><option value="0" selected>Doux</option><option value="1">Clap</option><option value="2">Bois</option><option value="3">Grosse caisse</option><option value="4">Cristal</option><option value="5">Pop</option><option value="6">Charleston</option><option value="7">Caisse claire</option><option value="8">Pluck</option><option value="9">Tok</option><option value="-1">Aucun</option></select></label><label title="La vitesse du curseur en partie (la souris est capturée, sans l'accélération de Windows)">Sensibilité <input type="range" id="obSens" min="0.3" max="3" step="0.05" value="1"> <span id="obSensV">1.00×</span></label><label title="La taille du curseur">Curseur <select class="f gSel" id="obCurSize"><option value="1" selected>1×</option><option value="2">2×</option><option value="3">3×</option></select></label><label title="La traînée du curseur">Traînée <select class="f gSel" id="obTrail"><option value="0" selected>Celle du skin</option><option value="1">Longue</option><option value="2">Aucune</option></select></label><label title="Souris : capturée, sans l'accélération de Windows. Tablette : le curseur est là où pointe le stylet.">Pointage <select class="f gSel" id="obAbs"><option value="0" selected>Souris</option><option value="1">Tablette (absolu)</option></select></label><label title="L'allure des orbes et du curseur">Skin <select class="f gSel" id="obSkin"><option value="0" selected>Classique</option><option value="1">Épuré</option><option value="2">Néon</option><option value="3">Contraste</option><option value="4">Aube</option></select></label><label title="Les sons joués à chaque frappe, comme dans osu!">Hitsounds <select class="f gSel" id="obHs"><option value="0" selected>Normal</option><option value="1">Soft</option><option value="2">Drum</option><option value="3">8-bit</option><option value="5" title="Le jeu de sons écrit dans la map pour chaque note (Normal, Soft ou Drum)">Selon la map</option><option value="-1">Son des clics</option></select></label><label title="Le storyboard et la vidéo de fond de la map osu!, quand elle en a">Storyboard <select class="f gSel" id="obSb"><option value="1" selected>Oui</option><option value="0">Non</option></select></label><label title="Assombrit le fond pour mieux voir les orbes">Fond assombri <input type="range" id="obDim" min="0" max="100" step="5" value="20"> <span id="obDimV">20 %</span></label><label title="Floute l'image de fond, comme dans osu!">Flou du fond <input type="range" id="obBlur" min="0" max="8" step="1" value="0"></label><label>Décalage <input type="number" class="f" id="rhOffset" min="-300" max="300" step="5" value="0" style="width:80px" title="Réglé tout seul après chaque partie"> ms</label></div>
       <div class="obHelp" id="obHelp" hidden><div class="hint">Un cercle se resserre sur chaque orbe : vise-le avec la souris et clique (ou W / X) quand le cercle touche l'orbe. Touche-les dans l'ordre de leurs numéros.</div><div class="hint">Glissière : touche son orbe, puis garde le bouton enfoncé et suis la boule jusqu'au bout (et au retour). Toupie : garde appuyé et fais tourner la souris autour du centre avant que l'anneau se referme.</div><div class="hint">Comme dans osu! : une barre de vie (le mod NF empêche de perdre), des mods (EZ, NF, HT, HR, DT, HD, FL), les notes SS à D et le classement de chaque niveau. Garde ² appuyé pour recommencer tout de suite ; Espace passe une longue intro.</div><div class="hint">La difficulté de chaque niveau est calculée sur ses notes : de 1★ à 10★.</div></div>
     </div></div>
 </div>`;
@@ -423,7 +423,7 @@ const clock = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStar
 // petits outils communs aux jeux : une toile pré-dessinée, la position du pointeur dans le canevas, un bip
 const cnv = (w, h, fn) => { const c = el('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.imageSmoothingEnabled = false; fn(g); return c; };
 const spr = (rows, pal) => cnv(Math.max(...rows.map(r => r.length)), rows.length, g => sprite(g, rows, 0, 0, pal));
-let W = 320; const H = 240, cv = $('gc'), g = cv.getContext('2d'); g.imageSmoothingEnabled = false;
+let W = 320; const H = 240, cv = $('gc'), g = cv.getContext('2d', {desynchronized: true}); g.imageSmoothingEnabled = false;
 const cpos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; };
 let actx = null;
 const beep = (f, d = .1, type = 'square', slide = 0, vol = .08) => { try { actx ??= new AudioContext(); const o = actx.createOscillator(), gn = actx.createGain(), t = actx.currentTime; o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + d); gn.gain.setValueAtTime(vol, t); gn.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(gn).connect(actx.destination); o.start(t); o.stop(t + d + .02); } catch {} };
@@ -1015,7 +1015,7 @@ const rhOver = () => {
 const rhBar = p => { const b = rhOver().querySelector('.rhBar'); b.hidden = p == null; if (p != null) b.querySelector('b').style.width = Math.round(p * 100) + '%'; };
 function rhCount() {  // 3, 2, 1 jusqu'au départ de la musique (l'horloge audio : une pause arrête le compte)
   const c = rhOver().querySelector('.rhCount'), tick = () => {
-    const left = rh && rhCtx && (rh.mode === 'play' || rh.mode === 'pause') ? rh.t0 - rhCtx.currentTime : 0, n = left > 0 && left <= 3 ? String(Math.ceil(left)) : '';
+    const left = rh && rhCtx && (rh.mode === 'play' || rh.mode === 'pause') ? (rh.tStart ?? rh.t0) - rhCtx.currentTime : 0, n = left > 0 && left <= 3 ? String(Math.ceil(left)) : '';
     if (c.textContent !== n) c.textContent = n;
     if (left > 0) requestAnimationFrame(tick);
   };
@@ -1025,11 +1025,17 @@ let rhTok = 0;
 async function rhSelect(i, diff) { const me = rhTok + 1; rhBar(.03); try { return await rhPrepare(i, diff); } finally { if (me === rhTok) rhBar(null); } }
 async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou identifiant d'une musique importée
   let info, c, base, ready = null; const tok = ++rhTok;
+  obRpRestore(); obVidStop();
   obWide(true);  // toutes les maps en large (1.3.9) : le compteur de touches loin du terrain
   if (rh) { try { rh.src?.stop(); } catch {} rh.mode = 'load'; }
   if (typeof i === 'number') {
     const song = RH_SONGS[i] || RH_SONGS[0]; i = RH_SONGS.indexOf(song); c = rhCompose(song); base = rhChart(c, diff); info = {name: song.name, bpm: song.bpm, key: 'rh' + i + diff};
     const buffer = await rhRenderSong(i, c, tok); if (tok !== rhTok) return; c = {events: c.events, lead: c.lead, len: c.len, step: c.step, buffer, beat0: 0};  // la batterie reste : Orbe y place ses streams
+  } else if (String(i).startsWith('ex:')) {  // un exercice : ex:genre:BPM:minutes:notes:AR
+    const [, k, bpm, min, nn, ar] = i.split(':'), E = obExercise(k, +bpm, +min, {n: +nn});
+    const buffer = await rhRenderSong(i, {events: E.events, lead: [], len: E.len, step: E.step}, tok); if (tok !== rhTok) return;
+    c = {events: [], lead: [], len: E.len, step: E.step, buffer, beat0: 0}; ready = E.notes;
+    info = {name: (OB_EX[k] || k) + (k === 'stream' ? ' de ' + nn : '') + ' · ' + bpm + ' BPM', ver: 'Exercice', bpm: +bpm, key: 'obex' + k + bpm + 'm' + min + (k === 'stream' ? 'n' + nn : '') + (k === 'read' ? 'a' + ar : ''), osu: {cs: 4, ar: k === 'read' ? +ar : 9, od: 8, hp: 4, sl: .7, sy: 'Exercice'}};
   } else if (/^o\w+$/.test(i) && obOsuSets().some(x => x.id === i)) {
     const L = await obOsuLoad(i, diff); if (!L) return rhSelect(0, 'normal'); ({c, info, notes: ready} = L);
   } else {
@@ -1038,19 +1044,31 @@ async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou iden
     c = {events: [], lead: [], len: a.len, step: a.beat / 4, buffer, beat0: a.beat0, peaks: a.peaks, rms: a.rms, fps: a.fps, ...rhBeatMap(a)}; base = rhChartImport(a, diff); info = {name: imp.name, bpm: a.bpm, key: 'rhx' + imp.id + diff};
   }
   if (tok !== rhTok) return;  // un autre niveau a été choisi entre-temps
-  const notes = (ready || RHG.chart(base, c, diff, info)).map(n => ({...n, judged: false}));
+  let notes = (ready || RHG.chart(base, c, diff, info)).map(n => ({...n, judged: false}));
+  const sec = obSecNext && rh && i === rh.song && diff === rh.diff ? obSecNext : (obSecNext = null);
+  if (sec) notes = notes.filter(n => n.t >= sec.a && n.t <= sec.b);
   rh = rhHook(rh || {raf: 0, tick: 0});
   Object.assign(rh, {mode: 'ready', song: i, diff, c, info, notes, stars: (RHG.stars || rhStars)(notes, c.len, RHG.factor), src: null, t0: 0, score: 0, combo: 0, maxCombo: 0,
-    counts: {PARFAIT: 0, BIEN: 0, OK: 0, RATÉ: 0}, dts: [], fx: [], sparks: [], record: false, grade: '', acc: 0, adj: 0, overAt: 0});
-  RHG.reset(); games.rhythmLast = {song: i, diff};
+    counts: {PARFAIT: 0, BIEN: 0, OK: 0, RATÉ: 0}, dts: [], fx: [], sparks: [], record: false, grade: '', acc: 0, adj: 0, overAt: 0, replay: null, section: null, he: [], rpD: 0, rec: {f: [], e: []}, secMsg: ''});
+  RHG.reset();
+  if (sec) { rh.section = sec; rh.noSave = true; rh.rec = null; rh.skipTo = 0; rh.rate = sec.rate * (obMod('DT') ? 1.5 : obMod('HT') ? .75 : 1); rh.c = {...rh.c, len: Math.min(rh.c.len, sec.b + 1)}; }
+  $('obAna').hidden = true; games.rhythmLast = {song: i, diff};
   if (rhImports().some(x => x.id === i)) obImpStars()[i + ':' + diff] = Math.round(rh.baseStars * 100) / 100;  // ta musique : ses étoiles pour la liste
   saveGames(); rhList();
   gameLoop(rh, RHG.key, RHG.update, rhDrawAll); obPreview();
 }
+const obSrc = (at, T = 0) => {  // la source du morceau : étirée à la vitesse du mod (hauteur gardée), ou accélérée telle quelle en NC et DC
+  const keep = rh.rate !== 1 && !obModSet.has('NC') && !obModSet.has('DC'), s = rhCtx.createBufferSource();
+  s.buffer = keep ? obStretch(String(rh.info?.key || rh.song), rh.c.buffer, rh.rate) : rh.c.buffer; rh.pr = keep ? 1 : rh.rate; s.playbackRate.value = rh.pr;
+  s.connect(rhOut); s.start(at, keep ? T / rh.rate : T); return s;
+};
 const rhFull = on => { try { if (on && !document.fullscreenElement) cv.parentElement.requestFullscreen?.().catch(() => {}); if (!on && document.fullscreenElement) document.exitFullscreen(); } catch {} };
 function rhBegin(lead = 4) {  // plein écran (par-dessus la barre de NeoDex), puis le morceau part après le compte à rebours
-  rhFull(true); rhAudio(); rhCtx.resume(); rh.pv = null; rh.t0 = rhCtx.currentTime + lead; rh.hist = []; rhCount(); rh.mode = 'play';
-  try { rh.src?.stop(); } catch {} rh.src = rhCtx.createBufferSource(); rh.src.buffer = rh.c.buffer; rh.src.playbackRate.value = rh.rate || 1; rh.src.connect(rhOut); rh.src.start(rh.t0);
+  rhFull(true); rhAudio(); rhCtx.resume(); rh.pv = null;
+  if (rh.rate !== 1 && !obModSet.has('NC') && !obModSet.has('DC')) obStretch(String(rh.info?.key || rh.song), rh.c.buffer, rh.rate);  // étirée avant de fixer le départ (1 à 3 s pour un long morceau)
+  const T = rh.section ? Math.max(0, rh.section.a - 1.5) : 0; rh.tStart = rhCtx.currentTime + lead;
+  rh.t0 = rh.tStart - T / rh.rate; rh.hist = []; rhCount(); rh.mode = 'play';
+  try { rh.src?.stop(); } catch {} rh.src = obSrc(rh.tStart, T);
 }
 function rhPress() {  // espace ou clic hors partie : jouer, reprendre, rejouer
   if (!rh) return false;
@@ -1059,7 +1077,7 @@ function rhPress() {  // espace ou clic hors partie : jouer, reprendre, rejouer
   if (rh.mode === 'over') { if (rh.tick - rh.overAt > 40) rhSelect(rh.song, rh.diff); return true; }
   return false;
 }
-function rhPause() { if (rh?.mode === 'play') { rh.mode = 'pause'; rh.menu = 0; rh.pausedAt = performance.now(); rhCtx?.suspend(); } }
+function rhPause() { if (rh?.mode === 'play') { rh.mode = 'pause'; rh.menu = 0; rh.pausedAt = performance.now(); rhCtx?.suspend(); obVidStop(); } }
 const rhWin = dt => RH.WIN.find(w => Math.abs(dt) <= w[0]);
 function rhHit(n, dt) {  // -> la fenêtre atteinte (PARFAIT, BIEN, OK), ou rien si la note est ratée
   const w = rhWin(dt); n.judged = true; if (!w) { rhMissed(n); return null; }
@@ -1079,6 +1097,7 @@ function rhCheckEnd(now) {
     rh.adj = rhAutoOffset(rh.dts);
   }
   saveGames(); rhList(); rhInfo(); RHG.done?.();
+  if (rh.section) obSecEnd(); obAnaShow();
   return true;
 }
 function rhOffsetStep(dts) {  // décalage automatique : si tu tapes en moyenne en retard (ou en avance), on corrige de 70 % de l'écart
@@ -1151,10 +1170,11 @@ function rhPager(order) {  // 1200 chansons : 50 par page (sinon la liste est tr
   };
 }
 function rhList() {
-  $('rhTabSongs').classList.toggle('main', rhTab === 'songs'); $('rhTabMine').classList.toggle('main', rhTab === 'mine'); $('rhTabStats')?.classList.toggle('main', rhTab === 'stats');
+  $('rhTabSongs').classList.toggle('main', rhTab === 'songs'); $('rhTabMine').classList.toggle('main', rhTab === 'mine'); $('rhTabStats')?.classList.toggle('main', rhTab === 'stats'); $('rhTabTrain')?.classList.toggle('main', rhTab === 'train'); if ($('obBrowse')) $('obBrowse').style.display = rhTab === 'mine' ? '' : 'none';
   $('rhTabMine').textContent = 'IMPORTER · ' + (rhImports().length + obOsuSets().length); $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
   $('obFilter').hidden = rhTab !== 'songs'; $('rhSongs').classList.toggle('obCar', rhTab === 'songs'); if (rhTab !== 'songs') $('obScanMsg').hidden = true;
-  if (rhTab === 'stats') return void $('rhSongs').replaceChildren(...obStatsPage());
+  if (rhTab === 'train') return void $('rhSongs').replaceChildren(...obTrainCards());
+  if (rhTab === 'stats') { const box = $('rhSongs'), {pp} = obProfile(); box.replaceChildren(...obStatsPage(), obPpCard(pp), obFriendCard()); obRpCard().then(c => { if (rhTab === 'stats') box.insertBefore(c, box.children[1] || null); }); return; }
   if (rhTab === 'mine' && !$('rhMuList').options.length) rhFillNeoMusic();
   if (rhTab === 'songs') {
     const res = games?.rhythm || {}, {L, rows} = obOrder(), all = obItems();
@@ -1229,7 +1249,7 @@ $('rhClick').onchange = () => { rhAudio(); rhCtx.resume(); rhClick(); };  // le 
 $('rhVol').oninput = () => { if (rhOut) rhOut.gain.value = +$('rhVol').value / 100 * .6; };
 $('obVolHs').oninput = () => { if (rhHs) rhHs.gain.value = +$('obVolHs').value / 100 * .6; };
 $('obVolUi').addEventListener('change', () => obUi('tick'));  // pour l'entendre
-for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
+for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obSb', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) $(id).addEventListener('change', () => { gstore('rhythmPrefs', {})[id] = $(id).value; saveGames(); });
 setInterval(() => { if (rhCtx?.state === 'running' && (!view.classList.contains('on') || (rh?.mode !== 'play' && rh?.mode !== 'fail' && !(rh?.mode === 'ready' && rh.pv)))) rhCtx.suspend(); }, 200);  // l'aperçu du départ tourne aussi  // la musique s'arrête avec la partie
 document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) rhPause(); });  // Échap sort du plein écran : on met en pause
 $('gNew').onclick = () => { if (rh) rhSelect(rh.song, rh.diff); $('gNew').blur(); };
@@ -1260,7 +1280,7 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 
 function rhOpen() {
   obWide(true);
-  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
+  const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obSb', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
   for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';
   obOsuRestar();
   if (games.orbeVar || games.orbeVarSt) { delete games.orbeVar; delete games.orbeVarSt; saveGames(); }  // les variantes de map sont retirées depuis la 1.3.7  // un choix d'une ancienne version (« 3 à 5 ★ ») : toutes
@@ -1915,16 +1935,47 @@ const obStars = ns => obStarsX(ns).stars;
   console.assert(wide.stars > tight.stars + 1 && wide.stars > 3 && wide.stars < 9 && st.speed > tight.speed && st.stars > 2 && fl.stars > wide.stars && [wide, tight, st, fl].every(x => isFinite(x.stars)), 'obStarsX', wide.stars, tight.stars, st.stars, fl.stars);
 }
 // les mods, comme dans osu! : [nom, effet, multiplicateur des points]
+// DT et HT gardent la hauteur de la musique (étirée d'avance, comme osu!) ; NC et DC la changent avec la vitesse
+function obWsola(chs, rate) {
+  const N = 1024, Ho = N / 2, Hi = Ho * rate, tol = 256, L = chs[0].length, n = Math.ceil(L / rate) + N, out = chs.map(() => new Float32Array(n));
+  const mono = chs.length === 1 ? chs[0] : Float32Array.from(chs[0], (v, i) => (v + chs[1][i]) / 2), w = Float32Array.from({length: N}, (_, i) => .5 - .5 * Math.cos(2 * Math.PI * i / N));
+  let prev = 0;
+  for (let k = 0, op = 0; op + N <= n; k++, op += Ho) {
+    let p = Math.round(k * Hi); if (p + N >= L) break;
+    if (k) {
+      const nat = prev + Ho, sc = (q, st) => { let s = 0; for (let i = 0; i < Ho; i += st) s += mono[nat + i] * mono[q + i]; return s; };
+      let best = -Infinity, bp = p;
+      for (let d = -tol; d <= tol; d += 8) { const q = p + d; if (q >= 0 && q + N < L) { const s = sc(q, 4); if (s > best) { best = s; bp = q; } } }
+      const c = bp; best = -Infinity;
+      for (let d = -7; d <= 7; d++) { const q = c + d; if (q >= 0 && q + N < L) { const s = sc(q, 2); if (s > best) { best = s; bp = q; } } }
+      p = bp;
+    }
+    for (let c = 0; c < chs.length; c++) { const x = chs[c], y = out[c]; for (let i = 0; i < N; i++) y[op + i] += x[p + i] * w[i]; }
+    prev = p;
+  }
+  return out;
+}
+{ // contrôle : un la (440 Hz) joué ×1,5 reste un la, et dure 1,5 fois moins
+  const sr = 44100, x = Float32Array.from({length: sr}, (_, i) => Math.sin(2 * Math.PI * 440 * i / sr)), [y] = obWsola([x], 1.5), a = 4000, b = 24000; let z = 0;
+  for (let i = a; i < b; i++) if (y[i - 1] < 0 && y[i] >= 0) z++;
+  console.assert(Math.abs(z / ((b - a) / sr) - 440) < 12 && Math.abs(y.length - Math.ceil(sr / 1.5) - 1024) < 2, 'obWsola', z);
+}
+const obStretched = new Map();
+function obStretch(key, buf, rate) {
+  if (rate === 1 || !buf) return buf; const k = key + '@' + rate; if (obStretched.has(k)) return obStretched.get(k);
+  const chs = Array.from({length: Math.min(2, buf.numberOfChannels)}, (_, c) => buf.getChannelData(c)), out = obWsola(chs, rate), b = rhCtx.createBuffer(out.length, out[0].length, buf.sampleRate);
+  out.forEach((d, c) => b.copyToChannel(d, c)); if (obStretched.size > 3) obStretched.delete(obStretched.keys().next().value); obStretched.set(k, b); return b;
+}
 const OB_MODS = [['EZ', 'Facile : orbes plus grands et plus lents, précision et vie plus douces', .5], ['NF', 'Sans échec : la vie vide ne fait pas perdre', .5],
   ['HT', 'Ralenti : le morceau à 75 %', .3], ['HR', 'Dur : orbes plus petits et plus rapides, précision et vie plus sévères, terrain retourné', 1.06],
-  ['DT', 'Accéléré : le morceau à 150 %', 1.12], ['HD', 'Caché : pas de cercle d\'approche, les orbes s\'effacent avant le bon moment', 1.06], ['FL', 'Lampe : on ne voit qu\'autour du curseur', 1.12],
+  ['DT', 'Accéléré : le morceau à 150 %', 1.12], ['NC', 'Nightcore : comme DT, la musique plus aiguë', 1.12], ['DC', 'Daycore : comme HT, la musique plus grave', .3], ['HD', 'Caché : pas de cercle d\'approche, les orbes s\'effacent avant le bon moment', 1.06], ['FL', 'Lampe : on ne voit qu\'autour du curseur', 1.12],
   ['SD', 'Mort subite : un seul raté et la partie est perdue', 1], ['PF', 'Perfection : tout ce qui n\'est pas un 300 fait perdre', 1],
   ['RX', 'Relax : pas besoin de cliquer, il suffit de viser (pas de pp)', .1], ['AP', 'Pilote : le curseur bouge tout seul, tu cliques (pas de pp)', .1],
   ['AT', 'Auto : regarde le jeu jouer tout seul (rien n\'est enregistré)', 1]];
-const OB_EXCL = {EZ: ['HR'], HR: ['EZ'], HT: ['DT'], DT: ['HT'], NF: ['SD', 'PF', 'AT'], SD: ['NF', 'PF', 'RX', 'AP', 'AT'], PF: ['NF', 'SD', 'RX', 'AP', 'AT'],
+const OB_EXCL = {EZ: ['HR'], HR: ['EZ'], HT: ['DT', 'NC', 'DC'], DT: ['HT', 'NC', 'DC'], NC: ['DT', 'HT', 'DC'], DC: ['DT', 'HT', 'NC'], NF: ['SD', 'PF', 'AT'], SD: ['NF', 'PF', 'RX', 'AP', 'AT'], PF: ['NF', 'SD', 'RX', 'AP', 'AT'],
   RX: ['AP', 'AT', 'SD', 'PF'], AP: ['RX', 'AT', 'SD', 'PF'], AT: ['NF', 'SD', 'PF', 'RX', 'AP']};
 let obModSet = new Set();
-const obMod = m => obModSet.has(m), obModTxt = () => OB_MODS.map(m => m[0]).filter(obMod).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obMod(m[0]) ? m[2] : 1), 1);
+const obMod = m => obModSet.has(m) || (m === 'DT' && obModSet.has('NC')) || (m === 'HT' && obModSet.has('DC')), obModTxt = () => OB_MODS.map(m => m[0]).filter(m => obModSet.has(m)).join(''), obModMult = () => OB_MODS.reduce((k, m) => k * (obModSet.has(m[0]) ? m[2] : 1), 1);
 function obStatsM(diff, len) {  // les réglages du niveau avec les mods : EZ les divise par deux, HR les multiplie par 1,4 (la taille par 1,3), jamais plus de 10
   const O = rh?.info?.osu, s0 = obStats(diff, len, rh?.info && obVarStyle(rh.info.key), rh?.notes && rh.diff === diff ? rh.baseStars : null), s = O ? {...s0, ...O, st: {...s0.st, name: O.sy || 'osu!'}} : s0, f = obMod('HR') ? 1.4 : obMod('EZ') ? .5 : 1, cs = obClamp(s.cs * (obMod('HR') ? 1.3 : obMod('EZ') ? .5 : 1), 0, 10);
   const ar = obClamp(s.ar * f, 0, 10), od = obClamp(s.od * f, 0, 10), hp = obClamp((O ? O.hp : obClamp(2 + s.lv * .55 + s.st.od, 2, 9)) * f, 0, 10);
@@ -2010,16 +2061,18 @@ function obOsuParse(txt) {
   const num = (v, d) => v == null || v === '' || isNaN(+v) ? d : +v;
   const od = num(D.OverallDifficulty, 5), cs = num(D.CircleSize, 5), ar = num(D.ApproachRate, od), hp = num(D.HPDrainRate, 5), svm = num(D.SliderMultiplier, 1.4), tr = num(D.SliderTickRate, 1);
   const tps = (S.TimingPoints || []).map(l => l.split(',').map(Number)).filter(p => p.length >= 2 && isFinite(p[0]) && isFinite(p[1]))
-    .map(p => ({t: p[0], bl: p[1], red: p[6] == null || p[6] === 1, kiai: ((p[7] || 0) & 1) === 1})).sort((a, b) => a.t - b.t || b.red - a.red);
+    .map(p => ({t: p[0], bl: p[1], red: p[6] == null || p[6] === 1, kiai: ((p[7] || 0) & 1) === 1, ss: p[3] >= 1 && p[3] <= 3 ? p[3] : 0})).sort((a, b) => a.t - b.t || b.red - a.red);
   const reds = tps.filter(p => p.red && p.bl > 0); if (!reds.length) throw new Error('pas de tempo dans la map');
   const bgm = (S.Events || []).map(l => /^0\s*,\s*0\s*,\s*"([^"]+)"/.exec(l) || /^0\s*,\s*0\s*,\s*([^,]+)/.exec(l)).find(Boolean);
-  const notes = []; let ti = -1, bl = reds[0].bl, sv = 1, kiai = false, combo = 0, col = -1, prevSpin = true;
+  const notes = []; let ti = -1, bl = reds[0].bl, sv = 1, kiai = false, combo = 0, col = -1, prevSpin = true, tss = {Normal: 1, Soft: 2, Drum: 3}[G.SampleSet] || 1;
   for (const l of S.HitObjects || []) {
     const f = l.split(','), x = +f[0], y = +f[1], t = +f[2], type = +f[3], hs = +f[4] || 0; if (!isFinite(t)) continue;
-    while (ti + 1 < tps.length && tps[ti + 1].t <= t + .5) { const p = tps[++ti]; if (p.red) { if (p.bl > 0) bl = p.bl; sv = 1; } else sv = p.bl < 0 ? obClamp(-100 / p.bl, .1, 10) : 1; kiai = p.kiai; }
-    if (type & 8) { notes.push({t: t / 1000, len: Math.max(.05, (+f[5] - t) / 1000), kind: 'spin', x: 128, y: 96, combo: 0, col: Math.max(0, col), hs, kiai}); prevSpin = true; continue; }
+    while (ti + 1 < tps.length && tps[ti + 1].t <= t + .5) { const p = tps[++ti]; if (p.red) { if (p.bl > 0) bl = p.bl; sv = 1; } else sv = p.bl < 0 ? obClamp(-100 / p.bl, .1, 10) : 1; kiai = p.kiai; if (p.ss) tss = p.ss; }
+    // le jeu de sons de la note (« normal:ajouts:… » à la fin de la ligne), sinon celui du point de tempo ; les ajouts suivent le jeu principal
+    const hsm = (/^(\d):(\d)/.exec(f[type & 8 ? 6 : type & 2 ? 10 : 5] || '') || []).map(Number), ss = hsm[1] || tss, as = hsm[2] || ss;
+    if (type & 8) { notes.push({t: t / 1000, len: Math.max(.05, (+f[5] - t) / 1000), kind: 'spin', x: 128, y: 96, combo: 0, col: Math.max(0, col), hs, ss, as, kiai}); prevSpin = true; continue; }
     if (type & 4 || prevSpin) { combo = 0; col += 1 + ((type >> 4) & 7); } prevSpin = false;
-    const o = {t: t / 1000, len: 0, kind: 'circle', x: x / 2, y: y / 2, combo: ++combo, col, hs, kiai};
+    const o = {t: t / 1000, len: 0, kind: 'circle', x: x / 2, y: y / 2, combo: ++combo, col, hs, ss, as, kiai};
     if (type & 2) {
       const [ct, ...cp] = f[5].split('|'), reps = Math.max(1, +f[6] || 1), len = +f[7] || 0, segs = [{t: ct[0], p: [[x, y]]}];
       // les maps d'osu! lazer changent de type de courbe en route (« B|…|P|… ») : chaque morceau repart du dernier point du précédent
@@ -2032,16 +2085,16 @@ function obOsuParse(txt) {
   if (!notes.length) throw new Error('la map est vide');
   const main = reds.map((p, i) => [p, (reds[i + 1]?.t ?? notes.at(-1).t * 1000) - p.t]).sort((a, b) => b[1] - a[1])[0][0];  // le tempo qui dure le plus
   return {src: txt, title: M.Title || M.TitleUnicode || '?', artist: M.Artist || '', creator: M.Creator || '', version: M.Version || '?', set: +M.BeatmapSetID > 0 ? +M.BeatmapSetID : 0,
-    audio: G.AudioFilename || '', bg: bgm ? bgm[1].trim() : '', cols, border: hx(CO.SliderBorder), track: hx(CO.SliderTrackOverride), preview: num(G.PreviewTime, -1) / 1000, cs, ar, od, hp, notes, step: main.bl / 4000, beat0: main.t / 1000, bpm: Math.round(60000 / main.bl)};
+    audio: G.AudioFilename || '', bg: bgm ? bgm[1].trim() : '', sl: num(G.StackLeniency, .7), cols, border: hx(CO.SliderBorder), track: hx(CO.SliderTrackOverride), preview: num(G.PreviewTime, -1) / 1000, cs, ar, od, hp, notes, step: main.bl / 4000, beat0: main.t / 1000, bpm: Math.round(60000 / main.bl)};
 }
 { // contrôle : une petite map (cercle, glissière en arc, Bézier coupée, toupie), les combos, la durée des glissières, la longueur à ÷ 2
   const m = obOsuParse('osu file format v14\n[General]\nAudioFilename: a.mp3\nMode: 0\n[Metadata]\nTitle:T\nVersion:Hard\nBeatmapSetID:7\n[Difficulty]\nHPDrainRate:5\nCircleSize:4\nOverallDifficulty:8\nApproachRate:9\nSliderMultiplier:1.4\n'
     + '[Events]\n0,0,"bg.jpg",0,0\n[TimingPoints]\n0,500,4,2,0,50,1,0\n1000,-50,4,2,0,50,0,1\n[HitObjects]\n100,100,500,5,0\n200,200,1000,2,0,P|250:150|300:200,1,140\n'
-    + '50,50,2000,6,0,B|100:50|100:50|150:100,2,100\n256,192,3000,12,0,4000\n10,10,5000,1,8\n');
+    + '50,50,2000,6,0,B|100:50|100:50|150:100,2,100\n256,192,3000,12,0,4000\n10,10,5000,1,8,3:1:0:0:\n');
   const [a, b, c, s, e] = m.notes, L = p => p.pts.at(-1)[2];
   console.assert(m && m.notes.length === 5 && m.bg === 'bg.jpg' && m.ar === 9 && m.set === 7 && m.bpm === 120 && a.combo === 1 && b.combo === 2 && c.combo === 1 && c.col === 1 && s.kind === 'spin' && e.combo === 1 && e.col === 2
     && b.kind === 'slide' && Math.abs(L(b) - 70) < .6 && Math.abs(b.len - 140 / (1.4 * 100 * 2) * .5) < .01 && Math.abs(L(c) - 50) < .6 && c.reps === 2 && Math.abs(c.len - 100 / 280 * .5 * 2) < .01
-    && b.kiai && Math.abs(s.len - 1) < 1e-9 && e.hs === 8, 'obOsuParse', m.notes);
+    && b.kiai && Math.abs(s.len - 1) < 1e-9 && e.hs === 8 && a.ss === 2 && a.as === 2 && e.ss === 3 && e.as === 1, 'obOsuParse', m.notes);
   const arc = obOsuPts(obOsuCurve('P', [[0, 0], [100, 100], [200, 0]]), 300), mid = arc.find(q => q[2] >= 75);  // un demi-cercle de rayon 100 (50 dans Orbe), coupé à 150
   console.assert(Math.abs(arc.at(-1)[2] - 150) < .01 && Math.abs(Math.hypot(mid[0] - 50, mid[1]) - 50) < .5, 'arc', arc.at(-1));
   // une glissière d'osu! lazer (une ligne puis un arc) : des points finis, serrés, coupés à la longueur
@@ -2108,6 +2161,7 @@ async function obOszImport(f) {
     c.getContext('2d').drawImage(im, (640 - im.width * k) / 2, (480 - im.height * k) / 2, im.width * k, im.height * k);
     await folder.writeFile(id + '-bg.jpg', c.toDataURL('image/jpeg', .85).split(',')[1]); bg = true;
   } catch {}
+  msg('Copie du storyboard et de la vidéo…'); const sbv = await obSbImport(z, get, id, m0);
   const diffs = [];
   for (const m of maps) {
     const k = diffs.length, st = obStarsX(m.notes, m.od, 1, {cs: m.cs, ar: m.ar}).stars;
@@ -2115,7 +2169,7 @@ async function obOszImport(f) {
     diffs.push({v: m.version, f: id + '-' + k + '.osu', st: Math.round(st * 100) / 100, sy: obOsuStyle(m), cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, n: m.notes.length, len: Math.round(m.notes.at(-1).t + (m.notes.at(-1).len || 0))});
   }
   diffs.sort((a, b) => a.st - b.st);
-  const L = obOsuSets(), e = {id, name: (m0.artist ? m0.artist + ' - ' : '') + m0.title, creator: m0.creator, set: m0.set, audio: id + '-audio.' + ext, bg, bpm: m0.bpm, preview: m0.preview, diffs, d: Date.now()};
+  const L = obOsuSets(), e = {id, name: (m0.artist ? m0.artist + ' - ' : '') + m0.title, creator: m0.creator, set: m0.set, audio: id + '-audio.' + ext, bg, ...(sbv.sb ? {sb: 1} : {}), ...(sbv.vid ? {vid: sbv.vid} : {}), bpm: m0.bpm, preview: m0.preview, diffs, d: Date.now()};
   const old = L.findIndex(x => x.id === id); if (old >= 0) L[old] = e; else L.push(e);
   obOsuCache.delete(id); saveGames(); rhTab = 'songs'; rhList();
   msg('« ' + e.name + ' » : ' + diffs.length + ' difficulté' + (diffs.length > 1 ? 's' : '') + ' importée' + (diffs.length > 1 ? 's' : '') + '.');
@@ -2136,12 +2190,13 @@ async function obOsuLoad(id, diff) {  // -> {c, info, notes} pour rhPrepare
       const im = await createImageBitmap(new Blob([await obFileBytes(id + '-bg.jpg')])), c = cnv(W, H, () => {}), k = Math.max(W / im.width, H / im.height), b = c.getContext('2d');
       b.imageSmoothingEnabled = true; b.drawImage(im, (W - im.width * k) / 2, (H - im.height * k) / 2, im.width * k, im.height * k); C.bg = c;
     } catch {}
+    await obSbLoad(s, C);
     obOsuCache.set(id, C);
   }
   const m = obOsuParse(new TextDecoder().decode(await obFileBytes(d.f))), r = Math.round(27.2 - 2.24 * m.cs), end = Math.max(...m.notes.map(n => n.t + (n.len || 0)));
   const nc = m.cols.length || OB.COLS.length; for (const n of m.notes) { n.r = r; n.col = (n.col % nc + nc) % nc; }  // les couleurs de la map si elle en a
   return {notes: m.notes, c: {events: [], lead: [], len: Math.min(C.buffer.duration, end + 1), step: m.step, beat0: m.beat0, buffer: C.buffer},
-    info: {name: s.name + ' [' + d.v + ']', ver: d.v, bpm: m.bpm, key: 'osu' + id + '|' + d.v, preview: s.preview, bg: C.bg, osu: {cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, sy: d.sy || obOsuStyle(m), cols: m.cols, border: m.border, track: m.track}}};
+    info: {name: s.name + ' [' + d.v + ']', ver: d.v, bpm: m.bpm, key: 'osu' + id + '|' + d.v, preview: s.preview, bg: C.bg, sb: C.sb, video: C.video, osu: {cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, sl: m.sl, sy: d.sy || obOsuStyle(m), cols: m.cols, border: m.border, track: m.track}}};
 }
 function obOsuCards() {  // les maps osu! dans MES MUSIQUES : une carte par map, un bouton par difficulté (avec ses étoiles)
   const res = games.rhythm || {};
@@ -2311,7 +2366,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
       hp: 1, hpHist: [], hpT: -9, failed: false, errs: [], kc: {K1: 0, K2: 0, M1: 0, M2: 0}, dScore: 0, cPop: 0, lastCombo: 0, lastNow: null, menu: 0, retryAt: 0, retrying: false, rank: 0, sliding: false, spinning: 0, noSave: obMod('AT'), ai: 0, pp: 0, resT: 0, resSnd: 0, pick: null, aim: [], tl: [], tlNext: 0, run: (games.orbeRun || {})[rh.info ? obKey() : ''] || null, var: rh.info ? (games.orbeVar || {})[rh.info.key] || 0 : 0});
     rh.disc = OB.COLS.map(c => obDisc(c, rh.r)); rh.ghost = obDisc('#3a3058', rh.r);
     obPrep(); if (obMod('FL')) [110, 70, 58, 46].forEach(obFlashCnv);
-    if (rhCtx && rh.info) { obOskKit(); obSet(+$('obHs').value); obExtra ??= (rhKit ??= rhKitMake()).extra(); }  // les sons prêts avant de jouer : rien à fabriquer pendant la partie
+    if (rhCtx && rh.info) { obOskKit(); obSet(+$('obHs').value); if ($('obHs').value === '5') for (const s of [1, 2]) obSet(s); obExtra ??= (rhKit ??= rhKitMake()).extra(); }  // les sons prêts avant de jouer : rien à fabriquer pendant la partie
     obTopShow();
   },
   update() {  // 60 fois par seconde : ce qui bouge à l'écran ; le jeu lui-même se joue à chaque image de l'écran (obLogic)
@@ -2320,12 +2375,12 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     if (rh.shake) rh.shake--;
     rhCheckEnd(rhNow());
   },
-  draw() { obDraw(); },
+  draw() { obDraw(); if (rh.replay) obRpHud(); },
   acc(end) { const c = rh.counts, n = c.PARFAIT + c.BIEN + c.OK + c['RATÉ'], d = end ? Math.max(n, rh.notes.length) : n; return d ? (c.PARFAIT * 300 + c.BIEN * 100 + c.OK * 50) / (d * 300) : 1; },
   grade(acc) { return obGrade(rh.counts, rh.notes.length, acc); },
   score(w, cb) { const v = {PARFAIT: 300, BIEN: 100, OK: 50}[w[1]] || 0; return Math.round(v + v * cb * (rh.dm || 1) * obModMult() / 25); },  // la formule d'osu! : le combo d'avant, la difficulté, les mods
-  hit(n, w, dt) { if (obMod('PF') && w[1] !== 'PARFAIT' && rh.mode === 'play') obFail(); obHp(obGain() * (w[1] === 'PARFAIT' ? 1 : w[1] === 'BIEN' ? .4 : -.1)); if (n.kind !== 'spin') { rh.errs.push([performance.now(), dt / rh.pk, w[3]]); obHs(n, 'head'); } },
-  miss() { if ((obMod('SD') || obMod('PF')) && rh.mode === 'play') obFail(); obHp(-(.04 + rh.ob.hp * .015)); },
+  hit(n, w, dt) { if (n.kind !== 'spin') (rh.he ??= []).push([n.t, Math.round(dt / rh.pk * 10000) / 10]); if (obMod('PF') && w[1] !== 'PARFAIT' && rh.mode === 'play') obFail(); obHp(obGain() * (w[1] === 'PARFAIT' ? 1 : w[1] === 'BIEN' ? .4 : -.1)); if (n.kind !== 'spin') { rh.errs.push([performance.now(), dt / rh.pk, w[3]]); obHs(n, 'head'); } },
+  miss(n) { if (n && n.kind !== 'spin') (rh.he ??= []).push([n.t, null]); if ((obMod('SD') || obMod('PF')) && rh.mode === 'play') obFail(); obHp(-(.04 + rh.ob.hp * .015)); },
   hsOn: () => +$('obHs').value >= 0 && rh?.mode === 'play',
   screens() {
     if (rh.mode === 'ready') { obReadyDraw(); return true; }
@@ -2340,7 +2395,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     const c = rh.counts, e0 = rh.errs.map(x => x[1] * 1000), mu = e0.length ? e0.reduce((a, b) => a + b, 0) / e0.length : 0;
     rh.ur = e0.length ? Math.sqrt(e0.reduce((a, b) => a + (b - mu) ** 2, 0) / e0.length) * 10 : 0;
     rh.pp = rh.failed ? 0 : obPP(rh.sx, {acc: rh.acc, n300: c.PARFAIT, n100: c.BIEN, n50: c.OK, miss: c['RATÉ'], combo: rh.maxCombo, fc: rh.fc, od: rh.ob.od, ar: rh.ob.ar, rate: rh.rate, mods: rh.mods.match(/../g) || []});
-    const H = gstore('orbeHist', []), a = Math.round(rh.acc * 10000) / 100, played = ((rh.failed ? rh.failNow : rh.lastEnd) - rh.first) / rh.rate;
+    const pp0 = obProfile().pp, H = gstore('orbeHist', []), a = Math.round(rh.acc * 10000) / 100, played = ((rh.failed ? rh.failNow : rh.lastEnd) - rh.first) / rh.rate;
     const am = rh.aim.length >= 8 ? Math.round(rh.aim.reduce((s0, q) => s0 + q[0], 0) / rh.aim.length * 100) : null;
     H.push({ai: am, d: Date.now(), k: obKey(), n: rh.info.name, df: RH_DIFFS[rh.diff] || rh.info.ver || 'Perso', s: rh.score, a, ur: Math.round(rh.ur), pp: rh.pp, g: rh.failed ? 'F' : rh.grade, m: rh.mods, f: rh.failed ? 1 : 0, t: Math.max(0, Math.round(played)), c: rh.maxCombo, st: Math.round(rh.stars * 100) / 100, F: !rh.failed && !c['RATÉ'] && rh.maxCombo >= rh.fc ? 1 : 0, sy: rh.ob.st.name, cl: Object.values(rh.kc).reduce((x, y) => x + y, 0)});
     { const had = new Map(obMedals(H.slice(0, -1)).map(m => [m.id, m.tier])); for (const m of obMedals(H)) if (m.tier > (had.get(m.id) || 0)) { toast('Médaille : ' + m.name + ' · ' + OB_TIER[m.tiers.length > 1 ? m.tier - 1 : 2][0] + ' · ' + m.desc(m.tiers[m.tier - 1])); setTimeout(() => obUi('medal'), 2200); } }
@@ -2348,20 +2403,48 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     if (!rh.failed) { const L = (gstore('orbeTop', {})[obKey()] ??= []), e = {s: rh.score, a, g: rh.grade, c: rh.maxCombo, x: c['RATÉ'], m: rh.mods, pp: rh.pp, d: Date.now()};
       L.push(e); L.sort((p, q) => q.s - p.s); L.length = Math.min(L.length, 10); rh.rank = L.indexOf(e) + 1;
       if (rh.rank === 1) gstore('orbeRun', {})[obKey()] = [...rh.tl, rh.score]; }  // le n° 1 : son score au fil du morceau, pour la comparaison en partie
+    const hd = H.at(-1).d, pp1 = obProfile().pp, ms = rh.he.filter(h => h[1] == null).map(h => Math.round(h[0] * 10) / 10);
+    for (const v of OB_PPM) if (pp0 < v && pp1 >= v) setTimeout(() => toast('Palier atteint : ' + v + ' pp !'), 3200);
+    obRpSave({song: rh.song, diff: rh.diff, mods: [...obModSet], key: obKey(), n: rh.info.name, df: H.at(-1).df, s: rh.score, a, g: rh.failed ? 'F' : rh.grade, c: [c.PARFAIT, c.BIEN, c.OK, c['RATÉ']], cb: rh.maxCombo, fc: rh.fc, pp: rh.pp, d: hd, ms})
+      .then(d => { if (d && rh?.info && obKey() === H.at(-1)?.k) { rh.rpD = d; obAnaShow(); } });
     saveGames(); obTopShow(); if (rhTab === 'stats') rhList();
   },
 };
 // ce que le niveau prépare avant de jouer : le terrain retourné (HR), l'empilement, les tics des glissières, les sons de chaque note, les pauses du morceau
+// la hauteur d'empilement de chaque objet, comme BeatmapProcessor.applyStacking d'osu! (distances < 3 pixels d'osu!, ici 1,5 ; seuil = AR × StackLeniency)
+function obStack(ns, pre, sl) {
+  const th = pre * sl, near = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]) < 1.5, pos = n => [n.ox ?? n.x, n.oy ?? n.y], endP = n => { if (n.kind !== 'slide') return pos(n); const [x, y] = obEnd(n); return [x + (n.ox ?? n.x) - n.x, y + (n.oy ?? n.y) - n.y]; }, endT = n => n.t + (n.kind === 'circle' ? 0 : n.len);
+  for (const n of ns) n.stack = 0;
+  for (let i = ns.length - 1; i > 0; i--) {
+    let oi = ns[i], n = i; if (oi.stack || oi.kind === 'spin') continue;
+    if (oi.kind === 'circle') {
+      while (--n >= 0) {
+        const on = ns[n]; if (on.kind === 'spin') continue;
+        if (oi.t - endT(on) > th) break;
+        if (on.kind === 'slide' && near(endP(on), pos(oi))) { const off = oi.stack - on.stack + 1; for (let j = n + 1; j <= i; j++) if (near(endP(on), pos(ns[j]))) ns[j].stack -= off; break; }
+        if (near(pos(on), pos(oi))) { on.stack = oi.stack + 1; oi = on; }
+      }
+    } else if (oi.kind === 'slide') {
+      while (--n >= 0) {
+        const on = ns[n]; if (on.kind === 'spin') continue;
+        if (oi.t - on.t > th) break;
+        if (near(endP(on), pos(oi))) { on.stack = oi.stack + 1; oi = on; }
+      }
+    }
+  }
+}
+{ // contrôle : trois cercles au même endroit (le 1er monte de 2), un cercle loin dans le temps (rien), un cercle posé au bout d'une glissière (descend)
+  const c = (t, x, y) => ({t, x, y, kind: 'circle', len: 0}), a = [c(0, 10, 10), c(.1, 10, 10), c(.2, 10, 10), c(5, 10, 10)];
+  obStack(a, 1, .7); const s = {t: 0, x: 0, y: 0, kind: 'slide', len: .2, reps: 1, pts: [[0, 0, 0], [40, 0, 40]]}, b = [s, c(.3, 40, 0), c(.4, 40, 0)]; obStack(b, 1, .7);
+  console.assert(a.map(n => n.stack).join() === '2,1,0,0' && b.map(n => n.stack).join() === '0,-1,-2', 'obStack', a.map(n => n.stack), b.map(n => n.stack));
+}
 function obPrep() {
   const ns = rh.notes, r = rh.r, beat = (rh.c.step || .125) * 4, b0 = rh.c.beat0 || 0;
   if (obMod('HR')) for (const n of ns) { n.y = OB.PH - n.y; if (n.pts) n.pts = n.pts.map(([x, y, l]) => [x, OB.PH - y, l]); }
-  // un orbe posé là où un autre vient d'être (encore à l'écran) se décale un peu vers le haut et la gauche : on voit les deux
+  // l'empilement d'osu! (les maps v6 et plus) : un orbe posé sur un autre encore à l'écran monte d'un cran vers le haut et la gauche
   for (const n of ns) { n.ox = n.x; n.oy = n.y; }
-  for (let i = 1; i < ns.length; i++) {
-    const n = ns[i]; if (n.kind === 'spin') continue;
-    for (let j = i - 1; j >= 0 && n.t - ns[j].t < rh.pre * .7; j--) { const p = ns[j]; if (p.kind !== 'spin' && Math.hypot(p.ox - n.ox, p.oy - n.oy) < 3) { n.stack = (p.stack || 0) + 1; break; } }
-    if (n.stack) { const d = Math.round(n.stack * Math.max(2, r * .1)); n.x = obClamp(n.x - d, r, OB.PW - r); n.y = obClamp(n.y - d, r, OB.PH - r); if (n.pts) n.pts = n.pts.map(([x, y, l]) => [x - d, y - d, l]); }
-  }
+  obStack(ns, rh.pre, rh.info?.osu?.sl ?? .7);
+  for (const n of ns) if (n.stack) { const d = n.stack * r * .1; n.x -= d; n.y -= d; if (n.pts) n.pts = n.pts.map(([x, y, l]) => [x - d, y - d, l]); }
   for (const n of ns) {
     const bi = obToB(rh.c, n.t), k = Math.round(bi);
     // clap sur la caisse claire (sinon sur les temps 2 et 4), cymbale sur un accent du refrain ou d'un début de mesure, sifflet sur les glissières
@@ -2388,13 +2471,14 @@ const obGain = () => .055 * (1 - rh.ob.hp / 14) + .02;
 function obHp(d) { rh.hp = obClamp(rh.hp + d, 0, 1); if (rh.hp <= 0 && !obMod('NF') && rh.mode === 'play') obFail(); }
 function obFail() {
   rh.failed = true; rh.failNow = rhNow(); rh.mode = 'fail'; rh.failAt = performance.now(); obLoop('slide', false); obLoop('spin', false); rhPlayKit(10, .5);
-  try { const t = rhCtx.currentTime; rh.src.playbackRate.setValueAtTime(rh.rate, t); rh.src.playbackRate.linearRampToValueAtTime(rh.rate * .25, t + 1.2); } catch {}  // la musique ralentit et descend
+  try { const t = rhCtx.currentTime; rh.src.playbackRate.setValueAtTime(rh.pr, t); rh.src.playbackRate.linearRampToValueAtTime(rh.pr * .25, t + 1.2); } catch {}  // la musique ralentit et descend
 }
 const obCombo = () => { rh.combo++; rh.maxCombo = Math.max(rh.maxCombo, rh.combo); };
 // le jeu, à chaque image de l'écran (144 images par seconde sur un écran à 144 Hz) : ratés, glissières, toupies, vie
 function obLogic(now) {
   const dt = obClamp(now - (rh.lastNow ?? now), 0, .1), late = RH.WIN.at(-1)[0] / rh.pk; rh.lastNow = now; rh.sliding = false; rh.spinning = 0;
   if (obMod('AT') || obMod('AP')) obAutoPos(now);  // le curseur bouge tout seul
+  if (rh.replay) obRpStep(now);  // un replay : le curseur et les frappes enregistrés
   if (obMod('AT') || obMod('RX')) {  // Auto frappe pile au bon moment ; Relax frappe dès que le curseur est sur l'orbe à son moment ; les deux tiennent glissières et toupies
     const n = rh.notes.find(n => !n.judged && n.kind !== 'spin');
     if (n && now >= n.t && (obMod('AT') || Math.hypot(rh.cx - OB.X0 - n.x, rh.cy - OB.Y0 - n.y) <= rh.r * 1.15)) {
@@ -2411,6 +2495,7 @@ function obLogic(now) {
     if (!n.judged && now - n.t > late) { rhMissed(n); obJudge(n, null); }
     if (n.kind === 'slide' && !n.done && now >= n.t) obSlider(n, now);
   }
+  if (rh.rec) obRecFrame(now);
   const on = rh.mode === 'play'; obLoop('slide', on && rh.sliding); obLoop('spin', on && rh.spinning > 0, .6 + Math.min(rh.spinning, 480) / 400);
 }
 // une glissière : bouton enfoncé et curseur sur la boule ; le cercle de suivi, une fois pris, est 2,4 fois plus grand (on peut s'écarter un peu).
@@ -2448,6 +2533,8 @@ function obAimRec(n) {  // le mouvement : du bout de l'objet d'avant vers celui-
   const ex = rh.cx - OB.X0 - n.x, ey = rh.cy - OB.Y0 - n.y; (rh.aim ??= []).push([(ex * dx + ey * dy) / L / rh.r, (ey * dx - ex * dy) / L / rh.r]);
 }
 function obPress(src, down, ago = 0) {
+  if (rh?.replay && !obRpIn) return;  // pendant un replay, tes clics ne comptent pas
+  if (rh?.rec && rh.mode === 'play') rh.rec.e.push([Math.round((rhNow() - ago * (rh.rate || 1)) * 1000), src, down ? 1 : 0]);
   if (!down) return void rh?.keys?.delete(src);  // lâchée même hors partie (pendant la pause) : sinon elle resterait enfoncée
   if (rh?.mode !== 'play' || rh.keys.has(src) || obMod('AT')) return; rh.keys.add(src);
   const kn = src === 'm0' ? 'M1' : src === 'm2' ? 'M2' : src === OB.KEYS[0] || src === OB.KEYS[2] ? 'K1' : src === OB.KEYS[1] || src === OB.KEYS[3] ? 'K2' : null;
@@ -2474,11 +2561,12 @@ const obNeed = n => Math.max(1, n.len * 1.2) * 2 * Math.PI;
 // les sons : les hitsounds du jeu de sons choisi, joués au moment de la frappe ; les sons en boucle de la glissière suivie et de la toupie qui tourne
 const obKits = [];
 let obExtra = null;
-const obSet = s => s === 4 ? obOsk?.kit || null : s >= 0 && s <= 3 && rhCtx ? (obKits[s] ??= (rhKit ??= rhKitMake()).hs(s)) : null;
+const obSet = s => s === 5 ? obSet(0) : s === 4 ? obOsk?.kit || null : s >= 0 && s <= 3 && rhCtx ? (obKits[s] ??= (rhKit ??= rhKitMake()).hs(s)) : null;
 const obPlayBuf = (b, v) => { if (!rhCtx || !rhHs || !b) return; const s = rhCtx.createBufferSource(), gn = rhCtx.createGain(); s.buffer = b; gn.gain.value = v; s.connect(gn).connect(rhHs); s.start(); };
 function obHs(n, part) {
-  const k = rh.info && obSet(+$('obHs').value); if (!k) return;  // sans niveau (la vérification au chargement) : en silence
-  obPlayBuf(k[0], .5); if (n.wh) obPlayBuf(k[1], .25); if (part === 'head' && n.fin) obPlayBuf(k[2], .3); if (part === 'head' && n.cl) obPlayBuf(k[3], .35);
+  const v = +$('obHs').value, k = rh.info && obSet(v); if (!k) return;  // sans niveau (la vérification au chargement) : en silence
+  const a = v === 5 && n.as ? obSet(n.as - 1) : k; obPlayBuf((v === 5 && n.ss ? obSet(n.ss - 1) : k)[0], .5);
+  if (n.wh) obPlayBuf(a[1], .25); if (part === 'head' && n.fin) obPlayBuf(a[2], .3); if (part === 'head' && n.cl) obPlayBuf(a[3], .35);
 }
 function obPlay(k) { if (!rhCtx || !rh.info) return; obExtra ??= (rhKit ??= rhKitMake()).extra(); obPlayBuf(obExtra[{tick: 0, bonus: 1, clear: 2}[k]], k === 'tick' ? .3 : .45); }
 const obLoopBufs = {};
@@ -2502,7 +2590,7 @@ function obLoop(name, on, rate = 1) {
 // passer l'intro, recommencer, la pause
 function obSkip() {
   const T = rh.skipTo, at = rhCtx.currentTime + .03; rh.skipTo = 0;
-  try { rh.src.stop(); } catch {} const s = rhCtx.createBufferSource(); s.buffer = rh.c.buffer; s.playbackRate.value = rh.rate; s.connect(rhOut); s.start(at, T); rh.src = s; rh.t0 = at - T / rh.rate;
+  try { rh.src.stop(); } catch {} rh.src = obSrc(at, T); rh.t0 = at - T / rh.rate;
 }
 async function obRetry() {
   if (!rh || rh.retrying) return; rh.retrying = true; obLoop('slide', false); obLoop('spin', false);
@@ -2794,7 +2882,7 @@ function obBadge(col, marks, on = true) {  // 16 × 16 : un losange à contour s
 }
 // les médailles, par paliers comme dans osu! : bronze, argent puis or (une seule pour « Premier pas ») ; chacune mesure une valeur sur ton historique
 const OB_TIER = [['Bronze', '#c8823a'], ['Argent', '#c8d0e0'], ['Or', '#ffd84a']];
-const obFin = H => H.filter(h => !h.f), obModOf = (h, m) => (h.m || '').match(/../g)?.includes(m);
+const obFin = H => H.filter(h => !h.f), obModOf = (h, m) => !!(h.m || '').match(/../g)?.some(x => x === m || (m === 'DT' && x === 'NC') || (m === 'HT' && x === 'DC'));
 const obMax = (L, f) => L.reduce((m, h) => Math.max(m, f(h) || 0), 0);
 const OB_MEDALS = [
   ['first', 'Premier pas', [1], () => 'Finir un niveau', H => obFin(H).length],
@@ -2982,7 +3070,8 @@ function obModsUi() {
   for (const [m, tip] of OB_MODS) {
     const b = document.createElement('button'); b.className = 'btn px obMod'; b.textContent = m; b.title = tip; b.dataset.m = m; b.style.cssText = 'width:auto;min-width:34px;margin:0;padding:2px 6px';
     b.onclick = e => {
-      e.preventDefault(); if (obModSet.has(m)) obModSet.delete(m); else { obModSet.add(m); for (const x of OB_EXCL[m] || []) obModSet.delete(x); }
+      e.preventDefault(); obRpKeep = false; obRpRestore();  // après un replay : tes mods à toi reviennent avant le changement
+      if (obModSet.has(m)) obModSet.delete(m); else { obModSet.add(m); for (const x of OB_EXCL[m] || []) obModSet.delete(x); }
       gstore('rhythmPrefs', {}).mods = [...obModSet]; saveGames(); obModsShow(); b.blur();
       if (rh && (rh.mode === 'ready' || rh.mode === 'over')) rhSelect(rh.song, rh.diff);  // le niveau se refait avec les nouveaux mods
     };
@@ -3021,7 +3110,8 @@ function obTopShow() {
   box.replaceChildren(el('span', 'hint', rh.info.name + ' · ' + (obDfName())),
     ...(L.length ? L.map((e, i) => { const r = el('div', 'obLbRow'); r.append(el('span', 'n', String(i + 1)), el('span', 'obG obG' + e.g, e.g), el('b', '', obNum(e.s)),
       el('span', 'hint', e.a.toFixed(2) + ' % · ' + e.c + 'x' + (e.m ? ' · ' + e.m : '') + (e.pp ? ' · ' + Math.round(e.pp) + ' pp' : '') + ' · ' + day(e.d))); return r; })
-      : [el('span', 'hint', 'Pas encore de partie finie sur ce niveau.')]));
+      : [el('span', 'hint', 'Pas encore de partie finie sur ce niveau.')]),
+    ...(typeof obFriends === 'function' ? obFriends().flatMap(f => f.t.filter(x => x[0] === obKey()).map(x => { const r = el('div', 'obLbRow'); r.append(el('span', 'n', '★'), el('span', 'obG obG' + x[3], x[3]), el('b', '', obNum(x[1])), el('span', 'hint', f.n + ' · ' + (+x[2]).toFixed(2) + ' %' + (x[5] ? ' · ' + x[5] : '') + (x[4] ? ' · ' + x[4] + ' pp' : ''))); return r; })) : []));
 }
 // les dessins : orbes et anneaux en pixels, préparés une fois par couleur et par taille
 // les skins, au choix dans les réglages : l'allure des orbes (la couleur d'un pixel selon sa distance d au centre), du cercle d'approche, des numéros, du curseur et de sa traînée
@@ -3142,6 +3232,103 @@ function obBgPic() {
   if (obBgC?.b !== b || obBgC.v !== v) obBgC = {b, v, c: cnv(W, H, q => { q.filter = 'blur(' + v + 'px)'; q.drawImage(b, -2 * v, -2 * v, W + 4 * v, H + 4 * v); })};
   return obBgC.c;
 }
+// le storyboard d'une map : les Sprite et leurs commandes F, M, MX, MY, S, V, R, P, en temps de la chanson (ms), sur une scène de 640 × 480
+// shortcut: ni Animation, ni boucles L/T, ni couleur C, ni adoucissements (tout est linéaire) ; à ajouter si des maps courantes en ont besoin
+const OB_SB_ORG = {TopLeft: [0, 0], Centre: [.5, .5], CentreLeft: [0, .5], TopRight: [1, 0], BottomCentre: [.5, 1], TopCentre: [.5, 0], Custom: [0, 0], CentreRight: [1, .5], BottomLeft: [0, 1], BottomRight: [1, 1]};
+function obSbParse(txt) {
+  const vars = [], out = []; let sec = '', sp = null;
+  for (let l of txt.split(/\r?\n/)) {
+    const h = /^\[(\w+)\]\s*$/.exec(l); if (h) { sec = h[1]; continue; }
+    if (sec === 'Variables') { const m = /^(\$\w+)=(.*)$/.exec(l.trim()); if (m) { vars.push(m.slice(1)); vars.sort((a, b) => b[0].length - a[0].length); } continue; }
+    if (sec !== 'Events' || l.startsWith('//')) continue;
+    for (const [k, v] of vars) l = l.split(k).join(v);
+    const d = /^[ _]*/.exec(l)[0].length, f = l.slice(d).trim().split(',');
+    if (!d) {
+      sp = null; if (f[0] !== 'Sprite' && f[0] !== '4') continue;
+      const L = {Background: 0, Fail: 1, Pass: 2, Foreground: 3, Overlay: 4}[f[1]] ?? +f[1], o = OB_SB_ORG[f[2]] || Object.values(OB_SB_ORG)[+f[2]] || [.5, .5];
+      if (L !== 1 && f[3]) out.push(sp = {o, f: f[3].replace(/"/g, '').replace(/\\/g, '/').trim(), x: +f[4] || 0, y: +f[5] || 0, c: []});  // pas le calque « échec »
+      continue;
+    }
+    if (!sp || d > 1) continue;  // les commandes d'une boucle
+    const k = f[0], t0 = +f[2], t1 = f[3] === '' || f[3] == null ? t0 : +f[3], n = {F: 1, S: 1, R: 1, MX: 1, MY: 1, M: 2, V: 2}[k];
+    if (!isFinite(t0) || !isFinite(t1)) continue;
+    if (k === 'P') { sp.c.push([k, t0, t1, [f[4]], [f[4]]]); continue; }
+    if (!n) continue;
+    const v = f.slice(4).map(Number); if (v.length < n || v.some(x => !isFinite(x))) continue;
+    if (v.length < 2 * n) v.push(...v.slice(0, n));
+    for (let i = 0, a = t0, b = t1; i + 2 * n <= v.length; i += n, a = b, b += t1 - t0) sp.c.push([k, a, b, v.slice(i, i + n), v.slice(i + n, i + 2 * n)]);  // des valeurs enchaînées : un morceau de plus chacune
+  }
+  return out.filter(s => s.c.length).map(s => { s.c.sort((a, b) => a[1] - b[1]); s.k = [...new Set(s.c.map(c => c[0]))].join(' '); s.t0 = Math.min(...s.c.map(c => c[1])); s.t1 = Math.max(...s.c.map(c => c[2])); return s; });
+}
+// la valeur d'une commande à l'instant t : avant la première, sa valeur de départ ; entre deux, la fin de la précédente
+function obSbV(s, k, t, def) {
+  let v = def, seen = false;
+  for (const c of s.c) {
+    if (c[0] !== k) continue;
+    if (t < c[1]) return seen ? v : c[3];
+    seen = true; if (t >= c[2]) { v = c[4]; continue; }
+    const p = (t - c[1]) / (c[2] - c[1] || 1); return c[3].map((a, i) => a + (c[4][i] - a) * p);
+  }
+  return v;
+}
+{ const [s] = obSbParse('[Variables]\n$c=Centre\n[Events]\nSprite,Background,$c,"sb\\a.png",320,240\n_F,0,1000,2000,0,1\n M,0,0,1000,0,0,100,50\n L,0,2\n  F,0,0,10,1\nAnimation,Foreground,Centre,"x.png",0,0,2,50\n');
+  console.assert(s && s.f === 'sb/a.png' && s.o[0] === .5 && s.t0 === 0 && s.t1 === 2000 && s.c.length === 2 && obSbV(s, 'F', 500, [1])[0] === 0 && obSbV(s, 'F', 1500, [1])[0] === .5 && obSbV(s, 'M', 500, [0, 0])[0] === 50 && obSbV(s, 'M', 1800, [0, 0])[1] === 50, 'obSbParse', s); }
+// à l'import : le storyboard (.osb et la map) et ses images réduites de moitié, puis la vidéo de fond (mp4 ou webm, 40 Mo au plus)
+async function obSbImport(z, get, id, m0) {
+  const r = {sb: false, vid: null}, osb = [...z.keys()].find(k => /\.osb$/i.test(k));
+  try {
+    const sp = obSbParse((osb ? new TextDecoder().decode(await obInflate(z.get(osb))) + '\n' : '') + m0.src);
+    const files = [...new Set(sp.map(s => s.f.toLowerCase()))].slice(0, 80), wh = [];  // shortcut: 80 images et 600 sprites au plus, assez pour la plupart des maps
+    for (let i = 0; i < files.length; i++) {
+      const n = get(files[i]); wh.push(null); if (!n) continue;
+      try {
+        const im = await createImageBitmap(new Blob([await obInflate(z.get(n))])), k = Math.min(.5, 400 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k)); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        await folder.writeFile(id + '-sb' + i + '.png', c.toDataURL('image/png').split(',')[1]); wh[i] = [im.width, im.height];
+      } catch {}
+    }
+    const out = sp.map(s => ({...s, i: files.indexOf(s.f.toLowerCase())})).filter(s => s.i >= 0 && wh[s.i]).slice(0, 600).map(({f, ...s}) => s);
+    if (out.length) { await folder.writeFile(id + '-sb.json', await obB64(new TextEncoder().encode(JSON.stringify({sp: out, wh})))); r.sb = true; }
+  } catch {}
+  const vm = /^(?:Video|1)\s*,\s*(-?\d+)\s*,\s*"?([^"\r\n]+?\.(mp4|m4v|webm))"?\s*(?:,|$)/im.exec(m0.src), vn = vm && get(vm[2].replace(/\\/g, '/'));
+  if (vn) try {
+    const b = await obInflate(z.get(vn)); if (b.length > 40e6) throw 0;
+    const f = id + '-video.' + (vm[3].toLowerCase() === 'webm' ? 'webm' : 'mp4'); await folder.writeFile(f, await obB64(b)); r.vid = {f, off: +vm[1]};
+  } catch {}
+  return r;
+}
+async function obSbLoad(s, C) {  // au chargement de la map : les images du storyboard et la vidéo, gardées avec la musique
+  if (s.sb) try { const S = JSON.parse(new TextDecoder().decode(await obFileBytes(s.id + '-sb.json'))); S.img = await Promise.all(S.wh.map((w, i) => w ? obFileBytes(s.id + '-sb' + i + '.png').then(b => createImageBitmap(new Blob([b]))).catch(() => null) : null)); C.sb = S; } catch {}
+  if (s.vid) try {
+    const v = document.createElement('video'); v.muted = true; v.playsInline = true; v.preload = 'auto';
+    v.src = URL.createObjectURL(new Blob([await obFileBytes(s.vid.f)], {type: s.vid.f.endsWith('webm') ? 'video/webm' : 'video/mp4'})); C.video = {el: v, off: s.vid.off / 1000};  // shortcut: l'adresse n'est jamais rendue, une par map ouverte dans la séance
+  } catch {}
+}
+function obVidStop() { const v = rh?.info?.video?.el; if (v && !v.paused) v.pause(); }
+// sous les orbes : la vidéo (calée sur la chanson et sa vitesse), puis les sprites du storyboard
+function obSbDraw(now, live) {
+  const I = rh.info; if (!I || $('obSb').value === '0' || !live) return obVidStop();
+  const V = I.video;
+  if (V) {
+    const v = V.el, vt = now - V.off, on = rh.mode === 'play' && vt >= 0 && vt < (v.duration || 1e9);
+    if (on) { if (v.playbackRate !== rh.rate) v.playbackRate = rh.rate; if (Math.abs(v.currentTime - vt) > .2) v.currentTime = vt; if (v.paused) v.play().catch(() => {}); } else obVidStop();
+    if (vt >= 0 && v.readyState >= 2 && v.videoWidth) { const k = Math.max(W / v.videoWidth, H / v.videoHeight); g.drawImage(v, (W - v.videoWidth * k) / 2, (H - v.videoHeight * k) / 2, v.videoWidth * k, v.videoHeight * k); }
+  }
+  const S = I.sb; if (!S) return;
+  const ms = now * 1000, ox = (W - 320) / 2;
+  for (const s of S.sp) {
+    if (ms < s.t0 || ms > s.t1) continue; const im = S.img[s.i]; if (!im) continue;
+    const a = s.k.includes('F') ? obSbV(s, 'F', ms, [1])[0] : 1; if (a <= .01) continue;
+    let [x, y] = /\bM\b/.test(s.k) ? obSbV(s, 'M', ms, [s.x, s.y]) : [s.x, s.y];
+    if (s.k.includes('MX')) x = obSbV(s, 'MX', ms, [x])[0]; if (s.k.includes('MY')) y = obSbV(s, 'MY', ms, [y])[0];
+    const sc = s.k.includes('S') ? obSbV(s, 'S', ms, [1])[0] : 1, [vx, vy] = s.k.includes('V') ? obSbV(s, 'V', ms, [1, 1]) : [1, 1], [w, h] = S.wh[s.i];
+    let fx = 1, fy = 1, add = false;
+    for (const c of s.c) if (c[0] === 'P' && (c[1] === c[2] || ms >= c[1] && ms <= c[2])) { if (c[3][0] === 'H') fx = -1; else if (c[3][0] === 'V') fy = -1; else if (c[3][0] === 'A') add = true; }
+    g.save(); g.globalAlpha = Math.min(1, a); if (add) g.globalCompositeOperation = 'lighter';
+    g.translate(ox + x / 2, y / 2); if (s.k.includes('R')) g.rotate(obSbV(s, 'R', ms, [0])[0]);
+    g.scale(sc * vx * fx * w / 2 / im.width, sc * vy * fy * h / 2 / im.height); g.drawImage(im, -s.o[0] * im.width, -s.o[1] * im.height); g.restore();
+  }
+}
 // le dessin, à chaque image de l'écran ; le jeu y avance aussi (obLogic) pour juger au plus près, même à 144 images par seconde
 function obDraw() {
   if (rh.mode !== 'play' && obLocked()) try { document.exitPointerLock(); } catch {}  // pause, fin de partie : la souris est rendue
@@ -3149,7 +3336,7 @@ function obDraw() {
   if (rh.mode === 'play') { obLogic(rhNow()); rh.pcx = rh.cx; rh.pcy = rh.cy; }
   const now = !live ? -2 : rh.mode === 'fail' ? rh.failNow : rhNow(), brk = live && obBreak(now);
   if (rh.combo > rh.lastCombo) rh.cPop = 6; rh.lastCombo = rh.combo; if (rh.cPop) rh.cPop--;
-  g.drawImage(obBgPic(), 0, 0);
+  g.drawImage(obBgPic(), 0, 0); obSbDraw(now, live);  // la vidéo et le storyboard de la map
   if (live) { g.fillStyle = 'rgba(0,0,0,' + (+$('obDim').value / 100 * (brk ? .5 : 1)) + ')'; g.fillRect(0, 0, W, H); }  // le fond assombri (moins pendant une pause du morceau)
   const K = live && obOskOn() ? obHi() : (obHiC && !obHiC.hidden && (obHiC.hidden = true), null); if (K) g.clearRect(0, 0, W, H);  // un skin osu! : ses objets sur la couche nette
   if (live) {
@@ -3299,7 +3486,7 @@ function obResults() {
   g.fillStyle = 'rgba(7,3,20,.94)'; g.fillRect(0, 0, W, H); px(g, '#120a26', 0, 0, W, 31); px(g, RHG.color, 0, 31, W, 1);
   const c = rh.counts, title = rh.info.name.length > 40 ? rh.info.name.slice(0, 39) + '…' : rh.info.name, diff = obDfName();
   pxFont(g, title, 8, 14, '#ffffff', 8); pxFont(g, diff + ' · ' + rhStarTxt(rh.stars) + (rh.mods ? ' · ' + rh.mods : ''), 8, 25, '#a8a0c8', 6);
-  const note = rh.noSave ? ['Auto : rien n\'est enregistré', '#a8a0c8'] : rh.failed ? ['Partie perdue : non comptée', '#ff4a5a'] : rh.rank === 1 ? ['N° 1 DU NIVEAU !', '#ffd84a'] : rh.rank ? ['N° ' + rh.rank + ' du niveau', '#e8e0ff'] : null;
+  const note = rh.replay ? ['Replay de ' + (rh.replay.R.n || 'la partie'), '#ffd84a'] : rh.section ? [rh.secMsg || 'Boucle', '#7ee07a'] : rh.noSave ? ['Auto : rien n\'est enregistré', '#a8a0c8'] : rh.failed ? ['Partie perdue : non comptée', '#ff4a5a'] : rh.rank === 1 ? ['N° 1 DU NIVEAU !', '#ffd84a'] : rh.rank ? ['N° ' + rh.rank + ' du niveau', '#e8e0ff'] : null;
   if (note && T > 1.5) pxFont(g, note[0], W - 8, 25, note[1], 6, 'right');
   const f = obEase((T - .1) / 1.1);
   pxFont(g, obNum(Math.round(rh.score * f)), 8, 52, '#ffffff', 16);
@@ -3383,12 +3570,15 @@ const obLocked = () => document.pointerLockElement === cv;
 const obLock = () => { if (obLocked() || +$('obAbs').value) return; try { const p = cv.requestPointerLock?.({unadjustedMovement: true}); p?.catch?.(() => { try { cv.requestPointerLock()?.catch?.(() => {}); } catch {} }); } catch { try { cv.requestPointerLock(); } catch {} } };  // tablette : jamais capturée
 // l'instant exact d'un clic ou d'une touche (e.timeStamp), pas celui où le code le reçoit : la frappe est jugée au plus juste
 const obAgo = e => obClamp((performance.now() - e.timeStamp) / 1000, 0, .05);
-document.addEventListener('pointermove', e => {
-  if (!rh || !view.classList.contains('on') || rh.mode === 'play' && (obMod('AT') || obMod('AP'))) return;  // Auto, Pilote : le curseur est mené par le jeu
+const obMove = e => {
+  if (!rh || !view.classList.contains('on') || rh.mode === 'play' && (obMod('AT') || obMod('AP') || rh.replay)) return;  // Auto, Pilote, replay : le curseur est mené par le jeu
   if (obLocked()) { const k = +$('obSens').value * W / cv.getBoundingClientRect().width; rh.cx = obClamp(rh.cx + e.movementX * k, 0, W); rh.cy = obClamp(rh.cy + e.movementY * k, 0, H); return; }
   const [x, y] = cpos(e); rh.cx = obClamp(x, 0, W); rh.cy = obClamp(y, 0, H);
   if (rh.mode === 'pause') { const i = obMenuAt(rh.cx, rh.cy); if (i != null) rh.menu = i; }
-});
+};
+const OB_RAW = 'onpointerrawupdate' in window;
+if (OB_RAW) document.addEventListener('pointerrawupdate', obMove);
+document.addEventListener('pointermove', e => { if (!OB_RAW || !e.isTrusted) obMove(e); });  // pointerrawupdate : la position dès qu'elle arrive, sans attendre l'image suivante
 document.addEventListener('pointerlockchange', () => { if (!obLocked() && rh?.mode === 'play') rhPause(); });  // Échap libère la souris : la partie se met en pause
 cv.oncontextmenu = e => e.preventDefault();
 cv.onpointerdown = e => {
@@ -3427,7 +3617,7 @@ document.addEventListener('keydown', e => {
     else if (m === 'over') { if (rh.tick - rh.overAt > 40) obRetry(); }
     else if (m !== 'fail') { rhPress(); if (rh.mode === 'play') obLock(); }
   }
-  if (k === 'p' || k === 'Escape') { if (m === 'play') rhPause(); else if (m === 'over') rhSelect(rh.song, rh.diff); }
+  if (k === 'p' || k === 'Escape') { if (m === 'play') rhPause(); else if (m === 'over') { if (rh.section) obSecStop(); else rhSelect(rh.song, rh.diff); } }
 });
 document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.length === 1 ? e.key.toLowerCase() : e.key; if (e.code === 'Backquote') rh.retryAt = 0; if (OB.KEYS.includes(k)) obPress(k, false); if (e.key === ' ' && keyOk(e)) e.preventDefault(); });
 {  // vérification : les orbes restent sur le terrain, dans l'ordre, avec des glissières, des streams et une toupie ; les orbes rapetissent avec le niveau ; un clic au bon moment sur l'orbe le touche, à côté non
@@ -3441,7 +3631,292 @@ document.addEventListener('keyup', e => { if (!rh) return; const k = e.key.lengt
   const small = obStats('expert', 100).r < obStats('facile', 100).r;
   console.assert(best >= 3 && best <= 33 && small && ok && x.some(o => o.kind === 'slide') && sp.length >= 1 && sp.every((s, i) => !i || s.t - sp[i - 1].t > 20) && hit && miss, 'orbe', ok, hit, miss, sp.length, best, small);
 }
-cv.__rh = {analyse: buf => rhAnalyse(buf), beatMap: a => rhBeatMap(a), st: () => rh, now: () => rhNow(), ball: (n, t) => obBall(n, t), themes: () => OB_THEMES.map(t => t.name), skins: () => OB_SKINS.map(k => k.name), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
+// un .osr : les mouvements compressés en LZMA (format « alone » : 13 octets d'en-tête, puis le flux). Encodeur minimal : que des littéraux
+// (aucune répétition cherchée), lisible par tout décodeur LZMA ; le texte d'un replay se compresse quand même environ de moitié
+function obLzma(bytes) {
+  const out = [], P = new Uint16Array(0x300 * 8).fill(1024), M = new Uint16Array(16 * 4).fill(1024);
+  let low = 0, range = 0xFFFFFFFF, cache = 0, csize = 1;
+  const shift = () => {
+    if (low < 0xFF000000 || low >= 0x100000000) { const carry = low >= 0x100000000 ? 1 : 0; let tmp = cache; do { out.push((tmp + carry) & 0xFF); tmp = 0xFF; } while (--csize); cache = Math.floor(low / 0x1000000) & 0xFF; }
+    csize++; low = (low % 0x1000000) * 256;
+  };
+  const bit = (A, i, b) => {
+    const bound = (range >>> 11) * A[i];
+    if (!b) { range = bound; A[i] += (2048 - A[i]) >> 5; } else { low += bound; range = (range - bound) >>> 0; A[i] -= A[i] >> 5; }
+    while (range < 0x1000000) { range = (range * 256) >>> 0; shift(); }
+  };
+  let prev = 0;
+  for (let p = 0; p < bytes.length; p++) {
+    const c = bytes[p]; bit(M, p & 3, 0);  // état 0 toujours (que des littéraux), posState = p & 3
+    const base = 0x300 * (prev >> 5); let s = 1;
+    for (let i = 7; i >= 0; i--) { const b = (c >> i) & 1; bit(P, base + s, b); s = (s << 1) | b; }
+    prev = c;
+  }
+  for (let i = 0; i < 5; i++) shift();
+  const head = new Uint8Array(13); head[0] = 0x5D; new DataView(head.buffer).setUint32(1, 1 << 16, true); new DataView(head.buffer).setUint32(5, bytes.length, true);
+  const r = new Uint8Array(13 + out.length); r.set(head); r.set(out, 13); return r;
+}
+// le MD5 (l'empreinte de la map dans le .osr)
+function obMd5(bytes) {
+  const K = Array.from({length: 64}, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 2 ** 32) >>> 0), S = [7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21];
+  const n = bytes.length, L = ((n + 8) >> 6) + 1 << 6, m = new Uint8Array(L); m.set(bytes); m[n] = 0x80; const dv = new DataView(m.buffer); dv.setUint32(L - 8, (n * 8) >>> 0, true); dv.setUint32(L - 4, Math.floor(n / 0x20000000), true);
+  let a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
+  for (let o = 0; o < L; o += 64) {
+    let A = a0, B = b0, C = c0, D = d0;
+    for (let i = 0; i < 64; i++) {
+      const r = i >> 4; let F, g;
+      if (r === 0) { F = (B & C) | (~B & D); g = i; } else if (r === 1) { F = (D & B) | (~D & C); g = (5 * i + 1) & 15; } else if (r === 2) { F = B ^ C ^ D; g = (3 * i + 5) & 15; } else { F = C ^ (B | ~D); g = (7 * i) & 15; }
+      F = (F + A + K[i] + dv.getUint32(o + g * 4, true)) >>> 0; A = D; D = C; C = B; const s = S[r * 4 + (i & 3)]; B = (B + ((F << s) | (F >>> (32 - s)))) >>> 0;
+    }
+    a0 = (a0 + A) >>> 0; b0 = (b0 + B) >>> 0; c0 = (c0 + C) >>> 0; d0 = (d0 + D) >>> 0;
+  }
+  return [a0, b0, c0, d0].map(v => [0, 8, 16, 24].map(s => ((v >>> s) & 255).toString(16).padStart(2, '0')).join('')).join('');
+}
+console.assert(obMd5(new TextEncoder().encode('')) === 'd41d8cd98f00b204e9800998ecf8427e' && obMd5(new TextEncoder().encode('The quick brown fox jumps over the lazy dog')) === '9e107d9d372bb6826bd81d3542a419d6', 'obMd5');
+// le fichier .osr d'osu! (mode 0) : en-tête, compteurs, puis les mouvements « écart ms|x|y|touches, » en pixels d'osu!
+function obOsr(R, beatmapMd5, player) {
+  const B = [], u8 = v => B.push(v & 255), u16 = v => { u8(v); u8(v >> 8); }, u32 = v => { for (let i = 0; i < 4; i++) u8(v >>> (8 * i)); }, u64 = v => { const lo = Number(BigInt.asUintN(32, v)), hi = Number(BigInt.asUintN(32, v >> 32n)); u32(lo); u32(hi); };
+  const str = s => { if (!s) return u8(0); const b = new TextEncoder().encode(s); u8(0x0b); let n = b.length; do { let x = n & 127; n >>>= 7; if (n) x |= 128; u8(x); } while (n); for (const x of b) u8(x); };
+  const MODS = {NF: 1, EZ: 2, HD: 8, HR: 16, SD: 32, DT: 64, RX: 128, HT: 256, NC: 512 | 64, FL: 1024, AT: 2048, AP: 8192, PF: 16384 | 32}, mods = (R.mods || []).reduce((a, m) => a | (MODS[m] || 0), 0);
+  let last = 0; const txt = R.f.map(([t, x, y, k]) => { const s = (t - last) + '|' + x + '|' + y + '|' + k + ','; last = t; return s; }).join('') + '-12345|0|0|0,';
+  const data = obLzma(new TextEncoder().encode(txt)), c = R.c;
+  u8(0); u32(20240101); str(beatmapMd5); str(player); str(obMd5(new TextEncoder().encode(R.d + beatmapMd5 + R.s)));
+  u16(c[0]); u16(c[1]); u16(c[2]); u16(0); u16(0); u16(c[3]); u32(R.s); u16(R.cb); u8(c[3] || R.cb < R.fc ? 0 : 1); u32(mods); str('');
+  u64(BigInt(R.d) * 10000n + 621355968000000000n); u32(data.length); for (const x of data) u8(x); u64(0n);
+  return new Uint8Array(B);
+}
+// ---- 1.4.0 : replays, analyse d'après partie, exercices, boucle sur un passage, amis, paliers de pp, navigateur de maps ----
+// les replays : chaque partie enregistre le curseur (en pixels d'osu!) et les frappes (à la milliseconde) ; gardés dans les fichiers du plugin
+// (jamais synchronisés), les 50 derniers
+const OB_RP_MAX = 50, obRpName = d => 'rp-' + d + '.ndr';
+let obRpIn = false, obRpMods = null, obRpKeep = false;
+const obRpMask = keys => { let m = 0; for (const k of keys) m |= k === 'm0' ? 1 : k === 'm2' ? 2 : k === OB.KEYS[0] || k === OB.KEYS[2] ? 5 : k === OB.KEYS[1] || k === OB.KEYS[3] ? 10 : 0; return m; };
+function obRecFrame(now) {  // à chaque image : une ligne si le curseur a bougé ou si les boutons ont changé (au plus une toutes les 8 ms), sinon une toutes les 100 ms
+  const R = rh.rec; if (!R) return;
+  const t = Math.round(now * 1000), x = Math.round((rh.cx - OB.X0) * 2), y = Math.round((rh.cy - OB.Y0) * 2), k = obRpMask(rh.keys), L = R.f.at(-1);
+  if (L && (t - L[0] < 8 || (t - L[0] < 100 && L[1] === x && L[2] === y && L[3] === k))) return;
+  R.f.push([t, x, y, k]);
+}
+// le fichier : les nombres en écarts (petits), en JSON, compressé
+async function obGz(txt, back) {
+  const s = new Blob([txt]).stream().pipeThrough(back ? new DecompressionStream('gzip') : new CompressionStream('gzip'));
+  return back ? new TextDecoder().decode(await new Response(s).arrayBuffer()) : new Uint8Array(await new Response(s).arrayBuffer());
+}
+const obDelta = (rows, back) => { const p = [0, 0, 0, 0]; return rows.map(r => r.map((v, j) => typeof v !== 'number' ? v : back ? (p[j] += v) : (v - p[j] + (p[j] = v, 0)))); };
+console.assert(JSON.stringify(obDelta(obDelta([[5, 10, 20, 1], [9, 12, 18, 0]]), true)) === '[[5,10,20,1],[9,12,18,0]]', 'obDelta');
+async function obRpSave(meta) {
+  const R = rh.rec; if (!R || R.f.length < 20) return null;
+  const body = {v: 1, ...meta, f: obDelta(R.f), e: obDelta(R.e.map(([t, s, d]) => [t, s, d]))};
+  try {
+    await folder.writeFile(obRpName(meta.d), await obB64(await obGz(JSON.stringify(body))));
+    const all = (await folder.listFiles()).filter(n => /^rp-\d+\.ndr$/.test(n)).sort();
+    for (const n of all.slice(0, Math.max(0, all.length - OB_RP_MAX))) await folder.removeFile(n);
+    return meta.d;
+  } catch { return null; }
+}
+async function obRpLoad(d) {
+  const b = await folder.readFile(obRpName(d)); if (b == null) throw new Error('ce replay n\'est plus sur ce PC');
+  const R = JSON.parse(await obGz(Uint8Array.from(atob(b), c => c.charCodeAt(0)), true)); R.f = obDelta(R.f, true); R.e = obDelta(R.e, true); return R;
+}
+const obRpHave = async () => new Set((await folder.listFiles().catch(() => [])).map(n => /^rp-(\d+)\.ndr$/.exec(n)?.[1]).filter(Boolean).map(Number));
+// revoir : les mods de la partie, le même niveau, puis le curseur et les frappes rejoués à leur instant (×0,5 : au ralenti, hauteur gardée)
+async function obRpWatch(d, speed = 1) {
+  let R; try { R = await obRpLoad(d); } catch (e) { return toast(e.message, true); }
+  obRpMods ??= new Set(obModSet); obModSet = new Set(R.mods || []); obRpKeep = true; obModsShow();
+  await rhSelect(R.song, R.diff);
+  if (!rh || rh.song !== R.song) return;
+  rh.replay = {R, fi: 0, ei: 0, speed}; rh.noSave = true; rh.rec = null; rh.rate *= speed;
+  $('obAna').hidden = true; rhBegin();
+}
+function obRpRestore() { if (obRpKeep) { obRpKeep = false; return; } if (obRpMods) { obModSet = obRpMods; obRpMods = null; obModsShow(); } }
+function obRpStep(now) {  // le curseur à l'instant (entre deux lignes enregistrées), puis les frappes arrivées
+  const P = rh.replay, F = P.R.f, ms = now * 1000; while (P.fi + 1 < F.length && F[P.fi + 1][0] <= ms) P.fi++;
+  const a = F[P.fi], b = F[P.fi + 1], k = b && b[0] > a[0] ? obClamp((ms - a[0]) / (b[0] - a[0]), 0, 1) : 0;
+  if (a) { rh.cx = OB.X0 + (a[1] + ((b?.[1] ?? a[1]) - a[1]) * k) / 2; rh.cy = OB.Y0 + (a[2] + ((b?.[2] ?? a[2]) - a[2]) * k) / 2; }
+  const E = P.R.e; obRpIn = true;
+  try { while (P.ei < E.length && E[P.ei][0] <= ms) { const [t, s, dn] = E[P.ei++]; obPress(s, !!dn, (ms - t) / 1000 / rh.rate); } } finally { obRpIn = false; }
+}
+function obRpHud() {  // pendant un replay : le bandeau, la ligne du temps avec les ratés de la partie en rouge, et où on en est
+  const P = rh.replay; if (!P) return;
+  const y = H - 7, x0 = 8, w = W - 16, len = rh.c.len || 1, now = rh.mode === 'play' ? rhNow() : 0;
+  px(g, 'rgba(7,3,20,.8)', 0, y - 9, W, 16); pxFont(g, 'REPLAY' + (P.speed !== 1 ? ' ×' + String(P.speed).replace('.', ',') : '') + ' · ' + (P.R.n || ''), x0, y - 2, '#ffd84a', 5);
+  px(g, '#2a2050', x0, y + 3, w, 2); px(g, '#3fe0ff', x0, y + 3, Math.round(obClamp(now / len, 0, 1) * w), 2);
+  for (const t of P.R.ms || []) px(g, '#ff4a5a', x0 + Math.round(obClamp(t / len, 0, 1) * (w - 1)), y + 1, 1, 6);
+}
+// l'analyse d'après partie (sous le jeu) : chaque frappe dans le temps (en avance en bas, en retard en haut), les ratés marqués sur la ligne
+// du temps, les passages les plus ratés à travailler en boucle, et les boutons du replay
+function obAnaShow() {
+  const box = $('obAna'); if (!box) return;
+  const he = rh.he || [], len = rh.c.len || 1; if (rh.replay || he.length < 3) { box.hidden = true; return; } box.hidden = false;
+  const c = $('obAnaC'), q = c.getContext('2d'), Wc = c.width, Hc = c.height, lim = RH.WIN.at(-1)[0] / rh.pk * 1000, mid = 44, hh = 34, x0 = 6, w = Wc - 12;
+  q.fillStyle = '#07021a'; q.fillRect(0, 0, Wc, Hc);
+  pxFont(q, 'CARTE DES ERREURS (EN HAUT : EN RETARD)', x0, 9, '#a8a0c8', 5);
+  for (const f of RH.WIN.map(v => v[0] / rh.pk * 1000)) for (const s of [1, -1]) for (let x = x0; x < x0 + w; x += 3) px(q, '#1c1238', x, Math.round(mid - s * f / lim * hh), 1, 1);
+  px(q, '#2b2468', x0, mid, w, 1);
+  const T = t => x0 + Math.round(obClamp((t - (rh.section?.a || 0)) / ((rh.section ? rh.section.b - rh.section.a : len) || 1), 0, 1) * (w - 1));
+  for (const [t, e] of he) {
+    if (e == null) { px(q, '#ff4a5a', T(t), mid - hh - 2, 1, hh * 2 + 4); continue; }
+    const a = Math.abs(e), col = a <= RH.WIN[0][0] / rh.pk * 1000 ? '#3fe0ff' : a <= RH.WIN[1][0] / rh.pk * 1000 ? '#7ee07a' : '#ffb04a';
+    px(q, col, T(t), Math.round(mid - obClamp(e / lim, -1, 1) * hh), 2, 2);
+  }
+  const ok = he.filter(h => h[1] != null).map(h => h[1]), mu = ok.length ? ok.reduce((a, b) => a + b, 0) / ok.length : 0, ur = ok.length ? Math.sqrt(ok.reduce((a, b) => a + (b - mu) ** 2, 0) / ok.length) * 10 : 0;
+  pxFont(q, 'moyenne ' + (mu >= 0 ? '+' : '') + mu.toFixed(1) + ' ms · UR ' + Math.round(ur) + ' · ratés ' + he.filter(h => h[1] == null).length, x0, Hc - 4, '#e8e0ff', 5);
+  const btn = (t, f, main) => { const b = el('button', 'btn' + (main ? ' main' : ''), t); b.onclick = () => { b.blur(); f(); }; return b; }, row = $('obAnaBtns'), secs = $('obAnaSec');
+  const d = rh.rpD, osu = /^o\w+$/.test(String(rh.song));
+  row.replaceChildren(...(d ? [btn('REVOIR LE REPLAY', () => obRpWatch(d), true), btn('AU RALENTI ×0,5', () => obRpWatch(d, .5)), ...(osu ? [btn('EXPORTER EN .OSR', () => obOsrSave(d))] : [])] : [el('span', 'hint', rh.section ? 'Boucle : pas de replay' : 'Pas de replay pour cette partie')]));
+  if (rh.section) return secs.replaceChildren(el('span', 'hint', 'Boucle ' + obClk(rh.section.a) + '–' + obClk(rh.section.b) + ' à ×' + rh.section.rate.toFixed(2)), btn('ARRÊTER LA BOUCLE', obSecStop));
+  const seg = 4, S = new Map();
+  for (const [t, e] of he) { const k = Math.floor(t / seg), v = S.get(k) || {k, n: 0, bad: 0}; v.n++; if (e == null || Math.abs(e) > RH.WIN[0][0] / rh.pk * 1000) v.bad += e == null ? 2 : 1; S.set(k, v); }
+  const bad = [...S.values()].filter(v => v.n >= 3 && v.bad).sort((a, b) => b.bad / b.n - a.bad / a.n).slice(0, 3);
+  secs.replaceChildren(...(bad.length ? bad.map(v => btn('S\'ENTRAÎNER ' + obClk(v.k * seg) + '–' + obClk(v.k * seg + seg), () => obSecStart(v.k * seg - 1, v.k * seg + seg + 1))) : [el('span', 'hint', 'Aucun passage vraiment raté : bravo !')]));
+}
+const obClk = s => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+// la boucle sur un passage : il tourne au ralenti (×0,75) ; à 95 % ou plus il repart 5 % plus vite, jusqu'à la vitesse normale et au-delà
+let obSecNext = null;
+function obSecStart(a, b) { if (!rh) return; obSecNext = {a: Math.max(0, a), b, rate: .75, wins: 0, n: 0}; toast('Ce passage tourne en boucle au ralenti, et accélère de 5 % à chaque réussite (95 % ou plus). Échap : arrêter.'); obSecGo(); }
+async function obSecGo() { const S = obSecNext; await rhSelect(rh.song, rh.diff); if (rh?.section === S) rhBegin(2); }
+function obSecStop() { obSecNext = null; if (rh) rhSelect(rh.song, rh.diff); }
+function obSecEnd() {
+  const S = rh.section, ok = rh.acc >= .95; S.n++; if (ok) { S.wins++; S.rate = Math.min(1.5, Math.round((S.rate + .05) * 100) / 100); }
+  rh.secMsg = ok ? 'RÉUSSI ! ENSUITE ×' + S.rate.toFixed(2) : 'ENCORE UNE FOIS · ' + (rh.acc * 100).toFixed(1) + ' %';
+  setTimeout(() => { if (rh?.section === S && rh.mode === 'over' && obSecNext === S) obSecGo(); }, 1800);
+}
+// les exercices : des motifs générés sur une batterie simple, au tempo choisi ; « lecture » : des orbes au hasard à AR 10 et plus
+const OB_EX = {jumps: 'Sauts de plus en plus grands', flow: 'Flux (orbes en courbe)', stream: 'Streams', read: 'Lecture à AR élevé'};
+function obExercise(kind, bpm, min, opt = {}) {
+  const beat = 60 / bpm, R = seeded(bpm * 31 + min * 7 + kind.length), notes = [], end = min * 60, cx = OB.PW / 2, cy = OB.PH / 2, clampX = v => obClamp(v, 18, OB.PW - 18), clampY = v => obClamp(v, 18, OB.PH - 18);
+  let t = 2, combo = 0, col = 0, ang = 0;
+  const add = (x, y, nc) => { if (nc || combo >= 8) { combo = 0; col++; } notes.push({t, kind: 'circle', x: clampX(x), y: clampY(y), combo: ++combo, col, len: 0}); };
+  if (kind === 'stream') {
+    const N = opt.n || 16;
+    while (t < end) { const a0 = R() * 2 * Math.PI, rad = 30 + R() * 25, x0 = cx + Math.cos(a0) * 40, y0 = cy + Math.sin(a0) * 30;
+      for (let i = 0; i < N && t < end; i++) { const a = a0 + i / N * 1.6 * Math.PI; add(x0 + Math.cos(a) * rad, y0 + Math.sin(a) * rad * .8, !i); t += beat / 4; }
+      t += beat * 2; }
+  } else if (kind === 'jumps') {
+    let k = 0;
+    while (t < end) { const d = 40 + (OB.PW - 70) * Math.min(1, (t - 2) / Math.max(10, end - 4)); ang += .35 + R() * .3; const s = k++ % 2 ? 1 : -1; add(cx + Math.cos(ang) * d / 2 * s, cy + Math.sin(ang) * d / 2.6 * s, k % 8 === 1); t += beat / 2; }
+  } else if (kind === 'flow') {
+    let x = cx, y = cy, dir = 0;
+    while (t < end) { dir += (R() - .5) * .9 + .25; x += Math.cos(dir) * 46; y += Math.sin(dir) * 40; if (x < 30 || x > OB.PW - 30) { dir = Math.PI - dir; x = clampX(x); } if (y < 30 || y > OB.PH - 30) { dir = -dir; y = clampY(y); } add(x, y); t += beat / 2; }
+  } else {
+    while (t < end) { add(30 + R() * (OB.PW - 60), 30 + R() * (OB.PH - 60)); t += beat / 2; }
+  }
+  const events = []; for (let b = 0; b * beat < end + 2; b++) { events.push({t: b * beat, k: 'kick', v: b % 4 ? .7 : 1}); events.push({t: b * beat + beat / 2, k: 'hat', v: .5}); if (b % 2) events.push({t: b * beat, k: 'snare', v: .6}); }
+  return {notes, events, len: end + 2, step: beat / 4};
+}
+{ const e = obExercise('stream', 180, 1, {n: 16}), j = obExercise('jumps', 150, 1), d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  console.assert(e.notes.length > 100 && e.notes.every((n, i) => !i || n.t > e.notes[i - 1].t) && e.notes.every(n => n.x >= 0 && n.x <= OB.PW && n.y >= 0 && n.y <= OB.PH) && d(j.notes.at(-2), j.notes.at(-1)) > d(j.notes[0], j.notes[1]) * 2, 'obExercise'); }
+function obTrainCards() {
+  const p = gstore('rhythmPrefs', {}), sel = (id, opts, v) => { const s = el('select', 'f gSel'); s.id = id; for (const [val, t] of opts) { const o = el('option', '', t); o.value = val; s.append(o); } s.value = v; return s; };
+  const k = sel('obExK', Object.entries(OB_EX), p.obExK || 'jumps'), b = sel('obExBpm', Array.from({length: 15}, (_, i) => [String(120 + i * 10), (120 + i * 10) + ' BPM']), p.obExBpm || '160');
+  const n = sel('obExN', [['16', '16 notes'], ['20', '20 notes'], ['24', '24 notes'], ['32', '32 notes']], p.obExN || '16'), m = sel('obExMin', [['1', '1 min'], ['2', '2 min'], ['3', '3 min']], p.obExMin || '1');
+  const ar = sel('obExAr', [['9', 'AR 9'], ['10', 'AR 10'], ['10.3', 'AR 10,3'], ['10.7', 'AR 10,7'], ['11', 'AR 11']], p.obExAr || '10');
+  const go = el('button', 'btn main', 'JOUER L\'EXERCICE'), r1 = el('div', 'row'), r2 = el('div', 'row');
+  go.onclick = () => { Object.assign(gstore('rhythmPrefs', {}), {obExK: k.value, obExBpm: b.value, obExN: n.value, obExMin: m.value, obExAr: ar.value}); saveGames(); go.blur(); rhSelect(['ex', k.value, b.value, m.value, n.value, ar.value].join(':'), 'X'); };
+  r1.append(k, b, m); r2.append(n, ar, go);
+  const c1 = el('div', 'sysCard'); c1.append(el('b', '', 'EXERCICES'), el('span', 'hint', 'Des motifs générés pour travailler la visée et la vitesse : sauts qui grandissent, flux en courbe, streams de 16 à 32 notes, lecture à AR 10 et plus. Le nombre de notes ne sert qu\'aux streams, l\'AR qu\'à la lecture.'), r1, r2);
+  const c2 = el('div', 'sysCard'), S = rh?.section;
+  c2.append(el('b', '', 'BOUCLE SUR UN PASSAGE'), el('span', 'hint', S ? 'En cours : ' + obClk(S.a) + '–' + obClk(S.b) + ' à ×' + S.rate.toFixed(2) + ' · ' + S.wins + ' réussite' + (S.wins > 1 ? 's' : '') + '.' : 'Après une partie, l\'analyse sous le jeu propose tes passages les plus ratés : le passage tourne en boucle au ralenti et accélère de 5 % à chaque réussite.'));
+  if (S) { const s = el('button', 'btn', 'ARRÊTER LA BOUCLE'); s.onclick = obSecStop; c2.append(s); }
+  return [c1, c2];
+}
+// les paliers de pp : un insigne tous les 1000 pp (et le premier à 500)
+const OB_PPM = [500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000];
+function obPpCard(pp) {
+  const c = el('div', 'sysCard'), g2 = el('div', 'obMedals');
+  for (const v of OB_PPM) { const on = pp >= v, t = el('div', 'obMedal' + (on ? '' : ' off')); t.append(obBadge(obRank(v).col, Math.min(3, Math.floor(v / 3000) + 1), on), el('b', '', v + ' pp')); g2.append(t); }
+  const nx = OB_PPM.find(v => pp < v); c.append(el('b', '', 'PALIERS DE PP'), el('span', 'hint', nx ? 'Prochain palier : ' + nx + ' pp (encore ' + Math.ceil(nx - pp) + ').' : 'Tous les paliers sont atteints !'), g2); return c;
+}
+// les amis : chacun échange son code (copier-coller, aucun serveur) ; le classement par pp, et leurs scores sur le niveau choisi
+const obMe = () => gstore('rhythmPrefs', {}).obName || 'Joueur';
+function obMyCode() {
+  const {pp, acc} = obProfile(), T = gstore('orbeTop', {}), top = Object.entries(T).map(([k, L]) => [k, L[0]]).filter(x => x[1]).sort((a, b) => (b[1].pp || 0) - (a[1].pp || 0) || b[1].s - a[1].s).slice(0, 40).map(([k, e]) => [k, e.s, e.a, e.g, Math.round(e.pp || 0), e.m || '']);
+  return 'ORBE1:' + btoa(unescape(encodeURIComponent(JSON.stringify({n: obMe(), pp: Math.round(pp), a: Math.round(acc * 100) / 100, t: top, d: Date.now()}))));
+}
+function obReadCode(s) {
+  const m = /ORBE1:([A-Za-z0-9+/=]+)/.exec(String(s)); if (!m) throw new Error('ce n\'est pas un code d\'ami d\'Orbe');
+  const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (typeof o.n !== 'string' || !Array.isArray(o.t)) throw new Error('code abîmé');
+  return {n: o.n.slice(0, 24), pp: +o.pp || 0, a: +o.a || 0, d: +o.d || 0, t: o.t.slice(0, 40).filter(x => Array.isArray(x) && typeof x[0] === 'string').map(x => [String(x[0]).slice(0, 120), +x[1] || 0, +x[2] || 0, String(x[3] || '').slice(0, 2), +x[4] || 0, String(x[5] || '').slice(0, 20)])};
+}
+{ const c = 'ORBE1:' + btoa(unescape(encodeURIComponent(JSON.stringify({n: 'Éa', pp: 1234, a: 97.5, t: [['rh1normal', 5000, 98.1, 'S', 120, 'HD']], d: 1})))), f = obReadCode('mon code : ' + c);
+  console.assert(f.n === 'Éa' && f.pp === 1234 && f.t[0][3] === 'S' && f.t[0][5] === 'HD', 'obReadCode'); }
+const obFriends = () => gstore('orbeFriends', []);
+function obFriendCard() {
+  const c = el('div', 'sysCard'), {pp, acc} = obProfile(), F = obFriends(), name = el('input', 'f'); name.value = obMe(); name.maxLength = 24; name.placeholder = 'Ton pseudo';
+  name.onchange = () => { gstore('rhythmPrefs', {}).obName = name.value.trim().slice(0, 24) || 'Joueur'; saveGames(); };
+  name.addEventListener('keydown', e => e.stopPropagation());
+  const cp = el('button', 'btn main', 'COPIER MON CODE'); cp.onclick = () => navigator.clipboard.writeText(obMyCode()).then(() => toast('Code copié : envoie-le à tes amis'), () => toast('Copie impossible', true));
+  const inp = el('input', 'f'); inp.placeholder = 'Colle ici le code d\'un ami'; inp.style.cssText = 'flex:1;min-width:0'; inp.addEventListener('keydown', e => e.stopPropagation());
+  const add = el('button', 'btn', 'AJOUTER'); add.onclick = () => {
+    try { const f = obReadCode(inp.value), L = obFriends(), i = L.findIndex(x => x.n === f.n); if (i >= 0) L[i] = f; else { if (L.length >= 30) L.shift(); L.push(f); } saveGames(); toast(f.n + (i >= 0 ? ' mis à jour' : ' ajouté')); rhList(); obTopShow(); }
+    catch (e) { toast(e.message, true); }
+  };
+  const r1 = el('div', 'row'), r2 = el('div', 'row'); r1.append(name, cp); r2.append(inp, add);
+  c.append(el('b', '', 'AMIS'), el('span', 'hint', 'Chacun copie son code et l\'envoie aux autres (message, mail…). Un code reprend tes pp et tes meilleurs scores ; recolle le code d\'un ami pour le mettre à jour.'), r1, r2);
+  const all = [{n: obMe() + ' (toi)', pp: Math.round(pp), a: acc, me: true}, ...F].sort((a, b) => b.pp - a.pp);
+  all.forEach((f, i) => { const r = el('div', 'obRow'), x = el('span', '', (i + 1) + '. ' + f.n); if (f.me) x.style.color = '#ffd84a'; r.append(x, el('b', '', f.pp + ' pp · ' + (+f.a).toFixed(2) + ' %'));
+    if (!f.me) { const del = el('button', 'btn', '×'); del.title = 'Retirer ' + f.n; del.style.cssText = 'width:auto;padding:0 6px;margin-left:6px'; del.onclick = () => { obFriends().splice(obFriends().indexOf(f), 1); saveGames(); rhList(); }; r.append(del); }
+    c.append(r); });
+  return c;
+}
+// les replays gardés : revoir, au ralenti, exporter en .osr (maps osu!)
+async function obRpCard() {
+  const c = el('div', 'sysCard'), have = await obRpHave(), H = (games.orbeHist || []).filter(h => have.has(h.d)).slice(-12).reverse();
+  c.append(el('b', '', 'REPLAYS · ' + have.size), el('span', 'hint', 'Les 50 dernières parties sont gardées sur ce PC (pas synchronisées). Au ralenti : ×0,5, la musique garde sa hauteur.'));
+  for (const h of H) {
+    const r = el('div', 'obRow'), b1 = el('button', 'btn', '▶'), b2 = el('button', 'btn', '×0,5'); b1.title = 'Revoir'; b2.title = 'Revoir au ralenti';
+    for (const b of [b1, b2]) b.style.cssText = 'width:auto;padding:0 6px;margin-left:4px';
+    b1.onclick = () => obRpWatch(h.d); b2.onclick = () => obRpWatch(h.d, .5);
+    const right = el('span', ''); right.append(el('b', '', (h.g || '') + ' · ' + (+h.a).toFixed(2) + ' %'), b1, b2);
+    if (/^osuo/.test(h.k || '')) { const b3 = el('button', 'btn', '.osr'); b3.title = 'Exporter pour osu!'; b3.style.cssText = 'width:auto;padding:0 6px;margin-left:4px'; b3.onclick = () => obOsrSave(h.d); right.append(b3); }
+    r.append(el('span', '', h.n + ' [' + h.df + ']' + (h.m ? ' +' + h.m : '')), right); c.append(r);
+  }
+  if (!H.length) c.append(el('span', 'hint', 'Joue une partie : son replay apparaîtra ici.'));
+  return c;
+}
+async function obOsrSave(d) {
+  try {
+    const R = await obRpLoad(d), s = obOsuSets().find(x => x.id === R.song), df = s?.diffs[+String(R.diff).slice(1)]; if (!df) throw new Error('la map de ce replay n\'est plus importée');
+    const md5 = obMd5(new Uint8Array(await obFileBytes(df.f))), f = R.f.map(([t, x, y, k]) => [t, x, R.mods?.includes('HR') ? 384 - y : y, k]);  // osu! rejoue un replay HR en retournant le terrain lui-même
+    const bytes = obOsr({...R, f}, md5, obMe()), u = URL.createObjectURL(new Blob([bytes])), a = document.createElement('a');
+    a.href = u; a.download = (s.name + ' [' + df.v + ']').replace(/[\\/:*?"<>|]/g, '_').slice(0, 80) + ' ' + new Date(d).toISOString().slice(0, 10) + '.osr'; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+    toast('Replay enregistré dans Téléchargements : ouvre-le avec osu!');
+  } catch (e) { toast('Export impossible : ' + e.message, true); }
+}
+// le navigateur de maps : la recherche d'osu.direct (classées par défaut), filtrée par étoiles, BPM et durée, et le téléchargement en un clic
+async function obBrowse() {
+  const q = $('obBrQ').value.trim(), st = $('obBrSt').value, [s0, s1] = $('obBrStars').value.split('-').map(Number), [b0, b1] = $('obBrBpm').value.split('-').map(Number), [l0, l1] = $('obBrLen').value.split('-').map(Number), out = $('obBrList');
+  out.replaceChildren(el('span', 'hint', 'Recherche…'));
+  try {
+    const r = await fetch('https://osu.direct/api/v2/search?mode=0&amount=100&query=' + encodeURIComponent(q) + (st ? '&status=' + st : ''));
+    if (!r.ok) throw new Error('le site a répondu ' + r.status);
+    const L = (await r.json()).filter(s => s && Array.isArray(s.beatmaps)).map(s => { const bm = s.beatmaps.filter(b => b.mode_int === 0 || b.mode === 'osu'); return {s, bm}; })
+      .filter(({s, bm}) => bm.length && (!b1 || (s.bpm >= b0 && s.bpm < b1)) && bm.some(b => (!s1 || (b.difficulty_rating >= s0 && b.difficulty_rating < s1)) && (!l1 || (b.total_length >= l0 * 60 && b.total_length < l1 * 60))));
+    const mine = new Set(obOsuSets().map(x => x.set));
+    out.replaceChildren(...(L.length ? L.slice(0, 40).map(({s, bm}) => {
+      const sr = bm.map(b => b.difficulty_rating).sort((a, b) => a - b), len = Math.max(...bm.map(b => b.total_length)), row = el('div', 'obRow'), b = el('button', 'btn' + (mine.has(s.id) ? '' : ' main'), mine.has(s.id) ? 'DÉJÀ LÀ' : 'TÉLÉCHARGER');
+      b.style.cssText = 'width:auto;padding:0 8px;margin-left:6px'; b.disabled = mine.has(s.id);
+      b.onclick = () => { b.disabled = true; b.textContent = '…'; obOsuLink(String(s.id)).then(() => { b.textContent = 'DÉJÀ LÀ'; }, e => { b.disabled = false; b.textContent = 'TÉLÉCHARGER'; toast('Import impossible : ' + e.message, true); }); };
+      const right = el('span', ''); right.append(el('b', '', sr[0].toFixed(1) + (sr.length > 1 ? '–' + sr.at(-1).toFixed(1) : '') + ' ★'), b);
+      row.append(el('span', '', s.artist + ' - ' + s.title + ' · ' + Math.round(s.bpm) + ' BPM · ' + obClk(len) + ' · ' + bm.length + ' diff. · ' + (s.creator || '')), right); return row;
+    }) : [el('span', 'hint', 'Aucune map trouvée avec ces filtres.')]));
+  } catch (e) { out.replaceChildren(el('span', 'hint', 'Recherche impossible : ' + e.message)); }
+}
+{ // la carte du navigateur (onglet IMPORTER), l'onglet ENTRAÎNEMENT et la carte d'analyse sous le jeu
+  const mk = (tag, id, cls, txt) => { const e = el(tag, cls || '', txt); if (id) e.id = id; return e; }, opt = (s, L) => { for (const [v, t] of L) { const o = el('option', '', t); o.value = v; s.append(o); } return s; };
+  const br = mk('div', 'obBrowse', 'sysCard'), r1 = el('div', 'row'), r2 = el('div', 'row'), qi = mk('input', 'obBrQ', 'f'); qi.placeholder = 'Chercher une map osu! (titre, artiste, mappeur)'; qi.style.cssText = 'flex:1;min-width:0';
+  qi.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') obBrowse(); });
+  const go = mk('button', 'obBrGo', 'btn main', 'CHERCHER'); go.onclick = () => { go.blur(); obBrowse(); };
+  r1.append(qi, go);
+  r2.append(opt(mk('select', 'obBrSt', 'f gSel'), [['1', 'Classées'], ['4', 'Aimées'], ['', 'Toutes']]), opt(mk('select', 'obBrStars', 'f gSel'), [['', 'Toutes les étoiles'], ['0-3', 'Moins de 3 ★'], ['3-4.5', '3 à 4,5 ★'], ['4.5-6', '4,5 à 6 ★'], ['6-99', '6 ★ et plus']]),
+    opt(mk('select', 'obBrBpm', 'f gSel'), [['', 'Tous les tempos'], ['0-150', 'Moins de 150 BPM'], ['150-200', '150 à 200 BPM'], ['200-999', '200 BPM et plus']]), opt(mk('select', 'obBrLen', 'f gSel'), [['', 'Toutes les durées'], ['0-2', 'Moins de 2 min'], ['2-4', '2 à 4 min'], ['4-99', '4 min et plus']]));
+  br.append(el('b', '', 'NAVIGATEUR DE MAPS'), el('span', 'hint', 'La recherche d\'osu.direct : choisis une map, elle se télécharge et s\'importe toute seule.'), r1, r2, mk('div', 'obBrList'));
+  $('rhImport').after(br);
+  const tab = mk('button', 'rhTabTrain', 'btn', 'ENTRAÎNEMENT'); $('rhTabStats').before(tab); tab.onclick = () => { rhTab = 'train'; rhList(); tab.blur(); };
+  const ana = mk('div', 'obAna', 'sysCard'); ana.hidden = true; const ac = mk('canvas', 'obAnaC'); ac.width = 400; ac.height = 96; ac.style.cssText = 'width:100%;image-rendering:pixelated';
+  ana.append(el('b', '', 'ANALYSE DE LA PARTIE'), ac, mk('div', 'obAnaBtns', 'row'), mk('div', 'obAnaSec', 'row')); $('obModBar').after(ana);
+}
+cv.__rh = {analyse: buf => rhAnalyse(buf), beatMap: a => rhBeatMap(a), st: () => rh, now: () => rhNow(), ball: (n, t) => obBall(n, t), themes: () => OB_THEMES.map(t => t.name), skins: () => OB_SKINS.map(k => k.name), rpLoad: d => obRpLoad(d), osr: (R, md5) => obOsr(R, md5, 'Test').length, sec: (a, b) => obSecStart(a, b), code: () => obMyCode(), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
 console.assert(new Set(RH_SONGS.slice(0, 60).map(s => obTheme(rhCompose(s).len).name)).size >= 4, 'orbe : thèmes variés');
 ctx.onOpen(() => rhOpen());
 
