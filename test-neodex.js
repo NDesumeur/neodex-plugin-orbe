@@ -37,8 +37,8 @@ module.exports = async ({ pj, sleep }) => {
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', bubbles: true })), 0`); await sleep(400); await shot('pause');
   const pm = await pj(`document.getElementById('gc').__rh.st().mode`); await sleep(400);
   // la vraie souris, posée sur la fenêtre, peut survoler « Recommencer » dans le menu : on choisit « Continuer » au clavier
-  const hov = await pj(`(rh => { const m = rh.menu; rh.menu = 0; return m; })(document.getElementById('gc').__rh.st())`);
-  await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })), 0`); await sleep(300); await shot('reprise');
+  // (dans le même appel : la souris n'a pas le temps de revenir sur le menu entre les deux)
+  const hov = await pj(`(rh => { const m = rh.menu; rh.menu = 0; document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })); return m; })(document.getElementById('gc').__rh.st())`); await sleep(300); await shot('reprise');
   const rm = await pj(`document.getElementById('gc').__rh.st().mode`);
   if (pm !== 'pause' || rm !== 'resume') throw new Error('pause : ' + pm + ' puis ' + rm + ' (survol ' + hov + ')');
   await pj(`(() => { const rh = document.getElementById('gc').__rh.st(), c = document.getElementById('gc').getBoundingClientRect(); document.dispatchEvent(new PointerEvent('pointermove', { clientX: c.left + rh.pcx / 320 * c.width, clientY: c.top + rh.pcy / 240 * c.height, bubbles: true }));
@@ -133,6 +133,8 @@ module.exports = async ({ pj, sleep }) => {
       for (let i = 0; i < 60; i++) { await new Promise(r => setTimeout(r, 250)); const rh = document.getElementById('gc').__rh.st(); if (rh.info?.osu && rh.mode === 'ready') break; }
       const rh = document.getElementById('gc').__rh.st(); return rh.info?.osu ? [rh.notes.length, rh.notes.filter(x => x.kind === 'slide').length, rh.notes.filter(x => x.kind === 'spin').length, rh.ob.ar, rh.ob.cs, rh.ob.st.name, document.querySelector('#rhSongs .obCard.on')?.textContent, document.getElementById('rhImpMsg').textContent].join('|') : 'pas importée : ' + document.getElementById('rhImpMsg').textContent; })()`);
   if (!/^8\|2\|1\|9\|4\|Mixte\|Test - Essai.*Insane/.test(osz)) throw new Error('map osu! : ' + osz);
+  // une map osu! : la toile s'élargit (le terrain au milieu, le compteur de touches loin des orbes)
+  const wide = await pj(`document.getElementById('gc').width`); if (wide !== 400) throw new Error('map osu! : toile de ' + wide + ' de large');
   // « Sans les chansons du jeu » : seulement tes musiques et les maps osu!
   await pj(`(s => { s.value = 'imp'; s.dispatchEvent(new Event('change')); })(document.getElementById('obFSrc')), 0`); await sleep(500);
   const imp = await pj(`[...document.querySelectorAll('#rhSongs .obCard > .hint')].map(h => /osu!|ta musique/.test(h.textContent) ? 1 : 0).join('')`);
@@ -146,6 +148,8 @@ module.exports = async ({ pj, sleep }) => {
       const ring = (lw, fill) => (x, w) => { x.beginPath(); x.arc(w / 2, w / 2, w / 2 - lw, 0, 7); if (fill) { x.fillStyle = '#c0c0c0'; x.fill(); } x.lineWidth = lw; x.strokeStyle = '#ffffff'; x.stroke(); };
       const files = [['Bleu/skin.ini', new TextEncoder().encode('[General]\\nName: Essai bleu\\n[Colours]\\nCombo1: 60,140,255\\nCombo2: 255,90,160\\n')], ['Bleu/hitcircle@2x.png', await png(256, 256, ring(10, true))], ['Bleu/hitcircleoverlay@2x.png', await png(256, 256, ring(6))],
         ['Bleu/approachcircle.png', await png(128, 128, ring(4))], ['Bleu/cursor@2x.png', await png(100, 100, (x, w) => { x.fillStyle = '#ffe040'; x.beginPath(); x.arc(w / 2, w / 2, w / 2 - 4, 0, 7); x.fill(); })]];
+      files.push(['Bleu/inputoverlay-key.png', await png(46, 46, (x, w) => { x.fillStyle = '#ffffff'; x.fillRect(4, 4, 38, 38); x.fillStyle = '#404040'; x.fillRect(8, 8, 30, 30); })],
+        ['Bleu/inputoverlay-background.png', await png(193, 46, (x) => { x.fillStyle = '#20a0ff'; x.fillRect(0, 0, 193, 46); x.fillStyle = '#0b2040'; x.fillRect(3, 3, 187, 40); })]);
       for (let d = 0; d < 10; d++) files.push(['Bleu/default-' + d + '@2x.png', await png(44, 64, (x) => { x.fillStyle = '#ffffff'; x.font = 'bold 56px sans-serif'; x.textAlign = 'center'; x.fillText(String(d), 22, 54); })]);
       const parts = [], cen = []; let off = 0;
       for (const [name, d] of files) { const nb = new TextEncoder().encode(name), h = new Uint8Array(30), c = new Uint8Array(46), hv = new DataView(h.buffer), cv = new DataView(c.buffer);

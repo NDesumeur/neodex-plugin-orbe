@@ -46,7 +46,7 @@ More mods: **SD** (a single miss and you fail), **PF** (anything but a 300 makes
 
 ## pp and statistics
 
-Each finished game gives **pp** (performance points), computed with osu!'s formulas (the 2023 ones): aim, speed and accuracy, depending on the level's stars, its OD, its AR and your mods. Values are very close to osu!'s, without being guaranteed identical (Flashlight counts as an aim bonus). A miss or a broken combo takes some away. Your **profile** adds up your best game on each level (the 1st counts in full, then 95 %, 90 %…).
+Each finished game gives **pp** (performance points), computed with osu!'s code translated as is (the July 2026 version): aim, speed, accuracy, reading and Flashlight (FL), depending on the level's stars, its OD, its AR and your mods, as for an osu! stable play. A miss or a broken combo takes some away (osu! also estimates broken sliders from the combo). Your **profile** adds up your best game on each level (the 1st counts in full, then 95 %, 90 %…).
 
 Your **rank** follows your total pp: Beginner, Bronze (50 pp), Silver (200), Gold (500), Platinum (1000), Diamond (2000), Master (4000) and Legend (7000). **Medals** have three tiers, **bronze**, **silver** and **gold**: Great grades (A, S, SS), Full combo (1, 10, 50 levels), Stars (3, 5, 7★), Accuracy (95, 98, 99.5 %), Combo (500, 1000, 2000), Performance (50, 100, 200 pp in one game), Hidden, Hard Rock, Double Time and Flashlight (finish a 2, 4, 6★ level with HD, HR, DT or FL), Traveller (10, 50, 200 different levels), Regular (50, 200, 1000 games) and Endurance (1, 5, 20 h of play); plus First step. And 34 more: Perfection and S streak (number of SS, of S), Starry combo, Starry SS and Sharpshooter (a full combo, an SS, 98 % on a hard level), Legend (8, 9, 10★), Metronome (UR under 150, 100, 80), Easy, Slow motion, Sudden death and Flawless (EZ, HT, SD, PF), Cocktail (several mods at once), Importer (osu! maps), Your music, All-rounder (the styles), Streamer, Jumper, Technician, Slider and Goldsmith (a style at 3, 5, 7★), Expert, Collector (a song in all 4 difficulties), Record library, Persistent, Stubborn, Marathon, Total score, Clicker, Regular player, Fire week (days in a row), Night owl and Early bird. Each new tier is announced at the end of the game.
 
@@ -54,7 +54,7 @@ The **STATS** tab starts with your **player card**: an image of your profile (ra
 
 ## During the game
 
-Top right: the rolling score, accuracy, a pie showing how far the song has gone, and the mods. If you already finished this level, a small **green** or **red** number under the score tells whether you are ahead of or behind your best at the same moment. Bottom: the bouncing combo, and in the middle the **hit error bar** (early on the left, late on the right; the small arrow is your average). On the right, the **K1 K2 M1 M2** counters light up when you press.
+osu! maps are shown wider (400 × 240 instead of 320 × 240): they reach the edges of the playfield, and the key counter on the right no longer hides the orbs. Top right: the rolling score, accuracy, a pie showing how far the song has gone, and the mods. If you already finished this level, a small **green** or **red** number under the score tells whether you are ahead of or behind your best at the same moment. Bottom: the bouncing combo, and in the middle the **hit error bar** (early on the left, late on the right; the small arrow is your average). On the right, the **K1 K2 M1 M2** counters light up when you press.
 
 ## Playfield themes
 
@@ -95,7 +95,7 @@ Like a mapper, the game **spots the choruses**: when 4 bars of a chorus come bac
 
 The music drives the map: streams on drum rolls, sliders on held notes, the finish on accents, new combos more often in the chorus.
 
-Stars are computed with osu!'s formulas (the 2023 ones): aim (with slider travel, angles and speed changes), speed (with rhythm changes), on the same scale as osu!.
+Stars are computed with osu!'s code translated as is (the July 2026 version): aim (jumps, agility and flow, with slider travel), speed (with rhythm complexity), reading (AR, notes on screen at the same time, HD) and Flashlight with FL. On ranked maps they land within 0.01 star of the osu! website. osu! maps imported before are recomputed once on opening.
 
 ## My music
 
@@ -107,7 +107,7 @@ In the **IMPORT** tab, create a level from an imported **audio file** or a track
 
 - Separate **volumes**: the **music**, the **hits** (hitsounds, sliders, spinners) and the **menu** (changing song or difficulty, the end grade, medals).
 - **Hitsounds**: osu!-style hit sounds in four sets (Normal, Soft, Drum and **8-bit**, with old-console sounds), with the whistle on sliders, the finish on accents and the clap on beats 2 and 4; plus the slider tick and spinner sounds. Or **Hit sound**: a single sound on each note you hit, one of 10 (Soft, Clap, Wood, Kick, Crystal, Pop, Hi-hat, Snare, Pluck, Tock) or none. Losing a combo of 10 or more plays a « combo break » sound.
-- **osu! skin**: **IMPORT AN OSU! SKIN** (or drop an **.osk** file on the game): its circles, approach circle, numbers, sliders, cursor, combo colours and hit sounds replace Orbe's, drawn sharp (the rest of the game stays pixel art). It shows in the Skin and Hitsounds menus; **REMOVE THE SKIN** removes it. One skin at a time.
+- **osu! skin**: **IMPORT AN OSU! SKIN** (or drop an **.osk** file on the game): its circles, approach circle, numbers, sliders, cursor, combo colours and hit sounds replace Orbe's, drawn sharp (the rest of the game stays pixel art). If the skin has a key counter (**inputoverlay**), its frame and keys replace Orbe's. It shows in the Skin and Hitsounds menus; **REMOVE THE SKIN** removes it. One skin at a time.
 - **Background dim** (0 to 100 %, down to black): the background darkens while playing so the orbs stand out (less during breaks in the song). **Background blur** (0 to 8): blurs the background image, as in osu!.
 - **Cursor**: its size (1× to 3×), its trail (the skin's, long or none) and **pointing**: mouse (captured) or **tablet** (the cursor goes where the pen points).
 - **Sensitivity** (0.3× to 3×): cursor speed in game. While playing, the mouse is captured and follows its raw movement, without Windows acceleration; Esc releases it and pauses.

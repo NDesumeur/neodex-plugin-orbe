@@ -30,6 +30,7 @@ const CSS = `.gMain{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
 .gStats{display:grid;grid-template-columns:1fr auto;gap:4px 14px}
 .gStats b{text-align:right}
 .gameBox canvas{max-width:800px;aspect-ratio:320/240}
+.gameBox canvas.wide{max-width:1000px}
 .rhFs{position:absolute;top:14px;right:14px;opacity:.85}
 .gameBox:fullscreen{padding:0;background:#05010b}
 .gameBox:fullscreen .rhFs{display:none}
@@ -84,7 +85,8 @@ const CSS = `.gMain{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
 .obCatH b{zoom:1.25}
 .obCardR{display:flex;gap:8px;align-items:center;flex:none}
 .obChip{padding:1px 6px 2px;background:var(--dc,#3a3058);color:var(--dt,#e8e0ff);box-shadow:0 0 0 2px #0a0814;line-height:18px}
-.obCar .obCardTop b{zoom:1.25}
+.obCar .obCardTop{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
+.obCar .obCardTop b{zoom:1.25;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  /* un long titre : coupé avec « … » (le titre entier dans l’infobulle) */
 .obChip .pxI{width:10px!important;height:10px!important;margin:0 0 0 3px}
 .obDiffRow>span:nth-child(2){zoom:1.25}
 .obDiffs{display:flex;flex-direction:column;gap:4px;margin-top:6px}
@@ -421,7 +423,7 @@ const clock = s => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStar
 // petits outils communs aux jeux : une toile pré-dessinée, la position du pointeur dans le canevas, un bip
 const cnv = (w, h, fn) => { const c = el('canvas'); c.width = w; c.height = h; const g = c.getContext('2d'); g.imageSmoothingEnabled = false; fn(g); return c; };
 const spr = (rows, pal) => cnv(Math.max(...rows.map(r => r.length)), rows.length, g => sprite(g, rows, 0, 0, pal));
-const W = 320, H = 240, cv = $('gc'), g = cv.getContext('2d'); g.imageSmoothingEnabled = false;
+let W = 320; const H = 240, cv = $('gc'), g = cv.getContext('2d'); g.imageSmoothingEnabled = false;
 const cpos = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H]; };
 let actx = null;
 const beep = (f, d = .1, type = 'square', slide = 0, vol = .08) => { try { actx ??= new AudioContext(); const o = actx.createOscillator(), gn = actx.createGain(), t = actx.currentTime; o.type = type; o.frequency.setValueAtTime(f, t); if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + d); gn.gain.setValueAtTime(vol, t); gn.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(gn).connect(actx.destination); o.start(t); o.stop(t + d + .02); } catch {} };
@@ -985,7 +987,7 @@ function rhStars(notes, len, factor = 1) {
 console.assert(rhStars([], 60) === 1 && rhStars(Array.from({length: 600}, (_, i) => ({t: i * .2, lane: i % 4})), 120) > rhStars(Array.from({length: 120}, (_, i) => ({t: i, lane: 0})), 120), 'rhStars');
 // les étoiles des chansons du jeu, calculées d'avance (outils-publication/gen-orbe-stars.js) : 2 caractères par difficulté (centièmes en base 36)
 const obStarsEnc = L => L.map(v => Math.min(1295, Math.max(0, Math.round(v * 100))).toString(36).padStart(2, '0')).join('');
-const OB_STARS_T = '547e7qa35i71ahcm4a71a3az4o9bb6bd6h9tc2d96m9vepew4a6v97au4m6793924z8c9zb14f708la84w7xa6bt5h8jbibt4p8q9ybg497wadbs4l8yb7ck5k8fbcc35vaca8bp648cb0cd4x8obye861albjdr509ddbdm689eb3dh5s9kbldr6kaedhe56a8ucyde6s92c6er5q9lekey6vavf4gf6i9leifa62age8g477c1f6gr6j9ndkft7cbfdzg76sajdwgf74bwemhh81cof4is7watbwf57ydpfgio8bcrg7kk8wd4f7hx486c8o9o4h7v8n9q486s8p9e516q8ja14r7f8t9l4t738taa4l7q99a4508a9vag4p829iaf4s5w7y93567g889w4v7n9kba538d91ac538ab4b7598baybo5d9cbsd3579zbdc65a86aobf5f8e9uav5889aqbu4o5z9p9m4p7d9mci598dbndc5p98b3c05o9baabv5c7c9md55m8yb1bz5tadd7e0649kbkcp68abc9e0587yb6dp5i89c0di6aa0ckdq6c9ydnf04s71aabr69addpeo6lacdpey71b1doga5r9ecfd874awe7f46wamcddf6t8fcjgd6y9zcje36nagcue471bbdnf66pacetfq5q9vcmf572c8fjhg7gayf2fw7nbpg1hc678mdlga5y9sgzhm7gchh4iy7kave6f76m8wbsgc7ocqeeh57lb9dsfs81cwf7iw7havd9hr7nbpdphc3j5l6p7m6298cnd65890azbn5o8ibacu7fb3fpgu6cbpe0ee435g757t70bjdyes7lb4erg23t5b78833m4v5z704a7c9tap4z7ra8au63abe4f47mc4gghj6mazbpe33o677p9g70bcg8h87eboejgo3s4r6e6z455n778b4u7i9qat57839sat649ub7c77nbsg8hi4v89aac74e6d8a8w6favdbf57rcnf1gj454w797v3h5869714w8f9zb35t91aebr5qaicmdc75bmf6fz6c8pb3ce455n6x8671auf4fv7ud0fugq3y56707m475k738j4t91axbn5596afb4569gbcdy6yc2fzgk5t74abb54j7s9a9k7bbsetg07cb6dneu466m7f8s3h435k6w5n8ib2cg5i8t9yba5zasdve27vc3f8g05kawcbdp4a5v758n6xb9e7ez6qahdpfq4i5n7n8b3z6c7j8e5fa7c3cl5b8c9qb86mald7ef7rchhiiy6aaicicy4m6y959q5f9zdof673b5fhhk425a797j304k5w795d8cb4c4568oaobc5z90cxe168bdgzhx4v8lbecw4w6r7z8y6waxdufj79c9emge335a5n7a415m79824p6u9ray4t96bfdw5ya2cfcq7ybwf4g26caqbrdb456l848s74c3effy6zbuech13s5u6r7s3r4x6u7d4q7ka0bk568ka4b163aoc4d76parfvje5x9cbjck3r6a808i72bgemfd7lcsfzh64c5z7c8b4w80a7b34l70828t5fa6bicp8acsejhb3x51647m6jaid6eu6caccee33t5y777y76bcdjir5g889pb14s7k90a4527wa2ax6eaaemh23n526p8162a0bkcj5x9hbece6qa9e5ec88cpg5hj5q9yc2d54y8oa9b83n6a8uag304s74905s8obxcn80cde3hx2z3m5d5n6jaudoe66daibhd13j556k8k87dhgkhi5l90avbv557s8k914v92aybv6uawgkhy3a4u5x6y6ebgdfei4z85bccy5y7ub1d87wcveyij5caabwd65o7pb2c74d7ea6bc3q4l7g855q8e9iat7td8glhh3k51667b6eaedfdp6ladbwdy3g4o636s80d1elhy5599c7dv54709yap546c9vbf6ubiegg94d608l9o61arcgd96dawd8dr639sc1d67hccf1h25o8rabb55p8davc64o5z9aau3i5d6i715d9gcld075acg7ih3f4i5p6h62akchdr5vatcke6344q5b628aclenhr5r8wb7c54x7n9rar507w9sak7md0fhhd3u6b747w5q8vbrcl5q9fazcp5sadcsd57rbmfth95c8vaqbt5m94aubb5d8xagbu40576z7k5i9cb0bv7mcxfeiv3s55798b6ia5dxee609idafc3c516c6j8kdpf4io4t88axbz4o689fa0537xabb377boedfb3n4n6j7k6xand3e25s8pbabr66bwdhel7ebsfygz59a7bcds4k7b9ya94j7fabb8486n7t8t5q8parb176bogyic3w69757j6kapdeei6pbocvfg3z5e787s7qbqg0h7517m9gar407f9ob84g6w9kbl7cbmergq4a6i818f5yagdedx5xaabyci6kaed3e37mbbglhb5ha6c7de5v93arcq567caob7373v6k7e5t9kbsco7uczexg93d4i646v5p90chew6eaadieq3z5r707x7yd6ffie5792albz5380anc04v7qa7az70boeugg3k5a788068a6bxdi5q90b8c46tancxea7vbzgei55i8ubrc65x8ybech4y7d94a332536p75579mbnc57zcxgphw3g4y5w77629odbdo659rc1dd385k6v7e77ajgpiq5c8sambp436d8jae577v9ea86vaeflfm496j7r9p6393c8cx5ha4bwd36wbcdrfe7scvfghl6498asc34u869uao4t7ya0av3o5r6r7m4v8lbpde7kcpf4gn3j5n6y7l5x90c6d35zagcze03r50656x7pcpe4h14z87adba517r93ad4z8caabb6b9lfph64b5r879r569ic4ck609zc5cr6yb1dpek7mcnelft5d92b6cb4t8wbbcr5284a2ai3r5a6f7g5u9ubpcs7ucshmi33m5f6y7i6ca7bqcr6aaabsdm394s646s82dugiju60aycvdq4r7a9k9v558mawcw73bxfphi3t51777u6m9ydce2619mb5cl68ard3ej6jaegii85ua4cle04s8vagc45masc2dq436g72855l8fahbl84c9g9hd45626r7i6dagcodi618jduev415l7c8i7scmebgk558va6bj4g73859e5c99b5bx73axdfex3s4v6i7c6a9pcle35l9tb0bs6x9ydbey7nc2g7hg5k9xb8d05p9wawbg5d8wbyc73s5m6p7c6098cace7ocag0gu3j475k6s5k8xdeet6b9qctdt3x5y7b7x7jbpdngv5m9hblcs547kamao567pa0ak7ccbfwi54o5z8g9263aecmd95z97bscs6195bjdc7tb7hahm609wbkcr5r9yaybz517u9mag3o5o67715ya1bkd16damg1io34495v6g6kabcwe85o9fd2co3b4j5n6y7qcnhjir4y77ayc85886a8ax4z899sb07dbyf4g94c70828t598ibuec6e9mbmch67a9d7dq7wd2gchs5k86bdbk5986aub25977alde4b5o7z8c5e8vb1bh7abhh2ik3w4t5x6w5r8uc0cn6yb1cge23d4u6n7a7vcpgqhj5u9bb9bu4s7c8s9k5g8a9sb97qcmfth93r4q6r7q5l9kcfd25x8hbacg6l9pdqev6haaephn5f94albo4r8r98aw4y7397a5446a7k7t5m8zakbg68a7fshj3l41676m6dbae3es5q91cydq3m54617487d9g2ka4l84b4cz51738c944i7g99a870ayecfy4c6e6z825590bcdx68a1bocs6pbae5gg7tccdzfq5m8kbkbw598qaias4t8j9mbb406h7t8c5vapctdu6kbadcig3s4d5z746h93cgdd6lbydnf33r4j5z7182cvfbh64p80apca4v818ya45h8d9xau7vcmg4ha3l5l7i945uawcyea5ta3c1ck6v9ccxf27scjg5h35p9abfcb5c8jajc85783a2bg3o5j7q8y5e8ob5cx8ecmgak03u5v797k6sagd3e66ea4ejf034496i7582crezj75893blbz4y7e9cba4s6q8uao74b1ezg24b5w7d7n67a7cpcv6hbacue86ca8c8d07fc2heii579gakba5i9qbwcd5d84afcj415c7s8m5n9aagb479badrfq4b5x7h92699sbyd46ha4e9eq3d576p8d84cmeuht548cblcy4l5y868u486q94ag6ubdf2gl3y5i6i7960apchd85vaac6db6sate7ep89cpgziu5k92bcc14w8xalbr558c9ub93l5m7r8q5oa5b2cf7ocjfeh23r576m7h5m8sb9dc6i9zc2f4435a7u927zcngkhy5d8eahat4l7a9b9v58929has6vbhfige40506o7l5u9tcnep5y9ubkcl69b1d2ek7ibvg7hr5d9daac24q7b999c5395awbc445u7b8763a3btcf6vabgfi93g5e6q7o63a3ced56997bod3364h5l6k7ucxfvi95a8maubn568raiak55819pat6zanekg23y5r7e8k5ka3d9e75g9lcgdt6jajc9d57cccfth05u9dbkcu599iarc6547s9oay415s748h5y9eagby7tdegjhm3m51667f679sbbcx6c97cjdf3q5e6s7h89cyeuh656879zb14p6v8b98577e7y9t77bhdifb4b6u83905z9obpd65s9ubqcp6ia3cfdr80c0gqht5v8wb8bx5r8wb1bi5b8xajbn2z4c616t5z98b1c688cieki83o5e6h795za0bjc664ahbudc3a5b6r7f8rcgeghs5i88aod04w7j8q9z4y6p9bar6pbsf5gv426a7a8t6a9zc7d15y8wb2d55ha7cxer7pbkeigv629obte95c7ta2b15u9haobu3x65849l4s7vapcg7vcvg2il3c415b5y6a9hc6ct65ajc2e03o596l7u7ebweair5i9vaoc84z7wa1as4o7994a961a6evgh3u547d8d5uawcgdd61agazck7nbnfsgl7fafe4ft5j93bqcj5f9vbxcq4z7s9sa53l657u8l5ja2blcw84cvephg3y556w7o5m9dcedl608najct3m506d777vc6gghh527qbidv4s7798a1497692ak6qa5ebfq3s5v7h8a5z9qdbdm5ta7c3e16t9mcydl7hcoh6ix5v8fawbp43799daj57859gaw436g7o8f5o93bmc687cmfegb3b4s6q7b5j9rdwes5h96coer3f54646v7rc5g2hc5d9jaxcw5i7a8y9x4z7u8z9w7dbng6gr455s7p8s69abbxdi568sbpch6nacdrex6pa9g9is5qahbjca598sahab5a9pb0bl4h5y7q885p9bbtcj7ucgekhq405w7g7u6hajcwe86abxeeg03s516j7q83czeign5k8narbo4z8a8va756889oar71b7ekh43w5e6a8g6jagckdq5tamc1dt6haqc5dr84buemij628ia0bl4u7x9dac5d8dasb34f6f7q8s5i8fb7c37pcuh0i039596r7u5x8mctex699zdlff3j4q5r718ddtflhw4x859ba54j79959s5l9bbdbm7kcnflgz42657s8d6q9bdkep68aibucf5y9qblc87qbifmh16998b6ct5p97btby5b8razbe30516g775q9wc7cx83cgfshr3w5h627c6bbpc6cv6gaqebfu373x5r687lchfhhb5h9fbgcc4t709r9y4w788sa16ybvewgv4a6m868h5s85chey5y9tbkcm6rabe2fa78bsegfn5a929saw4t8vb1c74x7wb6c93r4y759w5n9ibcbv7hbug4hn48667z8h65bbdkek6fa2d2eo3a4n6a7b6nbmcrj9528bavb84y7r9s9w4w7x9tau7ebkftg64a5v6e7t5797c1f8649gc9dg6qb4dzeq6ta5fvhj578eagc058809eao5b6q989k4h718b8s5e9xc3cs7sayf1gc445a75825saccrdf6faee6fs3c526y8a7uc3epi25g8rambb4y7z9waq4u7x9nab75aucvfb4j6d849p6d9md8e8689ib0cl6ob5emgi70akg8j45b8gaxbr517697a74x8mafbh3c566u825d9kaoby7yd7glhu394s5z706faecbdz6eahe5fy3u5q6x7g6xbsdwk15l80bsc84x7v9gao568i9xb877bee8fn4f69838n5n8ubccm5u8wcrdu6p9vcled7kc0fdh56aabbkck4q7xambm5a7uancb3r4l7n8a568yaac080cwg0ky3t5a6x7u60a8dde46hb7dveu3y5178846k9kdmi25589bdci4w7o85934w749ja26xawevft4i5b74855o9fbocn579fbecq6ib0f1fk79byglh34y7gaxbi588qaobn5b7m9laa3p66757a5j99azc67ncyg9h63o5i6f77649wcod86p9lcoec3r4t616m83cfe3h9538eb5bn4z7x99a14a6x9eap7db6foga3v5s77825wabaxca66aib3cy6rb5djet7sc4i3hy4x8mb4bp4k8oa3bg578g9raz3q5f6g7i5w9baxbr7nb1f2g83y4r5w6p5tatc9cr6h9ldsep3b4i5y728dcqenh45i8uauc14n75939p567f9tb376bgdzfm4d688na25h8zc9cv5h9jc5ee6ranbtdl88cbechk5n97aucj5e9fa9bs5m84beck3g4x6u7u5u9qboc879c6gwi13v5i6i735395csdg558xbtds324a5y738fdneoi85i73ajbw4s62809d5b86awc379baf6h33q5d6m826sane8fa5v8tbpcr5z8rdhfm83cxe8hc5t9hb1cl5o8sb9ck5a8kbfde3q4y5t6u638xchdq7wdfgmht3m4z6l795e9nc2da6kahdce73p5i6d717wd1f8h45f8hbcc1547s9zb04o858yae74bbfmgb416f7y8z5m9hbtcd5o8makbq6f9canc282djfci35v9ac2cv5g87b7ch4x7n9aae3x5h7g8t5wa6c2cx7ccjfuge3z536p7w69abbpcs6gawc1dw3r5g6q728cc3f0j04t82b3bi49768s9a598z9ram6maqf1ft4i6j7t8z6gaicldy5ya8chdc6q9wfgf27qbwfggt5m8fb5c85i85acao5e7fawcd3w5g6o7l5h99bhc86zb1dof63z5b7c8r6ha8cudl61ald8e33e4z656r8jctegha5582asb44q6c898z4j6v909r7oc4fth6445j7b82689nc4cp5v9oc4d37cbcdof383cxf4im5l9pbick4j7m9haj507x9dad3u5b7w9i5q8maybq76bpethg3m4n66745z9nazcj65a8d2d63g5466728ad2ffhf5aa6bsck415k8i9g4z6x9waz7lbdf3gb3u67717x5w9icre15r8fb1bk6saoe7gk7c9zezi05t9fb1d6518aaic0567mafb54c6n7f855592b5dt84c4gahq3g4t5p6z6fa1chei5b9mczet3s5h6o7l7yd9fki35c8sazcp4h758p9h508hadbc7abve6g03i516j766fb3duec5n8ubec26fb6cmd378bsgshf5e9ibic95g8m9taz557x9sb63k546v7s5p95btcs73algxje3f4q5i6j679wcndq6mare1fo3m5d6k778bcceegz5496bbbm5b839wat4m7m9qae7fbkepfp3q506v7y60afcadm6a9vbbcm6v9ud3e17ybug0hb5g8ka2b54m6o9kao557a8z9z3l5p7r7v6ka9bocp6gawg6hh2z484w5z6cb0d5e46pa3dof83p4v616w89dbf9ix4s9hbsd44v759ba85d8z9yau7dbyf1gc3w4s6m7b64b4c6ei5g9vbeci618w9zbo7abjhei05w9bchcj5j8qa6b25b8d9xaw3k5p6t7p6398b8c77wcug2hf3x566x7b6jbacbde6jabd8g53n4c5w6l84dugnki4f759kah4u8394a6406l8xan78b6dbft466e808q6b9xcnet5ya8ckdh699cbxce7jc9etgk5s93azc15090albi4u7ga0ah3f4p6q7l5oa6bic879avfxgr3y5s767w69a8d1ds6aa7c3df3m5i6v7d85cpfnhl5c8nbjc15b7ya4b1568o9fbj73ahfrfv3r6m7y9a69albwdf6c93bbc66j8ze1e47xcwfvhb4q85bncd5h8eakbc4x97b2bz3q4p6m7j5da7btcu7jbue1fu315o6p7g6a92bqcc5q9tbldj3l4q646w6wbfgeim558qacbo518sa6b44s798r9o74b6dtfh3s5h6l806cavbsd46j9vbecc6q8ucddh7mbkh0id5w9ibwcj4v8d8ja85a83anb33t5v7f855m8xb1cl6raigpk83r4u6k6z6hb5d4eh649oc2dl455m777t83ctfwhs5a9cb5c04y7l93ad547x9jah75cfeugi425g6n7p6daecbdi598kbodh6k9ccbd16f9tf1i35xatcjd85e8vbpd0569danbf3t4u6o7c619sanbu7jc9hdi236436n6t699gc9df5lapdbfg3z6276867mcrffil5f8zaobg4e627w95598g9sb37gckg8h94f6h80946ka3bwdi679ibqct6pajdkel6rakd2iw5b95aybt4w749naw5b7va5bp335m718b5m8ubncs7lbxg3hc3y536v7o6d9ucwdh72a6cneg3h50626v88d9f1h55o8oatbz4l758x9l4x7h8k9o7fcjejg245506d7l6cb6cndp659lbmcn6magdpev7td2ghhh4w8lbxd3547saibz5n8q9maq405r677v629mbwcg83czgtip3q4p5l6w629nbpco6rbgdgfa3u5s6l7c7wd4g4h35k9zbrcr4d6t8c995j859ebl5w9ofngy3x6d8194588kbie4609db7c16baccbdj7mcgfigv5o9ybpct5m9xb4bd5o90c4d93p5h819061apcye77vblf8h03o5p7a7o5z9ncme26a9ycdem3e4t5n6h6nale1j15b82a3b84m6o8y9g4v8a9ead7abqenfo3r526f796gadc3de6g96afby6m9xegfp6db2g4hh609ybmdm324g4q64';
+const OB_STARS_T = '4r7b7pae586zarca4h7ba9bk4n8paobi669obudy6g9ydxev426j8oa14d6b8r9l4s859tay4l6x8sar4m7k9sc1598fb3bz4n8ba6bt4f7ja6b74d88ajby5g8daxcb5l9xambz5t8fb6cq4l86b5cy5pa5badz5g99cvdk5y97b9e05v96bodx66a4dder5v8rcqei6q9gdhf85c94dpeo6qapecgc6n9mekfn6ga8e7gs70beevgz6aa6digg70axeggw6zalephu79bkewi182byehis7maucmg67kdefak381cfgim08mczekj3496b8q9x487t8ja6416g879u4u6x8sal4h798pac4l6v8vaj4d7i8za34o879rao4i7t9bah4v618j9p54718daa557v9nbg4q818uak5783b1bi5a87avbt529fbldc4y9pbace567vatbp5h8ga5bb4x87anbw4z6v9zaf4k7xa9cc557ybgdp5h8yb8ch5b8qadbt5n7j9qdh5d8uayc65pa3dfe75t9cbeco5x9yc3ee587ybcdq5981btd9629mcke86b9edffe557nayc86c9sdkex6ba3e4fd6oaqdhga5i8zc8eg6uape7fi6la7d0e86n8mdkgl6o9scfep6dagd8ep6qatdifs6wahedfd609wd4fn70bqfmio7jalesg079bag6id5u8sd4ga5u9sg5h97ic9gtj97oadeffe6k9dcbh477c6e7ha7ab3d9gb7wcgeyiu7jb5d8ih7nbsdci73c556k7y5d97cidd5c8waybs5k8cbld97bb2fqhh61bbdnep425872806nbddsfj7nb3ffgr3s5b778l3i4w687d49759aad4q7m9ub068ahe1fa7fbqgxig75aobuez3n6c7v9u7db3g0hw7bbefci13o536d7b425h7f8u4t7j9yba4y7w9uay5r9ib9cw7fblg7iq4n7xa4bh426j858y64aadafg7nc4f0he3r516m7r3b4v68764n8a9rbk5h8wa9c35ra4cgdf6zb3ezgd6b90bscl3z5k748m77aremfr7ncwfqhz3n546x7t455x778w4o8paqbo4s90aibb5c9eb5dk6tbpgbi35n7ib7d24c7j8u9n72beeuh47db7e4f8426f7l9j3j4i5m765e8jbcdf538k9qbj63avdeec7nbofagx5oaecde84b5z7c946qauejff6ka2e7gl4c5l7z8n4a6f808y5s9sbtd55087a0bq66akd0e380bzhykf60aicqdo4m6l919y4z9idheo77auf6id4d5l7f7t324q5x775a81b6d04y8eajbp6294cwe05vb2g4hb4q8cbjcm4x6m869h70avdyff71bqewhw3j4w5t7i4f5y7j8j4l6q96aj4p9aawdf5v9tcico7lbqfmhg6la7cfdk466j8b956sbnesgr6qbkejhu3k5m6v7u3p506v8a4v7va7c04n8da4b35tafc6dv6habfmj4669hc8d8466f829c6nb2eig87acgg2i64c6a7i8y4p7ta4bf466u7x935d9vbjcw7wcseeiw3u556a7p6ta4d6f5689wcee2475w7a8272bcdeiy538b9wbb4l7d93ab4p7wa0bc6ba4e8gm3p5d788j5q9hbjcz5p96bccv6la7diei83c9g8i85e9kbrd54r8eaabk3q6c91ay2z4o6w8g5l8obxcx7sc3e1jw2x415a6968afdif264agbedi3q5b6p8p7wd6hdjd5c8rakc04u7l8q9i4p8qaibx6bamg9hr3a515y756cb5dtej4q86bmde607yb0d57ncoevk9519wbzds5j7nbnco3z7ba0b53u507m8a5n8eabbq7ncqgoic3l546a7f6daddce06c9wc1e83b4u627286cyepij539dbtdk4q73a5bh576sa1bh6layecgw485z8qa35zahcjdp6aamcydy5r9gbydf74c4g5hz5c8gabbc5j7zb0cj4p6i96bb3d5c707c5f94c2d478alg1i2374k5z6q609pcuee5qagcpez334s5e6b7xc5ekkc5o90becf4s7s9rb14p7o9qaw7gcmfriq3s647c8i5j8ubvcw5g90b6d65qaecgd07obfgbi4548iayc4578tb1c85g8xaqca4357777r5997b1c57icjf7jh3e54798v6n9zdnfa5w99dkfy3e4s6a6s8bd6f2jq4x88arbb4r669gaf4o7wa8b96ybiesg73n4u6m836qaed0eg5v8hboc964bqdefj75bogihz5pa0bcdq4k789sac4h75a3b34b657u925e8jaybo77bagejy416d737y68a4dqf567bacnfq3w5o6y7v7nbugii05e7va8bb476pacbu476x9eaz74b9f3h8445z7k8l5za6die35ma3bkd474abdkfe7kb2gphv5ja0bxdy5s8vaxd7577jb4bo354b5y785k9hc3cy7lcufch83r4o6c785o8zc3ek6la7dgf23t5l6w837rcyf0k04x8raic1527naic44p7oa1b973baexhi4a5f7b8r659ybue95s94bbca6oa5d3el7pbwh6js5a8qbpck6b8lbgcu4q7e92aw3c4m6q7l589hbvc87ucqgyip3d4t5y7g609jczdr5s9cc3dv3h5l6v7n78amg3ip528ialc8436a80al4t7f9caj6va4fhg4456h7o9v608tcgdw5j9zbud66raue1g57mcogeih5t8wauca4v7z9qb64n7qa0b33u5r76844r8gb2cy7dcbfhic3d5l6x7m5m8uc5de5t9xd2ee3u4z6f787fckdvhi4x81aebi4y7i97ay4q8dafbi5z9pf2hb465w7x9f5792bdcb64abbwcl6nardzeu7fcgeeg1538yb7c75c8pbddc4u869qay43546z7s5r9gbpd47ucnh8ie3t596i7d6aa3btdq5ya2bpeh324w687288dvgzll68ajcxe84j7491a0528ca8ct74blg3i53m577f8d689tdcek5q9kb1cx6bagd0f56ia8grhw5ha1coet558lapc25kamc4eu4567708c5f8kalc788bugfir3t5y6y876da3cteb618ldbej3s5k788f7hcde8ig558rabbs4d6l8d9j4v8rb1c66uajd3f548546j7p669bcpec5j9qb0cd6pa3dwfc7rbrg7i3539jbbd45f9vb4c55590bscl3h5e6m7m6193c4cb7ebqfzh73l4k687a518mcoea639jclef43617i7u7kbndrhk5h93bkcv587taqav527ra4au7dbtg6ik4k688oa35sa2ced06693bjcx5x9ebndr7tb8h5j05m9pb9d05l9ib2cs4s7s9man3j5j697g5u9xbmdh63ahfti8385364736da6cfds5p9rd0d53j4p62797kcbi3k1537eaqcg5887aebo4v839zbj71bkerh84570899m528cbsdi629ec4dn64a1dcee7qcqgiio5e84babp5o80alb2537n9xcn4h638o995k97bhc075bghhit3u526n7d5u8zbzcp6mawcff13r516j7x7jcdhkjb5n96b8cc4e738ta45n85a3bj7dcegaig3r4q6t865k99c8d95x8kbncn6v9se7eu6oa5ebhs588oaobt4y8k9tca4n7493a0405y7d855h8wavby5qa4fghb3j4h5y6y6mazdnfa5y8zczei3f5962767ycvgplc4b84a9ca4o6r8o9v4d7999a56sabexh43u63738t4x8pbtdp5y9mbudh74azephu7abqeihj5d8obrcb568ia0bh4s849hbk3q617f835rahcje966b5dmi73i4m6p7n6n8wcfds6qbpdxfn3n4u5u797xcnehiu4b77aebu4x7s97al57849pb382cdggi1415w7s9w5jalclet5y9rbxca6t9bdjfu7jcbgxid5j9lb7d35c8jahci4s7o9zbx3d5m7e8f5d8sbedc8lc7g1lj3t5w7e836ka3d4et679qdvev3c4e6d7n82cmf1km528tbec94v7f95b8526p98au70ahfkgl4a5v70886a9yckct6ib3d5fd67a0cgef7ibshmjg4r91aibd5e94bmci5a80anco3z5f8e9e5g96aeb96wazdtgh435s789g5x9cbudc6i9re3fl384y6k8g7uc8ekit4z81boca4k688a9c3w6l8qa36ub8eqgj3s576m7o5saac3d45ta0brd56maidvf881cohijg5990bbc24v8uamc34r8b9wbh3u5l7k8h5qa4bacn7fc2fmi43n5d6l7j5f8qb7cw6y9zccfs3w5i7y9l7ucigfih5688arbn4l7f9aa5508s9nbb70b8evgr3l5h6z865p9wcudq5x9hbpcy5za5defu7fbfgbiw5992aec24g7n9c9w5391axbm425z7l8l5t9yblcp6m9vfsij3k556s7o5k9mc9dg678xbyd7384l5s737scxfwji548iaubn5t8papaz4m7m9eb06safeuh3425s7a8j5f9ycwdu508wc5df66a7c5dw7cccfphg5l97bhct5a9gaycs577r9kba3k5k6w8s5k94acc87hcxgziv3e52697g5z9jbida619bctdt3j566q7w7uceeji34z85a0bd4f6o8e9z527l82a46xawdwg2456p84935s9kbqde5j9yc3d56sa2cadv7lbnhaiz5q8wb1cg5h8jaxcb518jalbs354u69786795b7cc80cdelif3f5c6l7d5p9cbncv6namc3da3r596r7d8ucjeaiw597xaydj4l7b8qad4s709gaz6dbgf8hw3q6c7c956f9yc3d25u8kbhdi55a1coe07ebbfchx5x9ubsej5k7ja7bs5g9baucq405t8ia64l7pakc07wcag1ke2x455i6e639ic2cs5xa6ccec3n576q7z7dbwerj65i9ob2dd4u7p9lah4g7a94aj5v9vebgc3g5471865mafbrdi5s9yaqch7ybofrhz7ba9elh25a8rbfcj5ia6bzd44x7h9pak446h7v8t5c9nbmdf7ucgefiw3u5c6z845o92c2d65s8tbhdm3j536f7i7yc3g2hq5080badw4s759ea8437f8tae6j9xe7fe455u7e8m5k9kckdf63aec3em709kc5dp80cuhuk95j8cb0bx4h7a9han52879eaz3v6d7x8q5i90bgck7zc6g5hy3p4r6q7p5e9hdce64y9ccoeq3e536g757uc9gkih4y96aqcw5b7g9can4z7i8ya97abkgchj425g7g9264a0c4dx4z8gbbcb6fa7dzf86eabg2ib5sacblco528oa5ae5295avbr445u7s8h5g95bccn7lc9efj53o5l7h8c649zcrek6ebheig73h526r7r7qcmehhs578cacbs4r848uag4u7t9jb279azezhs3v5h6c8j6ya7coea5fa5cfdv67a8c2dy7ybpeojb5t90a9by4m7u9eah5b88ahbg4a6m7r9h5f8jb0ch7pcmgyis385d6z8i5u89cgeo679idkgc3w556i7c7ydbfqj7508495ah4e7894a55w8vb6bh7ecjgeim4f5t788p6r95duf45za9brco699tboc47jb9g7ik5w8vb4cw5u8xc8d2598kb6bu3b526n7k5d9ocddg7vc2g2k63z5f6l7n5zatcfdq6kame3g73b4d626s7bcbfqhw578sbfcc4r759u9z4l768mad6qbieth74k6o8g9d5i81ccf45r9lc2d86qa5ehga6zbhejge4z8o9rb54w82bfdb4w7rarbw3m507f9r5998b4c57bbog8ic3y62809464ardmf36c9qd7f53a4y6g7n67brcmiv4w89apbt4k7g949v4p7oa3b075b4fogy3w5p6k804p92bxes5t98bve66jape6f5769zf9h14w87acc34y7u9nbo526n9wa14b6s8a8z579lbmct7rauflhr3t577f875k9ucfd86fa8e5gj3d506w8d7qc1egj95b89akbb4y7s9wb34p7h9ka86xahddgi4m6d8qae6f9fdae45x9abgdl68auepha6paefmiu5181aucc4r7397ap518eazc1324x6m7r5b92ahc17qd3gnjb394q617m64a5ckef6aa9eag13s5h6u7x6pbsdsjo5b7xbnd24n7n9rap528d9xbq7ab1egg54m5t8d8w5h8sbtd75k97crej6n9xcxek7hbsfehq669rbmd64g7qadb75a7yanct3l4v7488548ja7br7zccgelu3m5d727z5u9udaev6bb8dses3q537d8r699vcpi4528ab1cs4n7i8f9l4r6w9dau6tabf0g642557d8y5e95bicu5f96axcl6caoelfx7bbngdhb4r7iaebe5e8jaobu517d9raw3q5x717c5q96bacv7bcoh3if3d576a7d609lcid46q9idcen3k4r5x758jc9e3hy4x8ebgcb4s7r96at466l98aj7naxg2gl435u768n5j9vaice5va8awd66kandofv7sbthfi44p8eaybo4t8mafbi4v8aa2b63n5e6k7w5p8qb2cc7iazfjh43m4q6d7r5sa6c6cw6c9fdfew324h657n84cke6io5d8nb4ch4l6q8va34y7b9ybj6wb6eagl4i6a87a7598tc7d55l9cbte16iavc1e383cddyjh5f8vaxd05993agby5o7yb9d33n4x6r7s5m9kc1cv76bzgpj23o5f6g7b4s8tbzd4588jbxdl334d607n84d8eekf5m7nakc14x6g8g9s5e8kbbcm75b0fght415d6m896rajedfi5y8sbqd55x90dcf67qcne2iv5j99bdcw5o8pbuc9528fbndv3k4t66796c8qcyep7nd6h1k13c516p7f5092c0cs6c9xd9ei3d5d6h7d7scvfihz598ubgco4w82a2bj4a7t8wak75azfbfy4567889k5c94bycw5k8tatcb6f9eb2d07ud7f5ji649ebod95a8fb7d44k7f9bal445k86905p9rc4d374cafphx3w536w86609ybmd46aadbwdw3k5a6k7e8lc2eqjd4q7xajbl46728l9c518o9sb46gacesg94n6j839e69a5clew5x9sckdk6m9neufa83bufnh75b81b0dd5r89apbf5p84b7dq3q5d6t875k99bbc975b1e8fr3s5f7f8s649pche75vacd4eb3d57657a8fcqe9iw4y8aapbk4o6e879a4c6v97a17cbpg2i24e5x7i8n659nbucu5o9jccdb77azdhf17vchezjc5g9lbhcz4o7f9jat4v7o9oar3h597r905i8iambr74b8fgj43s516m7w5n9gawca689xcsdk3c50627585cofdiq519lbcch3s5k81905276ambj7kb2f9hq3r5u717x619fd3en5k8hbsce70aadvh27c9ufji25i9bazda4r80akbk4y7kakbi496o7h8n4z8lazd78cbngoid3g4t5u7h6o9tdded4t9gcge93g556o7z7ocyesja568ob7d447738j9k4v85a3b76xbce9ho3g4x6v7m6daqdoen5d8pbbcl65amc9cy75bihphq519gb4cg4v8oabbd5m88a0bv3h546r7t5e94bqd16waig7j3334o5o6q5w9ndceo6nahe8h3415j6v7u82c8e4ia5e8vaqbc4z849sax4f7h9iai7cb9egfz3u5a708i5yabc4dj5x9sbdd4649pd2en7pbdgii8558daebw536m9kba4y7d96a13k5n7f7x6c9zbdd55zavfvha2y4h56656gapdsem6b9rdvfy3t536m7n7zd6etkd4c9dbfcr4y739ea65a8va1bb76befbh03j586l7b60aecbej5r9hbfcw618ma5by7ab9gvib5q96bxcn598c9obh528ka6bh3k5y6u7r608waycj7ocigcii3q5d6w7o6saycgdf6jaae2gw3o4i697780dth0li4t779wb24m7z9daj3w6n8sad7hawdnfw44648f9c6c9ydafy5xa0ckds6098bhcw7abtfgi25h94aqch4q8taabu4m789ran3e5c6l7m5l9wbkca79b4g8hn3p5g718f5z9ycwdz5z9zcodu3e586p7d7xchfsik508fb0bx5a7q9sba4w8q9jbx6ta8fagn3v6k869j5va3bvdr6h97brcd6g90dsei7lchgsih4b84b0cc558kasbf5890b1c13k4t6e7y5l9sbid678bleagd345j6k7v5v8xbnd85l9jc5dl3f4z627d6vb1g4ig518kaebo4w8la4bx4k7b8ta67aapdqfm3i5i6s8863anbydl699kbecw6w94cvdz7xbhh6jx5q9hbvcs4r7z8wav527yaebn3s5l7l925d8qbfck6lafflk43o5e71746daid0ek619nccdz3u5m717y7zc8gbiu5492b4c84j7f8rar4t7q9qaw6sc3f4i63r5l6t8465acc4e34x8pbid86c92c2dc61a7f4i05vadc2d65i8kbedh5a90a5bw3l4z6o805q9najc67rc1hkio3j4l6k796b9ecge25kaccvf348697c8n7rcaf8j85295ajc04h65879c568f9tbc75c4gbif476g8c9l6a9zcdel6a9gbxdf73aidtf96sajcyik5591ancb4z709dbg597sa0c7325q6y81638sbgd07lbqgpih3k50737y6b9ocqdp6sa3d5ep3h4y64797xcxf4hz5p8eb5c24g789aaa4z7f8r9v74c0euhf42566w8h65b4cke96790bgct6hahdsfa7fcugvio4i8ib9cr5486aqbt5e8m9xbs3t5q698a6199bkdb7xcshfjq3f4r5n775r9gbpd06nb4dig03m5k6q7q7ncmg1ir5p9ibrd14h6g879m507w99bq5l9jexg73r6a8a9q518ib7da5k92axc95xa4ccdw7cc5fihy5h9tbsd85k9bb0bk5m92c5da3i597o8l5yajd1et7qblfsi7465x797r5s9bcsep6m9ycjez3c4l5z756jagcwil5082a1bn506n929u4m7s9gb370baemgn3n5m717z64a4cde06392apcj6waaebgv5wayfyh85p9wb6dh304j4m64';
 const OB_LEN_T = '2sb425np2fjj29lv1t2c1lbi2r9w2ufy2mep2mep2lhp2dz92cgy2aaz2aaz27l023to1zv220ej1yaf1ws71yaf1vtb1qxt1tyf1oy31pq81pc21lbi1mpu1jcc1lbi1j0y1j0y1i3k1g1v1gmd1dds1d4p1dds32oo307529ef3e6n2vjm2ufy24d5372e2oao2mep1yjp34vi2h5w2fjj1seu2vyp2bqi2cgy1q8w2sft25np26xj1n9c2j62238c20y91kza2h411zv21xs31i2h2bgp1uvf1vc91ee229qj1smm1rcp1dds23z21q4k1okb1b6i222o1o6o1nt819g01zea1lbi1jnv16kk1wia1jzi1ipp15dr1tud1h7a1gmd14p71seu5vn24dbq4zzr4zkn41kv6egb5e053drk3wna6gsy5ah53o0h4frn4ocm3t0k5si65sxd418r48my57sk5npc4cp14cp14gs43p2f56qp4uai3h723xxs6g1f5ah54frn4j3k48un3k125d8j4qaa43604yhp4xs05e0549ql49ql5n3u40j9627b59hp4axc3wna59xm5yph4dbq3x3d50y040qq5xfm556o47664f3259hp5iqh4dbq4sll49mv49996r2057bb38eh4aid6uww6fhc4dbq4cp14vl03o9x68384mgi3y264uu05snr52wd3o0h4eqa4klx3zwy57y6533r3fgg4e0w5snr5p4m418r4frn4s9k4cv257y65sxd3u9s4zkn5qa651mh3ubx3sxz3g5a4su843ki4u4o3z7k45dj3qzt5gao3izf4cbp445c38nh556o518u4gkc41286hc05nc93uw04j7p3nor4wd7445c4gea3tke3i9g423y4hcl47ob4eqa4v6b4dya5p2x5f2w3ntr3ipf6bf553f6380p4hfz3pc05vn2393p4d7h40xe3kww4eqa53co44u93l545zby48un5az04o3a4bll423y5sc053f63szi48i7392k5prf40t14jba45cc37zu3sxz4cp145n7410w4yhp37qo5ch5582u3kjg45i95gnn556o47a03yy73mcr5qcl3r6643244qxu3ktp3pgt4z2w3k7e3d654e0w3cru4smp5kqh3zaq4ocm5eqb53f64nyi4bf93g8257sk36kp4vag4klx42vd3kyv5fva3uw03mg15tq746dj5rro6dep3vfm3ipf59xm4avr3o9x4w2t3ktp3xm13z3j52i2465f40dr37qo4qns4n133kar5meu4abk5o0n4ur349mb3nmb6fvu5aop3pqt4qfp3t0k4zkn42z04m894pb9469j38yj5ijs3pc03y9f4ocm44qc62kv53xb4a55445c6iou570o49x5462b3g7252ks3zq54ljl3s5z48r24i9a556o3pqt3q265jfi38hk4laf5gdd3xxs3lyd59xm4y7341584w2t3g5p5clc3nor4jzb48un396g4c3u5ln94lep37ld4wd73gc74w834ocm480241pw5exk50fq460u3w213nhq5qtw3l2h4a3g4su83veq44u9445c3tke3og852nc3ay95fwc5oxs44ku4ocm5vn25bol4xs04r6h3j3y5d8j38eh53rs472l3erh48i75fo14mae3rvj4m103nf756o066804jed3pkr6ise3w8k3drk491n3vyr5dh63ynt4klx4pb93tke46w453gd3xm140to5hj43m1y4qpu6ixq3v5n407r6bx556uq44zz50cr3n7t4dya3qeq4rrl4ocm3l3m3qyr536z4amc3zsh5exk3ri25w2f6ciy3t963fgg5adl4xs0472l4f703vgl4v6b44pj4vq1456d3of83pgt49nx3vdx3hvl4eqa45ue5vn26hdu4gxn3whh5x4y4n133ke83ri23gue5t2w3dkl4n315m0q3ywx3imf5k004pb93ti452ua3xd24r6h5yk53xxs4glq5ol348474c6i4glq3b9s4t5s3i304pb93lc340xe48i74r8v41wj4dci556o42fb5fe468gt4bq23pqt6stk4ls94m10445c3cfe4qkd3mdc4qj35amr3erh41m64nn33o9x36v15hj448un4iyo5snr4pb94g5s556o3s9o4eqa50im3qoh57l93o9x4ocm4qkd48dq3qzt4gv93ugf46jd4deo3vx15tvk679u46e541i35u054qns4w5h4x9s38eh5d8j35yk4njr445c42wn42ta5ron4f9c44mb4i1c3uw04wd752f63mpw41285mwd4y73445c4jxn3qoh4icr3fgg4zec52i239a83fgg3zda4rjg4by14qaa44r75yr35u273vfm3ddr58dm4qxu3wuf4ngz3n345vn231fe49mv4rd63zp23ees5b5q3s9o3jjm5cef3dkl4zb14q3g3yy73zv267k242764ocm4eqa3s0f525e3p3o4jzb52ks32hw4dbq4i9a476646324eqa41tc5v7b65pv3ofo3va95tc8570o4klx3w213p60625w3ged4b1e4gb548dq4huc5r373s1z3y9f5e7v39kt6b7a6lhm49993vp94zgh4sll4e3253jo3um94tyn3vx14fve4zec3okq3y724wj53z0j4aid5rro45s65cu55olz4hrr4dv2556o4dr03pi744s53fgg5vn23ctw4lu54iql3p603ugf5b173qoh3mkv4xs04bhz523k4zkn3tbu3wxr5prf4rpt4ocm4ea03bw052c43a7b516s3s5z42xv4b7b4x4t49ql3eq54yhp4jed601s5utr47ik3ktp6i924oxv3meu44s53aio4mxe3t6a4p2y528u3gv93gir5eqb43e43qgs4iap3p864ret5pgl3mul445c6qfa462b3o9x3va93sga5cef43ki4ryh4g5s46nq3gn65r374e7t3wna5hj43uja5b5q4pr43o9x3qoh5vn258w04k534p7y3rnq5tjv37qo4nv64qhk3qhq3pqt4e7t3tgg3w2q41ng3lrj5gxy5ph93uw03c4c6fhc4lox4v6b407r3l3m5vn23u745amr3pc03t3k4abk4iyo3s9o47y35dlp3heg651061k643ph3w2168cx4pw745wu4n5p3s0f506i3vk657wp4qkd46nq4d8e4dok4k6o3nku5g2u3efq4xek68ry3pva4klx5nvg4m5b57sk4o2f38yj68gt3pwi56jc3u743tbu4e8z5loq3s1z3ikz5bkk3pkr4q08506i4klx3pqt5o814pb94b5l4hag3epo5mjo3p3o4hdj4wmz3beq45g4556o4brh3yzo5t5f3heg5xc06fhc44ke4f61556o4m103tke4g2q37vs556o3iea4wd73lc33fgg46w44t3w4lep42764gn53dnk4w2t5rph44ke4mcp5j6v4fn53sga3ri23qoh5j063m1y4c32556o3i9g3va95t6v4rjg3oyc5kfp3nmb5hj4601s48r249996f224u2o3nyy50o236sk5qtw3pc04ww65d8j3udp3t6a5jr03c103l164h143ynt5prf5hp448dq4oxv65k751xp4q654qfp43876b5s388x52ai5j063x6v3pqt538i3jft3ti452wd47sh5prf6fso4cxq4e8z6ejc5k0045wu3z623pfb5exk3xs65avt3wai3zp24klx4d063yg73nse4xs03kbf5o0n4okz4hrr3pkr5bx341i34s9k46k23yg74gb53lrj4fxl3q6x3p0844t54k533d5d3o3u4da44dya66um5utr4klx3ktp6hq95ddn3ab944r738eh584i3fgg49ft4ulq32pi3kyv4pb93w8k3rk64qkd42ct4gea6kgu3vfm4fp8699z445c3ke83yom3t964wd73xm14x8y4mec40hh46nq4oom3ugf445c4ory3yg764z74qxu42fb4j7p51mh4lox4mo049kg3fgg4xs03nvh516s5j0643bv3hsb481p3wcn3ul95hj43rw36b024y0a4ojv4bf96elw3w8k445c51zq3cl34xs039yx4kwr57va3i9g3oin5vn24abk48i74abk4abk5tvk5jmr45v03imf5hyg4iu23api42763uls4cht3cng4o3a4x4t38eh47ob4plx4fas41og5qtw3l2h601s4yss3j1n44s55grc556o4e0w4hfz3z3j57sk3i304y48506i445c42ta556o4zkn3fgg506i3k3j5p2x6ozt3vyr4iu25gv358te3dtz44r73ucu4pb93i9g4zql4s573sk73ktp4fas4abk3jv64ist45s659pa52nc3w733jpp4xmk3tke4ory3uhi3ws85clc393p4rrl506i421542a44td544wu3kq53z7k3nvh59pa5ku2477s46nq6e8a5doh3w0n4deo3cmv3wai3jeo4n314b5l3wzr3hjs556o3r1445km5sc048bv4vxc4qpu3um93w216elw43hq3s884uh03kga6ac53gf643ki48un3gue43gn4v0d3pc04axc4m6x3cru5h4s56gn4eqa3yom2292';  // la durée de chaque chanson, en millisecondes (4 caractères en base 36)
 const rhStarCache = new Map();  // 'i:diff' -> étoiles (les morceaux du jeu donnent toujours les mêmes notes)
 { const D = Object.keys(RH_DIFFS); if (OB_STARS_T.length === RH_SONGS.length * D.length * 2) RH_SONGS.forEach((_, i) => D.forEach((d, k) => { const j = (i * D.length + k) * 2; rhStarCache.set(i + ':' + d, parseInt(OB_STARS_T.slice(j, j + 2), 36) / 100); })); }
@@ -1023,6 +1025,7 @@ let rhTok = 0;
 async function rhSelect(i, diff) { const me = rhTok + 1; rhBar(.03); try { return await rhPrepare(i, diff); } finally { if (me === rhTok) rhBar(null); } }
 async function rhPrepare(i, diff) {  // i : numéro d'un morceau du jeu, ou identifiant d'une musique importée
   let info, c, base, ready = null; const tok = ++rhTok;
+  obWide(typeof i === 'string' && /^o\w+$/.test(i) && obOsuSets().some(x => x.id === i));
   if (rh) { try { rh.src?.stop(); } catch {} rh.mode = 'load'; }
   if (typeof i === 'number') {
     const song = RH_SONGS[i] || RH_SONGS[0]; i = RH_SONGS.indexOf(song); c = rhCompose(song); base = rhChart(c, diff); info = {name: song.name, bpm: song.bpm, key: 'rh' + i + diff};
@@ -1258,6 +1261,7 @@ function keysUi() {  // construit au premier rhOpen : les réglages du jeu sont 
 function rhOpen() {
   const p = games.rhythmPrefs || {}; for (const id of ['rhVol', 'rhClick', 'rhOffset', 'obSens', 'obSkin', 'obHs', 'obDim', 'obBlur', 'obCurSize', 'obTrail', 'obAbs', 'obPrev', 'obVolHs', 'obVolUi', 'obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen', 'obSort']) if (p[id] != null) $(id).value = p[id];
   for (const id of ['obFSrc', 'obFStars', 'obSort']) if ($(id).selectedIndex < 0) $(id).value = '';
+  obOsuRestar();
   if (games.orbeVar || games.orbeVarSt) { delete games.orbeVar; delete games.orbeVarSt; saveGames(); }  // les variantes de map sont retirées depuis la 1.3.7  // un choix d'une ancienne version (« 3 à 5 ★ ») : toutes
   keysUi(); if (Array.isArray(p.mods)) obModSet = new Set(p.mods.filter(m => OB_MODS.some(x => x[0] === m))); obModsUi(); obDimShow();
   if (Array.isArray(p.keys) && p.keys.length === OB.KEYS.length) keysSet(p.keys);
@@ -1588,128 +1592,326 @@ function obChart(base, c, diff, info) {
   const o = obChart(ns, {len: 40, step: .125, beat0: 1}, 'S6'), at = t => o.some(n => Math.abs(n.t - t) < 1e-6);
   console.assert(at(1 + .5 / 3) && at(1 + 1 / 3) && obChart.copies > 0, 'obChart triolets/refrain', obChart.copies);
 }
-// la difficulté en étoiles, calculée comme osu! (osu!standard, version de 2023) : chaque objet devient un « objet de difficulté » (positions en pixels osu!,
-// le double de ceux d'Orbe, distances ramenées à un rayon de 50, temps en ms, curseur « paresseux » dans les glissières), puis la visée (avec et sans
-// glissières) et la vitesse (avec la complexité du rythme) accumulent un effort qui retombe ; les pics par tranche de 400 ms donnent les étoiles.
-// -> {aim, speed} (les notes de visée et de vitesse), stars, et ce qu'il faut aux pp : sf (part des glissières dans la visée), sn (notes « de vitesse »), nC, nS, nSp
-const OB_NR = 50;  // le rayon normalisé d'osu!
-function obDiffObjs(ns, od, rate) {
-  const great = (80 - 6 * od) * 2 / rate, D = [];  // la fenêtre du 300, en entier (ms)
-  const H = ns.map(n => {
-    const o = {t: n.t * 1000, kind: n.kind, x: n.x * 2, y: n.y * 2, r: (n.r || 16) * 2};
-    o.end = [o.x, o.y]; o.travel = 0; o.travelT = 0;
-    if (n.kind === 'slide' && n.pts) {  // le curseur paresseux : il ne suit la boule que quand elle sort d'un cercle de 1,8 rayon (1 rayon sur un retour)
-      const dur = n.len * 1000, reps = n.reps || 1, span = dur / reps, sf = OB_NR / o.r, at = ms => { let f = ms / span, p = Math.floor(f); f -= p; if (p >= reps) { p = reps - 1; f = 1; } const [x, y] = obAt(n.pts, p % 2 ? 1 - f : f); return [x * 2, y * 2]; };
-      const trackEnd = Math.max(dur - 36, dur / 2), nest = [];
-      for (let s = 0; s < reps; s++) { for (let q = 1; q < 4; q++) nest.push({t: (s + q / 4) * span}); if (s < reps - 1) nest.push({t: (s + 1) * span, rep: 1}); }
-      nest.push({t: trackEnd, tail: 1}); nest.sort((a, b) => a.t - b.t);
-      let cx = o.x, cy = o.y, dist = 0; const lazyEnd = at(trackEnd);
-      nest.forEach((p, i) => {
-        let [px, py] = at(p.t), mx = px - cx, my = py - cy;
-        if (p.tail) { const lx = lazyEnd[0] - cx, ly = lazyEnd[1] - cy; if (Math.hypot(lx, ly) < Math.hypot(mx, my)) { mx = lx; my = ly; } }
-        const L = sf * Math.hypot(mx, my), need = p.rep ? OB_NR : OB_NR * 1.8;
-        if (L > need) { const k = (L - need) / L; cx += mx * k; cy += my * k; dist += L - need; }
-      });
-      o.end = [cx, cy]; o.tail = at(dur); o.travel = dist * Math.pow(1 + (reps - 1) / 2.5, 1 / 2.5); o.travelT = Math.max(trackEnd / rate, 25);
+// la difficulté en étoiles, traduite du code d'osu! (osu!standard, ppy/osu, version 20260706) : chaque objet devient un « objet de difficulté »
+// (positions en pixels osu!, le double de ceux d'Orbe, distances ramenées à un rayon de 50, temps en ms, curseur « paresseux » dans les glissières),
+// puis cinq compétences : la visée (sauts, agilité, flow ; avec et sans glissières), la vitesse (avec la complexité du rythme), la lecture (AR, densité, HD)
+// et la Lampe (FL). Les mêmes formules qu'osu!, pour avoir les mêmes étoiles et les mêmes pp.
+// shortcut: sans l'empilement des notes superposées (« stacking ») d'osu!, à ajouter si des maps très empilées s'écartent des étoiles du site
+// o : {cs, ar, mods, beat} -> {stars, aim, speed, read, fl, et ce qu'il faut aux pp}
+const oCl = (x, a, b) => Math.min(b, Math.max(a, x)), oRL = (x, a, b) => oCl((x - a) / (b - a), 0, 1), oLerp = (a, b, t) => a + (b - a) * t, oDeg = d => d * Math.PI / 180;
+const oSm = (x, a, b) => { x = oRL(x, a, b); return x * x * (3 - 2 * x); }, oSmr = (x, a, b) => { x = oRL(x, a, b); return x * x * x * (x * (6 * x - 15) + 10); };
+const oLogi = (x, mid, mul, max = 1) => max / (1 + Math.exp(mul * (mid - x))), oNorm = (p, ...v) => v.reduce((s, x) => s + x ** p, 0) ** (1 / p);
+const oBell = x => { x = oCl((.5 - Math.abs(x - .5)) * 2, 0, 1); return x * x * (3 - 2 * x); };
+const oErf = x => { if (!x) return 0; if (!isFinite(x)) return Math.sign(x); const t = 1 / (1 + .3275911 * Math.abs(x)), e = 1 - t * (.254829592 + t * (-.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429)))) * Math.exp(-x * x); return x >= 0 ? e : -e; };
+const oErfInv = x => { if (x <= -1) return -Infinity; if (x >= 1) return Infinity; if (!x) return 0; const a = .147, s = Math.sign(x); x = Math.abs(x); const ln = Math.log(1 - x * x), t1 = 2 / (Math.PI * a) + ln / 2; return s * (Math.sqrt(Math.sqrt(t1 * t1 - ln / a) - t1) + (x >= .85 ? ((x - .85) / .293) ** 8 : 0)); };
+const oRange = (d, a, m, b) => d > 5 ? m + (b - m) * (d - 5) / 5 : d < 5 ? m + (m - a) * (d - 5) / 5 : m;  // DifficultyRange d'osu! (valeurs à 0, 5 et 10)
+const oRound = x => { const r = Math.round(x); return Math.abs(x % 1) === .5 && r % 2 ? r - 1 : r; };  // l'arrondi de C# (au pair)
+const oWide = a => oSm(a, oDeg(40), oDeg(140)), oAcute = a => oSm(a, oDeg(140), oDeg(40));
+function obOsuObjs(ns, o) {  // les objets en unités d'osu!, avec les morceaux des glissières (tête, tics, retours, bout) comme SliderEventGenerator
+  const rad = o.cs != null ? 32 * (1 - .7 * (o.cs - 5) / 5) * 1.00041 : null, pre = oRange(o.ar ?? 9, 1800, 1200, 450), hd = o.mods.has('HD');
+  return ns.map(n => {
+    const h = {t: n.t * 1000, kind: n.kind, x: n.x * 2, y: n.y * 2, r: rad ?? (n.r || 16) * 2, pre, fadeIn: hd ? pre * .4 : 400 * Math.min(1, pre / 450), reps: 0};
+    h.end = h.t + (n.kind === 'circle' ? 0 : (n.len || 0) * 1000); h.endPos = [h.x, h.y];
+    if (n.kind === 'slide' && n.pts) {
+      const reps = n.reps || 1, dur = n.len * 1000, span = dur / reps, L = n.pts.at(-1)[2] * 2, vel = n.vel ?? L / span, len = Math.min(1e5, L), td = oCl(n.tick ?? vel * (o.beat || 500), 0, len), minEnd = vel * 10;
+      const pos = p => { const [x, y] = obAt(n.pts, p); return [x * 2, y * 2]; }, nest = [{t: h.t, p: 0}];
+      for (let s = 0; s < reps; s++) {
+        const st = h.t + s * span, rev = s % 2 === 1, tk = [];
+        if (td) for (let d = td; d <= len; d += td) { if (d >= len - minEnd) break; const pp = d / len; tk.push({t: st + (rev ? 1 - pp : pp) * span, p: pp, tick: 1}); }
+        if (rev) tk.reverse(); nest.push(...tk);
+        if (s < reps - 1) nest.push({t: st + span, p: (s + 1) % 2, rep: 1});
+      }
+      nest.push({t: h.t + dur, p: reps % 2});
+      for (const q of nest) q.pos = pos(q.p);
+      Object.assign(h, {nest, reps: reps - 1, span, dur, pos, endPos: nest.at(-1).pos});
     }
-    return o;
+    return h;
   });
+}
+function obDiffObjs(H, rate, great) {
+  const D = [], end = d => d.lazyEnd || [d.h.x, d.h.y];
+  const ang = (c, l, ll) => { const v1 = [ll[0] - l[0], ll[1] - l[1]], v2 = [c[0] - l[0], c[1] - l[1]]; return Math.abs(Math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])); };
   for (let i = 1; i < H.length; i++) {
-    const c = H[i], l = H[i - 1], ll = H[i - 2], dt = (c.t - l.t) / rate, d = {i: D.length, o: c, last: l, dt, st: Math.max(dt, 25), great, jump: 0, minD: 0, minT: Math.max(dt, 25), angle: null, travel: c.travel, travelT: c.travelT, t: c.t / rate};
-    let sf = OB_NR / c.r; if (c.r < 30) sf *= 1 + Math.min(30 - c.r, 5) / 50;
+    const c = H[i], l = H[i - 1], lD = D[i - 2], llD = D[i - 3], dt = (c.t - l.t) / rate, adt = Math.max(dt, 25);
+    const d = {i: D.length, h: c, dt, adt, st: c.t / rate, et: c.end / rate, hwg: c.kind === 'spin' ? 0 : 2 * great / rate, pre: c.pre / rate, jump: 0, lazyJ: 0, minJD: 0, minJT: adt, lazyTD: 0, lazyTT: 0, travelD: 0, travelT: 0, angle: null, nva: null};
+    d.odd = (79.5 - d.hwg / 2) / 6; d.lastEndDT = lD ? Math.max(d.st - lD.et, 25) : adt; d.scb = Math.max(1, 1 + (30 - c.r) / 70);
+    if (c.nest) {  // le curseur paresseux : il ne suit la boule que quand elle sort d'un cercle de 1,8 rayon (1 rayon sur un retour)
+      let track = Math.max(c.t + c.dur - 36, c.t + c.dur / 2), nest = c.nest; const lt = nest.findLast(q => q.tick);
+      if (lt && lt.t > track) { track = lt.t; nest = nest.filter(q => q !== lt).concat([lt]); }
+      d.lazyTT = track - c.t; let e = d.lazyTT / c.span; e = e % 2 >= 1 ? 1 - e % 1 : e % 1;
+      let lazy = c.pos(e), cur = [c.x, c.y]; const sf = 50 / c.r;
+      for (let k = 1; k < nest.length; k++) {
+        const q = nest[k], last = k === nest.length - 1; let mv = [q.pos[0] - cur[0], q.pos[1] - cur[1]], need = 90;
+        if (last) { const lz = [lazy[0] - cur[0], lazy[1] - cur[1]]; if (Math.hypot(...lz) < Math.hypot(...mv)) mv = lz; } else if (q.rep) need = 50;
+        let ml = sf * Math.hypot(...mv);
+        if (ml > need) { const f = (ml - need) / ml; cur = [cur[0] + mv[0] * f, cur[1] + mv[1] * f]; ml *= f; d.lazyTD += ml; }
+        if (last) lazy = cur;
+      }
+      d.lazyEnd = lazy; d.travelD = d.lazyTD * Math.max(1, c.reps ** .3); d.travelT = Math.max(d.lazyTT / rate, 25);
+    }
     if (c.kind !== 'spin' && l.kind !== 'spin') {
-      const lc = l.end; d.jump = Math.hypot(c.x - lc[0], c.y - lc[1]) * sf; d.minD = d.jump;
-      if (l.kind === 'slide') { d.minT = Math.max(d.st - l.travelT, 25); const tj = Math.hypot(c.x - l.tail[0], c.y - l.tail[1]) * sf; d.minD = Math.max(0, Math.min(d.jump - (OB_NR * 2.4 - OB_NR * 1.8), tj - OB_NR * 2.4)); }
-      if (ll && ll.kind !== 'spin') { const llc = ll.end, v1 = [llc[0] - l.x, llc[1] - l.y], v2 = [c.x - lc[0], c.y - lc[1]]; d.angle = Math.abs(Math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])); }
+      const sf = 50 / c.r, P = [c.x, c.y]; let lc = lD ? end(lD) : [l.x, l.y];
+      d.jump = Math.hypot(l.x - c.x, l.y - c.y) * sf; d.lazyJ = Math.hypot(c.x - lc[0], c.y - lc[1]) * sf; d.minJD = d.lazyJ;
+      if (l.kind === 'slide' && lD) {
+        d.minJT = Math.max(adt - Math.max(lD.lazyTT / rate, 25), 25);
+        d.minJD = Math.max(0, Math.min(d.lazyJ - (120 - 90), Math.hypot(l.endPos[0] - c.x, l.endPos[1] - c.y) * sf - 120));
+      }
+      if (llD && llD.h.kind !== 'spin') {
+        if (lD.h.kind === 'slide' && lD.travelD > 0) lc = [l.x, l.y];
+        const llc = end(llD), a = ang(P, lc, llc), la = lD.h.kind === 'slide' && lD.travelD > 0 ? lD.h.nest.at(-2).pos : llc;
+        d.nva = Math.atan2(Math.abs(c.y - lc[1]), Math.abs(c.x - lc[0])); d.angle = Math.min(a, ang(P, end(lD), la));
+      }
     }
     D.push(d);
   }
   return D;
 }
-const obWideB = a => Math.sin(.75 * (Math.min(5 / 6 * Math.PI, Math.max(Math.PI / 6, a)) - Math.PI / 6)) ** 2, obAcuteB = a => 1 - obWideB(a);
-function obAimEval(D, i, sl) {
-  const c = D[i], l = D[i - 1], ll = D[i - 2];
-  if (c.o.kind === 'spin' || i <= 1 || l.o.kind === 'spin') return 0;
-  let cv = c.jump / c.st;
-  if (l.o.kind === 'slide' && sl) cv = Math.max(cv, l.travel / l.travelT + c.minD / c.minT);
-  let pv = l.jump / l.st;
-  if (ll.o.kind === 'slide' && sl) pv = Math.max(pv, ll.travel / ll.travelT + l.minD / l.minT);
-  let wide = 0, acute = 0, vel = 0, slider = 0, strain = cv;
-  if (Math.max(c.st, l.st) < 1.25 * Math.min(c.st, l.st) && c.angle != null && l.angle != null && ll.angle != null) {
-    const ab = Math.min(cv, pv); wide = obWideB(c.angle); acute = obAcuteB(c.angle);
-    if (c.st > 100) acute = 0;
-    else acute *= obAcuteB(l.angle) * Math.min(ab, 125 / c.st) * Math.sin(Math.PI / 2 * Math.min(1, (100 - c.st) / 25)) ** 2 * Math.sin(Math.PI / 2 * (obClamp(c.jump, 50, 100) - 50) / 50) ** 2;
-    wide *= ab * (1 - Math.min(wide, obWideB(l.angle) ** 3)); acute *= .5 + .5 * (1 - Math.min(acute, obAcuteB(ll.angle) ** 3));
-  }
-  if (Math.max(pv, cv)) {
-    const p2 = (l.jump + ll.travel) / l.st, c2 = (c.jump + l.travel) / c.st, ratio = Math.sin(Math.PI / 2 * Math.abs(p2 - c2) / Math.max(p2, c2, 1e-9)) ** 2;
-    vel = Math.min(125 / Math.min(c.st, l.st), Math.abs(p2 - c2)) * ratio * (Math.min(c.st, l.st) / Math.max(c.st, l.st)) ** 2;
-  }
-  if (l.o.kind === 'slide') slider = l.travel / l.travelT;
-  strain += Math.max(acute * 1.95, wide * 1.5 + vel * .75);
-  if (sl) strain += slider * 1.35;
-  return strain;
+function oOpac(d, time, hid) {  // l'opacité de l'objet de d à cet instant (sans la vitesse du morceau, comme dans osu!)
+  const h = d.h; if (time > h.t) return 0;
+  const a = oCl((time - (h.t - h.pre)) / (400 * Math.min(1, h.pre / 450)), 0, 1);
+  return hid ? Math.min(a, 1 - oCl((time - (h.t - h.pre + h.fadeIn)) / (h.pre * .3), 0, 1)) : a;
 }
-function obSpeedEval(D, i) {
-  const c = D[i], nx = D[i + 1], prev = D[i - 1]; if (c.o.kind === 'spin') return 0;
-  let st = c.st, dbl = 1;
-  if (nx) { const cd = Math.max(1, c.dt), nd = Math.max(1, nx.dt), diff = Math.abs(nd - cd), sr = cd / Math.max(cd, diff), wr = Math.min(1, cd / c.great) ** 2; dbl = sr ** (1 - wr); }
-  st /= obClamp(st / c.great / .93, .92, 1);
-  const sb = st < 75 ? 1 + .75 * ((75 - st) / 40) ** 2 : 1, dist = Math.min(125, (prev ? prev.travel : 0) + c.minD);
-  return (sb + sb * (dist / 125) ** 3.5) * dbl / st;
+const oDTF = (d, nx) => { if (!nx) return 0; const cd = Math.max(1, d.dt), dd = Math.abs(Math.max(1, nx.dt) - cd); return 1 - (cd / Math.max(cd, dd)) ** (oRL(d.lazyJ, 100, 50) ** 2 * (1 - Math.min(1, cd / d.hwg) ** 5)); };
+function oVecRep(D, d, l) {
+  if (d.angle == null || l.angle == null) return 1;
+  let n = 0;
+  for (let k = 0; k < 6; k++) { const p = D[d.i - 1 - k]; if (!p || Math.max(d.adt, p.adt) > 1.1 * Math.min(d.adt, p.adt)) break; if (p.nva != null && d.nva != null) n += Math.cos(8 * Math.min(oDeg(11.25), Math.abs(d.nva - p.nva))); }
+  const rep = Math.min(.5 / n, 1) ** 2, stack = oSmr(d.lazyJ, 0, 100), base = 1 - .15 * oAcute(l.angle) * Math.cos(2 * Math.min(oDeg(45), Math.abs(d.angle - l.angle) * stack));
+  return (base + (1 - base) * rep * .5 * stack) ** 2;
 }
-function obRhythmEval(D, i) {
-  const c = D[i]; if (c.o.kind === 'spin') return 0;
-  const P = k => D[i - k - 1], hist = Math.min(i, 32); let prevIsland = 0, sum = 0, island = 1, startR = 0, first = false, start = 0;
-  while (start < hist - 2 && c.t - P(start).t < 5000) start++;
-  for (let k = start; k > 0; k--) {
-    const co = P(k - 1), po = P(k), lo = P(k + 1); if (!lo) continue;
-    const decay = Math.min((hist - k) / hist, (5000 - (c.t - co.t)) / 5000), cd = co.st, pd = po.st, ld = lo.st;
-    const cr = 1 + 6 * Math.min(.5, Math.sin(Math.PI / (Math.min(pd, cd) / Math.max(pd, cd))) ** 2), wp = Math.min(1, Math.max(0, Math.abs(pd - cd) - co.great * .3) / (co.great * .3));
-    let er = wp * cr;
-    if (first) {
-      if (!(pd > 1.25 * cd || pd * 1.25 < cd)) { if (island < 7) island++; }
-      else {
-        if (co.o.kind === 'slide') er *= .125; if (po.o.kind === 'slide') er *= .25; if (prevIsland === island) er *= .25; if (prevIsland % 2 === island % 2) er *= .5;
-        if (ld > pd + 10 && pd > cd + 10) er *= .125;
-        sum += Math.sqrt(er * startR) * decay * Math.sqrt(4 + island) / 2 * Math.sqrt(4 + prevIsland) / 2;
-        startR = er; prevIsland = island; if (pd * 1.25 < cd) first = false; island = 1;
+function oSnap(D, d, sl) {
+  const l = D[d.i - 1]; if (d.h.kind === 'spin' || d.i <= 1 || l.h.kind === 'spin') return 0;
+  const l2 = D[d.i - 3], cD = sl ? d.lazyJ : d.jump, pD = sl ? l.lazyJ : l.jump, pV = pD / l.adt, ls = l.h.kind === 'slide' && sl;
+  let cV = cD / d.adt; if (ls) cV = Math.max(cV, (l.lazyTD + d.lazyJ) / d.adt);
+  let s = cV * oVecRep(D, d, l);
+  if (d.angle != null && l.angle != null) {
+    const ca = d.angle, la = l.angle, vi = Math.min(cV, pV); let ac = 0;
+    if (Math.max(d.adt, l.adt) < 1.25 * Math.min(d.adt, l.adt)) { ac = oAcute(ca); ac *= .08 + .92 * (1 - Math.min(ac, oAcute(la) ** 3)); ac *= vi * oSmr(60000 / (d.adt * 2), 300, 400) * oSmr(cD, 0, 200); }
+    let wd = oWide(ca); wd *= .25 + .75 * (1 - Math.min(wd, oWide(la) ** 3));
+    let wc = cD / d.adt ** 1.45; if (ls) wc = Math.max(wc, (l.lazyTD + d.lazyJ) / d.adt ** 1.45);
+    wd *= Math.min(wc, pD / l.adt ** 1.45);
+    if (l2) { const dd = Math.hypot(l2.h.x - l.h.x, l2.h.y - l.h.y); if (dd < 1) wd *= 1 - .55 * (1 - dd); }
+    s += Math.max(ac * 2.41, wd * 9.67);
+    s += vi * oSmr(cD, 50, 100) * oRL(cD, 300, 100) ** 1.8 * oSmr(ca, oDeg(110), oDeg(60)) * oSmr(pD, 50, 100) * oRL(pD, 300, 100) ** 1.8 * oSmr(la, oDeg(110), oDeg(60)) * 1.02;
+  }
+  if (Math.max(pV, cV)) {
+    if (sl) cV = cD / d.adt;
+    const r = oSm(Math.abs(pV - cV) / Math.max(pV, cV), 0, 1) || 0, mn = Math.min(d.adt, l.adt);  // || 0 : les deux vitesses nulles (osu! donnerait NaN)
+    s += Math.min(125 / mn, Math.abs(pV - cV)) * r * (mn / Math.max(d.adt, l.adt)) ** 2 * .9;
+  }
+  if (d.h.kind === 'slide' && sl) { const b = d.travelD / d.travelT; s += (b < 1 ? b : b ** .75) * 1.5; }
+  return s * d.scb / (1 - .03 ** ((d.adt / 1000) ** .65));
+}
+function oAgi(D, d) {
+  if (d.h.kind === 'spin') return 0;
+  const dist = (D[d.i - 1]?.lazyTD || 0) + d.lazyJ;
+  return Math.min(dist, 120) / 120 * 1000 / d.adt * d.scb ** 1.5 / (1 - .2 ** (d.adt / 1000));
+}
+const oOver = (a, b) => { const r = a.h.r; return oCl(1 - (Math.max(Math.hypot(a.h.x - b.h.x, a.h.y - b.h.y) - r, 0) / r) ** 2, 0, 1); };
+function oFlow(D, d, sl) {
+  const l = D[d.i - 1]; if (d.h.kind === 'spin' || d.i <= 1 || l.h.kind === 'spin') return 0;
+  const ll = D[d.i - 2], cD = sl ? d.lazyJ : d.jump, pD = sl ? l.lazyJ : l.jump, pV = pD / l.adt;
+  let cV = cD / d.adt; if (l.h.kind === 'slide' && sl) cV = Math.max(cV, (l.lazyTD + d.lazyJ) / d.adt);
+  let f = cV * Math.sqrt(d.scb) * (1 + Math.min(.25, ((Math.max(d.adt, l.adt) - Math.min(d.adt, l.adt)) / 50) ** 4));
+  if (d.angle != null && l.angle != null) f *= .8 + Math.sqrt(Math.sin(Math.abs(d.angle - l.angle) / 2) * 180 / (d.adt * .1) / 270);
+  const ow = d.i > 2 ? 1 - oOver(d, l) * oOver(d, ll) * oOver(l, ll) : 1;
+  if (d.angle != null) f += cV * oAcute(d.angle) * ow;
+  if (Math.max(pV, cV)) { if (sl) cV = cD / d.adt; f += Math.min(125 / Math.min(d.adt, l.adt), Math.abs(pV - cV)) * (oSm(Math.abs(pV - cV) / Math.max(pV, cV), 0, 1) || 0) * ow * .52; }
+  if (d.h.kind === 'slide' && sl) f += d.travelD / d.travelT;
+  return f ** 1.45 * oSmr(cD, 0, 50);
+}
+function oAimSkill(D, sl, mods) {  // VariableLengthStrainSkill : des tranches de 400 ms au plus, recoupées à chaque nouveau pic
+  let cur = 0, peak = 0, begin = 0, end = 0, total = 0; const objD = [], slS = [], peaks = [], queue = [], DW = .9, MSL = 400;
+  const ins = p => { let i = peaks.findIndex(q => q.v < p.v); if (i < 0) i = peaks.length; peaks.splice(i, 0, p); };
+  const save = len => { const p = {v: peak, len: oRound(len)}; ins(p); total += p.len; while (total > 11 / (1 - DW) * MSL) { total -= peaks.at(-1).len; peaks.pop(); } };
+  const dec = ms => .2 ** (ms / 1000), init = (t, d) => cur * dec(t - D[d.i - 1].st);
+  const val = d => {
+    if (mods.has('AP')) return 0;
+    const k = dec(d.adt); cur *= k;
+    const snap = oSnap(D, d, sl) * 70.9, agi = oAgi(D, d) * 2.35; let flow = oFlow(D, d, sl) * 242, comb = oNorm(1.2, snap, agi);
+    const r = flow / comb, pS = r === 0 ? 0 : isNaN(r) ? 1 : 1 / (1 + Math.exp(-7.27 * Math.log(r)));
+    if (mods.has('RX')) { comb *= .75; flow *= .6; }
+    cur += (comb * pS + flow * (1 - pS)) * 1.12 * (.985 + Math.max(0, d.odd) ** 2 / 4000) * (1 - k);
+    if (d.h.kind === 'slide') slS.push(cur);
+    return cur;
+  };
+  for (const d of D) {
+    let s;
+    if (d.i === 0) { begin = d.st; end = begin + MSL; peak = s = val(d); }
+    else {
+      while (d.st > end) {
+        save(end - begin); begin = end;
+        if (queue.length) { const [qs, qt] = queue.shift(); end = qt + MSL; peak = Math.max(init(begin, d), qs); } else { end = begin + MSL; peak = init(begin, d); }
       }
-    } else if (pd > 1.25 * cd) { first = true; startR = er; island = 1; }
+      s = val(d);
+      if (s > peak) { queue.length = 0; save(d.st - begin); begin = d.st; end = begin + MSL; peak = s; }
+      else { while (queue.length && queue.at(-1)[0] < s) queue.pop(); queue.push([s, d.st]); }
+    }
+    objD.push(s);
   }
-  return Math.sqrt(4 + sum * .75) / 2;
+  if (D.length) ins({v: peak, len: oRound(end - begin)});
+  // les pics les plus forts, sur leurs 4 premières secondes, comptent moins (de 72,7 % à 100 %)
+  let S = peaks.filter(p => p.v > 0), time = 0, skip = 0;
+  while (S.length > skip && time < 4000) {
+    const p = S[skip];
+    for (let a = 0; a < p.len; a += 20) S.push({v: p.v * oLerp(.727, 1, Math.log10(oLerp(1, 10, oCl((time + a) / 4000, 0, 1)))), len: Math.min(20, p.len - a)});
+    time += p.len; skip++;
+  }
+  S = S.slice(skip).sort((a, b) => b.v - a.v);
+  let v = 0, t = 0; for (const p of S) { const e = t + p.len / MSL; v += p.v * (DW ** t - DW ** e); t = e; }
+  v /= 1 - DW;
+  const cts = v * (1 - DW), top = L => L.reduce((a, x) => a + oLogi(x / cts, .88, 10, 1.1), 0), mx = Math.max(0, ...slS);
+  return {v, strains: !objD.length ? 0 : cts === 0 ? objD.length : top(objD), sliders: !slS.length || !cts ? 0 : top(slS), hard: mx ? slS.reduce((a, x) => a + oLogi(x / mx, .5, 12), 0) : 0};
 }
-function obSkill(D, mult, decay, ev, rhythm) {  // les pics d'effort par tranche de 400 ms, les 10 plus forts atténués, puis une somme pondérée (×0,9 à chaque rang)
-  const peaks = [], strains = []; let cur = 0, rh = 1, peak = 0, end = D.length ? Math.ceil(D[0].t / 400) * 400 : 0;
-  const dec = ms => decay ** (ms / 1000);
-  D.forEach((d, i) => {
-    while (d.t > end) { peaks.push(peak); peak = (rhythm ? cur * rh : cur) * dec(end - (D[i - 1]?.t ?? d.t - d.dt)); end += 400; }
-    cur *= dec(rhythm ? d.st : d.dt); cur += ev(D, i) * mult;
-    let v = cur; if (rhythm) { rh = obRhythmEval(D, i); v = cur * rh; }
-    strains.push(v); peak = Math.max(peak, v);
-  });
-  peaks.push(peak);
-  const s = peaks.filter(v => v > 0).sort((a, b) => b - a);
-  for (let i = 0; i < Math.min(s.length, 10); i++) s[i] *= .75 + .25 * Math.log10(1 + 9 * obClamp(i / 10, 0, 1));
-  s.sort((a, b) => b - a);
-  return {v: s.reduce((t, v, i) => t + v * .9 ** i, 0) * 1.06, strains};
+function oHarm(L, scale) {  // HarmonicSkill : les difficultés triées, pondérées de façon « harmonique »
+  let v = 0, ws = 0; L.filter(x => x > 0).sort((a, b) => b - a).forEach((x, i) => { const w = (1 + scale / (1 + i)) / (i ** .9 + 1 + scale / (1 + i)); ws += w; v += x * w; });
+  return {v, ws};
 }
-const obBasePerf = r => (5 * Math.max(1, r / .0675) - 4) ** 3 / 1e5;
-function obStarsX(ns, od = 8, rate = 1) {
-  const nC = ns.filter(n => n.kind !== 'slide' && n.kind !== 'spin').length, nS = ns.filter(n => n.kind === 'slide').length, nSp = ns.filter(n => n.kind === 'spin').length;
-  if (ns.length < 2) return {aim: 0, speed: 0, stars: 0, sf: 1, sn: 0, nC, nS, nSp};
-  const D = obDiffObjs(ns, od, rate), A = obSkill(D, 23.55, .15, (D, i) => obAimEval(D, i, true)), A0 = obSkill(D, 23.55, .15, (D, i) => obAimEval(D, i, false)), S = obSkill(D, 1375, .3, obSpeedEval, true);
-  const aim = Math.sqrt(A.v) * .0675, aimNS = Math.sqrt(A0.v) * .0675, speed = Math.sqrt(S.v) * .0675, mx = Math.max(...S.strains, 1e-9);
-  const sn = S.strains.reduce((t, v) => t + 1 / (1 + Math.exp(-(v / mx * 12 - 6))), 0);
-  const base = (obBasePerf(aim) ** 1.1 + obBasePerf(speed) ** 1.1) ** (1 / 1.1);
-  const stars = base > 1e-5 ? Math.cbrt(1.14) * .027 * (Math.cbrt(1e5 / 2 ** (1 / 1.1) * base) + 4) : 0;
-  return {aim, speed, stars: Math.round(stars * 100) / 100, sf: aim > 0 ? aimNS / aim : 1, sn, nC, nS, nSp};
+function oSpeedEval(D, d) {
+  if (d.h.kind === 'spin') return 0;
+  let st = d.adt; const dtf = 1 - oDTF(d, D[d.i + 1]);
+  st /= oCl(st / d.hwg / .93, .92, 1);
+  const sb = 15000 / st > 200 ? .75 * ((75 - st) / 40) ** 2 : 0;
+  return (1 + sb) * 1000 / st / (1 - .3 ** (d.adt / 1000)) * dtf;
+}
+function oRhythm(D, d) {  // la complexité du rythme : les « îles » de notes au même écart, et leurs changements
+  if (d.h.kind === 'spin') return 0;
+  const MAXI = 2147483647, eps = d.hwg * .3, Isl = dl => ({dl: Math.max(dl, 25), n: 1, occ: 1}), P = k => D[d.i - 1 - k];
+  const sim = (a, b) => a.n > 1 && b.n > 1 && Math.abs(a.dl - b.dl) < eps && a.n % 2 === b.n % 2, eq = (a, b) => Math.abs(a.dl - b.dl) < eps && a.n === b.n;
+  const effD = r => 1 + 26 * Math.min(.5, oBell(r - Math.trunc(r)));
+  let isl = Isl(MAXI), prevIsl = Isl(MAXI), sum = 0, startD = 0, first = false, start = 0; const isls = [], hist = Math.min(d.i, 32);
+  while (start < hist - 2 && d.st - P(start).st < 5000) start++;
+  let prev = P(start), pp = P(start + 1);
+  for (let i = start; i > 0; i--) {
+    const co = P(i - 1); if (co.h.kind === 'spin') continue;
+    const dec = Math.min((hist - i) / hist, (5000 - (d.st - co.st)) / 5000), cd = Math.max(co.dt, 1e-7), pd = Math.max(prev.dt, 1e-7), dd = Math.abs(pd - cd);
+    if (isl.dl === MAXI) isl = Isl(Math.trunc(cd));
+    const ratio = Math.max(pd, cd) / Math.min(pd, cd);
+    let eff = effD(ratio) * oCl((dd - eps) / eps, 0, 1) * oCl(2 - ratio / 8, 0, 1);
+    if (prev.h.kind === 'slide') { const a = co.minJT, b = co.lastEndDT; eff = Math.min(effD(Math.max(a, cd) / Math.min(a, cd)), effD(Math.max(b, cd) / Math.min(b, cd)), eff); }
+    if (dd < eps) { if (isl.dl === MAXI) isl.dl = Math.max(Math.trunc(cd), 25); isl.n++; }
+    if (first) {
+      if (dd > eps) {
+        if (co.h.kind === 'slide') eff *= .5;
+        if (sim(isl, prevIsl)) eff *= .5;
+        if (Math.max(pp.dt, 1e-7) > pd + eps && pd > cd + eps) eff *= .125;
+        if (prevIsl.n === isl.n) eff *= .5;
+        if (pd > cd + eps) eff *= .65;
+        const ex = isls.find(x => eq(x, isl));
+        if (ex) { if (eq(prevIsl, isl)) ex.occ++; eff *= Math.min(3 / ex.occ, (1 / ex.occ) ** oLogi(isl.dl, 58.33, .24, 2.75)); } else if (isl.n > 0) isls.push(isl);
+        eff *= 1 - oDTF(prev, co) * .75;
+        sum += isl.n > 1 ? Math.sqrt(eff * startD) * dec : .7 * dec;
+        startD = eff; if (pd + eps < cd) first = false;
+        prevIsl = isl; isl = Isl(Math.trunc(cd));
+      }
+    } else if (pd > cd + eps) { first = true; if (co.h.kind === 'slide') eff *= .6; if (prev.h.kind === 'slide') eff *= .6; startD = eff; isl = Isl(Math.trunc(cd)); }
+    pp = prev; prev = co;
+  }
+  return Math.sqrt(4 + sum * oRL(isl.n, 22, 3) * .95) / 2;
+}
+function oSpeedSkill(D, mods) {
+  let cur = 0; const objD = [], slS = [];
+  for (const d of D) {
+    if (mods.has('RX')) { objD.push(0); continue; }
+    const k = .3 ** (d.adt / 1000); cur = cur * k + oSpeedEval(D, d) * (mods.has('AP') ? .5 : 1) * (1 - k) * 1.16;
+    const s = cur * oRhythm(D, d); if (d.h.kind === 'slide') slS.push(s); objD.push(s);
+  }
+  const {v, ws} = oHarm(objD, 20), cto = ws ? v / ws : 0, top = L => cto ? L.reduce((a, x) => a + oLogi(x / cto, .88, 10, 1.1), 0) : 0, mx = Math.max(0, ...objD);
+  return {v, strains: top(objD), sliders: top(slS), notes: mx ? objD.reduce((a, x) => a + oLogi(x / mx, .5, 12), 0) : 0};
+}
+function oVisDens(D, d) {  // les objets suivants déjà visibles quand il faut cliquer celui-ci
+  let c = 0;
+  for (let o = D[d.i + 1]; o; o = D[o.i + 1]) { if (o.st - d.st > 3000 || d.st < o.st - o.pre) break; c += oOpac(o, d.h.t, false) * oCl(2 - (o.st - d.st) / 1500, 0, 1); }
+  return c;
+}
+function oPastInf(D, d) {
+  let s = 0;
+  for (let i = 0; i < d.i; i++) { const o = D[d.i - 1 - i]; if (d.st - o.st > 3000 || o.st < d.st - d.pre) break; s += oOpac(d, o.h.t, false) * oSmr(o.lazyJ, 15, 150) * oCl(2 - (d.st - o.st) / 1500, 0, 1); }
+  return s;
+}
+function oConstAng(D, d) {  // des angles qui se répètent : plus faciles à lire
+  let n = 0, k = 0, gap = 0, p0 = d, p1 = null, p2 = null;
+  while (gap < 2000) {
+    const o = D[d.i - 1 - k]; if (!o) break;
+    if (o.angle != null && d.angle != null) {
+      let alt = Math.PI;
+      if (p0.angle != null && p1?.angle != null && p2?.angle != null) {
+        const w = oRL(Math.min(o.angle, p0.angle) * 180 / Math.PI, 20, 5) * oRL(Math.max(o.angle, p0.angle) * 180 / Math.PI, 60, 120);
+        alt = oLerp(Math.PI, .1 * (Math.abs(p1.angle - o.angle) + Math.abs(p2.angle - p0.angle)), w);
+      }
+      n += Math.cos(3 * Math.min(oDeg(30), Math.min(Math.abs(d.angle - o.angle), alt) * oSmr(o.lazyJ, 0, 50))) * (1 - oRL(o.adt, 200, 2000));
+    }
+    gap = d.st - o.st; k++; p2 = p1; p1 = p0; p0 = o;
+  }
+  return oCl(2 / n, .2, 1);
+}
+function oReadEval(D, d, hid) {
+  if (d.h.kind === 'spin' || d.i === 0) return 0;
+  const nx = D[d.i + 1], vel = Math.max(1, d.lazyJ / d.adt), dens = oVisDens(D, d), past = oPastInf(D, d), can = oConstAng(D, d);
+  const fut = Math.sqrt(dens) * (nx ? oSmr(nx.lazyJ, 15, 150) : 1), nd = Math.max(0, (past + fut) ** 1.7 * .4 * can * vel - 2.5) ** .45 * 2.4;
+  let hd = 0;
+  if (hid) {
+    hd = ((d.pre ** 2.2 * .01 + (dens + past) ** 3.3 * 3) * can * vel * .01) ** .4 * .28;
+    const pv = D[d.i - 1]; if (d.lazyJ === 0 && oOpac(d, pv.h.t, true) === 0 && pv.st > d.st - d.pre) hd += .28 * 2500 / d.adt ** 1.5;  // les piles parfaites
+  }
+  const pe = ((500 - d.pre + Math.abs(d.pre - 500)) / 2) ** 2.5 / 140000 * can * vel;
+  return oNorm(1.5, pe, hd, nd) / (1 - .8 ** (d.adt / 1000));
+}
+function oReadSkill(D, mods) {
+  let cur = 0, redN = 0, redT = null; const objD = [];
+  for (const d of D) {
+    const k = .8 ** (d.dt / 1000);
+    cur = cur * k + oReadEval(D, d, mods.has('HD')) * (mods.has('RX') ? .4 : 1) * (mods.has('AP') ? .1 : 1) * (.825 + Math.max(0, d.odd) ** 2.2 / 1125) * (1 - k) * 2.5;
+    redT ??= d.st + 60000; if (d.st <= redT) redN++;
+    objD.push(cur);
+  }
+  const L = objD.filter(x => x > 0); for (let i = 0; i < Math.min(L.length, redN); i++) L[i] *= Math.log10(oLerp(1, 10, oCl(i / redN, 0, 1)));  // la première minute est apprise par cœur
+  const {v, ws} = oHarm(L, 1), cto = ws ? v / ws : 0;
+  return {v, notes: cto ? objD.reduce((a, x) => a + oLogi(x / cto, 1.15, 5, 1.1), 0) : 0};
+}
+function oFLEval(D, d, hd) {
+  if (d.h.kind === 'spin') return 0;
+  const h = d.h, sf = 52 / h.r; let small = 1, cum = 0, f = 0, last = d, rep = 0;
+  for (let i = 0; i < Math.min(d.i, 10); i++) {
+    const o = D[d.i - 1 - i]; cum += last.adt;
+    if (o.h.kind !== 'spin') {
+      const jd = Math.hypot(h.x - o.h.endPos[0], h.y - o.h.endPos[1]); if (!i) small = Math.min(1, jd / 75);
+      f += Math.min(1, o.lazyJ / sf / 25) * (1 + .4 * (1 - oOpac(d, o.h.t, hd))) * sf * jd / cum;
+      if (o.angle != null && d.angle != null && Math.abs(o.angle - d.angle) < .02) rep += Math.max(1 - .1 * i, 0);
+    }
+    last = o;
+  }
+  f = (small * f) ** 2 * (hd ? 1.2 : 1) * (.2 + .8 / (rep + 1));
+  if (h.kind === 'slide') { const pt = d.lazyTD / sf; f += Math.max(0, pt / d.travelT - .5) ** .5 * pt / (h.reps + 1) * 1.3; }
+  return f;
+}
+function oFLSkill(D, mods, nObj) {  // StrainSkill : des tranches fixes de 400 ms, ici toutes additionnées
+  let cur = 0, peak = 0, end = 0; const P = [];
+  for (const d of D) {
+    if (d.i === 0) end = Math.ceil(d.st / 400) * 400;
+    while (d.st > end) { P.push(peak); peak = cur * .15 ** ((end - D[d.i - 1].st) / 1000); end += 400; }
+    cur = cur * .15 ** (d.dt / 1000) + oFLEval(D, d, mods.has('HD')) * (mods.has('RX') ? .7 : 1) * (mods.has('AP') ? .4 : 1) * (.985 + Math.max(0, d.odd) ** 2 / 4000) * .058;
+    peak = Math.max(peak, cur);
+  }
+  P.push(peak);
+  return P.reduce((a, b) => a + b, 0) * (.7 + .1 * Math.min(1, nObj / 200) + (nObj > 200 ? .2 * Math.min(1, (nObj - 200) / 200) : 0));
+}
+const oCog = (r, f) => r <= 0 ? f : f <= 0 ? r : oNorm(1.1, r, f * oCl(f / r, .25, 1));
+function obStarsX(ns, od = 8, rate = 1, o = {}) {
+  const mods = new Set(o.mods || []), nC = ns.filter(n => n.kind !== 'slide' && n.kind !== 'spin').length, nS = ns.filter(n => n.kind === 'slide').length, nSp = ns.filter(n => n.kind === 'spin').length;
+  const H = obOsuObjs(ns, {...o, mods}), D = obDiffObjs(H, rate, Math.floor(80 - 6 * od) - .5);
+  const mc = H.reduce((a, h) => a + (h.nest ? h.nest.length : 1), 0);  // le combo maximal d'osu! (tête, tics, retours et bout des glissières)
+  const A = oAimSkill(D, true, mods), A0 = oAimSkill(D, false, mods), S = oSpeedSkill(D, mods), R = oReadSkill(D, mods), F = mods.has('FL') ? oFLSkill(D, mods, H.length) : 0;
+  const aim = A.v ** .63 * .02275, aimNS = A0.v ** .63 * .02275, speed = Math.sqrt(S.v) * .0675, read = Math.sqrt(R.v) * .0675, fl = Math.sqrt(F) * .0675;
+  const base = oNorm(1.1, 4 * aim ** 3, 4 * speed ** 3, oCog(4 * read ** 3, 25 * fl ** 2)), stars = Math.cbrt(base * 1.12);
+  return {stars: Math.round(stars * 100) / 100, aim, speed, read, fl, sf: A.v > 0 ? aimNS / aim : 1, aimHard: A.hard, aimN: A.strains, speedN: S.strains, readN: R.notes, sn: S.notes,
+    aimSF: A0.sliders / Math.max(1, A0.strains - A0.sliders), speedSF: S.sliders / Math.max(1, S.strains - S.sliders), mc, nC, nS, nSp};
 }
 const obStars = ns => obStarsX(ns).stars;
-{ // contrôle : des sauts au demi-temps à 180 BPM, larges de 4 diamètres, font plus d'étoiles que les mêmes sauts serrés ; un stream de doubles-croches donne de la vitesse
+{ // contrôle : des sauts au demi-temps à 180 BPM, larges de 4 diamètres, font plus d'étoiles que les mêmes sauts serrés ; un stream de doubles-croches donne de la vitesse ; FL et HD en ajoutent
   const mk = (n, gap, d) => Array.from({length: n}, (_, i) => ({t: 1 + i * gap, kind: 'circle', x: 128 + (i % 2 ? d : -d) / 2, y: 96 + (i % 4 < 2 ? 0 : 20), r: 16}));
-  const wide = obStarsX(mk(200, 60 / 180 / 2, 128)), tight = obStarsX(mk(200, 60 / 180 / 2, 30)), st = obStarsX(mk(200, 60 / 180 / 4, 12));
-  console.assert(wide.stars > tight.stars + 1 && wide.stars > 3 && wide.stars < 9 && st.speed > tight.speed && st.stars > 2, 'obStarsX', wide.stars, tight.stars, st.stars);
+  const wide = obStarsX(mk(200, 60 / 180 / 2, 128)), tight = obStarsX(mk(200, 60 / 180 / 2, 30)), st = obStarsX(mk(200, 60 / 180 / 4, 12)), fl = obStarsX(mk(200, 60 / 180 / 2, 128), 8, 1, {mods: ['FL', 'HD']});
+  console.assert(wide.stars > tight.stars + 1 && wide.stars > 3 && wide.stars < 9 && st.speed > tight.speed && st.stars > 2 && fl.stars > wide.stars && [wide, tight, st, fl].every(x => isFinite(x.stars)), 'obStarsX', wide.stars, tight.stars, st.stars, fl.stars);
 }
 // les mods, comme dans osu! : [nom, effet, multiplicateur des points]
 const OB_MODS = [['EZ', 'Facile : orbes plus grands et plus lents, précision et vie plus douces', .5], ['NF', 'Sans échec : la vie vide ne fait pas perdre', .5],
@@ -1805,7 +2007,7 @@ function obOsuParse(txt) {
   const cols = Object.keys(CO).filter(k => /^Combo\d+$/.test(k)).sort((a, b) => a.slice(5) - b.slice(5)).map(k => hx(CO[k])).filter(Boolean);  // les couleurs de combo de la map
   if ((+G.Mode || 0) !== 0) return null;
   const num = (v, d) => v == null || v === '' || isNaN(+v) ? d : +v;
-  const od = num(D.OverallDifficulty, 5), cs = num(D.CircleSize, 5), ar = num(D.ApproachRate, od), hp = num(D.HPDrainRate, 5), svm = num(D.SliderMultiplier, 1.4);
+  const od = num(D.OverallDifficulty, 5), cs = num(D.CircleSize, 5), ar = num(D.ApproachRate, od), hp = num(D.HPDrainRate, 5), svm = num(D.SliderMultiplier, 1.4), tr = num(D.SliderTickRate, 1);
   const tps = (S.TimingPoints || []).map(l => l.split(',').map(Number)).filter(p => p.length >= 2 && isFinite(p[0]) && isFinite(p[1]))
     .map(p => ({t: p[0], bl: p[1], red: p[6] == null || p[6] === 1, kiai: ((p[7] || 0) & 1) === 1})).sort((a, b) => a.t - b.t || b.red - a.red);
   const reds = tps.filter(p => p.red && p.bl > 0); if (!reds.length) throw new Error('pas de tempo dans la map');
@@ -1822,7 +2024,7 @@ function obOsuParse(txt) {
       // les maps d'osu! lazer changent de type de courbe en route (« B|…|P|… ») : chaque morceau repart du dernier point du précédent
       for (const c of cp) { if (/^[A-Z]/.test(c)) { const e = segs.at(-1).p.at(-1); if (segs.at(-1).p.length < 2) segs.pop(); segs.push({t: c[0], p: [e]}); } else { const q = c.split(':').map(Number); if (q.length === 2 && q.every(Number.isFinite)) segs.at(-1).p.push(q); } }
       const raw = segs.flatMap(sg => sg.p.length > 1 ? obOsuCurve(sg.t, sg.p) : []), pts = obOsuPts(raw.length > 1 ? raw : [[x, y], [x + 1, y]], len || 1);
-      Object.assign(o, {kind: 'slide', len: Math.max(.03, (pts.at(-1)[2] * 2) / (svm * 100 * sv) * bl * reps / 1000), pts, reps, shape: 'osu'});
+      Object.assign(o, {kind: 'slide', len: Math.max(.03, (pts.at(-1)[2] * 2) / (svm * 100 * sv) * bl * reps / 1000), pts, reps, shape: 'osu', vel: svm * 100 * sv / bl, tick: svm * 100 * sv / tr});
     }
     notes.push(o);
   }
@@ -1873,6 +2075,16 @@ async function obOsuStyleFill() {
   if (ch) { saveGames(); rhList(); }
 }
 const obOsuSets = () => gstore('orbeOsu', []);
+async function obOsuRestar() {  // les étoiles des maps importées avant la 1.3.8, recalculées comme osu! (une seule fois)
+  if (games.orbeOsuSt === 2 || obOsuRestar.on) return; obOsuRestar.on = true; let ch = false;
+  try {
+    for (const s of obOsuSets()) {
+      for (const d of s.diffs) try { const m = obOsuParse(new TextDecoder().decode(await obFileBytes(d.f))); if (m) { d.st = obStarsX(m.notes, m.od, 1, {cs: m.cs, ar: m.ar}).stars; ch = true; } } catch {}
+      s.diffs.sort((a, b) => a.st - b.st);
+    }
+    games.orbeOsuSt = 2; saveGames(); if (ch) rhList();
+  } finally { obOsuRestar.on = false; }
+}
 const obOsuCache = new Map();  // id -> {buffer, bg}, pour cette session
 const obB64 = u => new Promise((ok, ko) => { const fr = new FileReader(); fr.onload = () => ok(String(fr.result).split(',')[1] || ''); fr.onerror = () => ko(fr.error); fr.readAsDataURL(new Blob([u])); });
 const obHash = s => [...s].reduce((h, c) => (Math.imul(h, 33) + c.charCodeAt(0)) >>> 0, 5381).toString(36);
@@ -1897,7 +2109,7 @@ async function obOszImport(f) {
   } catch {}
   const diffs = [];
   for (const m of maps) {
-    const k = diffs.length, r = Math.round(27.2 - 2.24 * m.cs), st = obStarsX(m.notes.filter(n => n.kind !== 'spin').map(n => ({...n, r})), m.od).stars;
+    const k = diffs.length, st = obStarsX(m.notes, m.od, 1, {cs: m.cs, ar: m.ar}).stars;
     await folder.writeFile(id + '-' + k + '.osu', await obB64(new TextEncoder().encode(m.src)));
     diffs.push({v: m.version, f: id + '-' + k + '.osu', st: Math.round(st * 100) / 100, sy: obOsuStyle(m), cs: m.cs, ar: m.ar, od: m.od, hp: m.hp, n: m.notes.length, len: Math.round(m.notes.at(-1).t + (m.notes.at(-1).len || 0))});
   }
@@ -1947,7 +2159,7 @@ function obOsuCards() {  // les maps osu! dans MES MUSIQUES : une carte par map,
 }
 // les skins osu! (.osk) : cercles, chiffres, cercle d'approche, glissières, curseur, couleurs de combo et sons, dessinés nets (en HD) par-dessus le terrain en pixels.
 // shortcut: un seul skin à la fois (le nouveau remplace l'ancien), sans les animations à plusieurs images ; à revoir si on veut en garder plusieurs
-const OSK_IMG = ['hitcircle', 'hitcircleoverlay', 'approachcircle', 'cursor', 'cursortrail', 'cursormiddle', 'sliderb0', 'sliderb', 'sliderfollowcircle', 'sliderfollowcircle-0', 'reversearrow', 'sliderscorepoint'];
+const OSK_IMG = ['hitcircle', 'hitcircleoverlay', 'approachcircle', 'cursor', 'cursortrail', 'cursormiddle', 'sliderb0', 'sliderb', 'sliderfollowcircle', 'sliderfollowcircle-0', 'reversearrow', 'sliderscorepoint', 'inputoverlay-background', 'inputoverlay-key'];
 const OSK_SND = ['hitnormal', 'hitwhistle', 'hitfinish', 'hitclap'];
 const OSK_COLS = ['#ffc000', '#00ca00', '#127cff', '#f21839'];  // les couleurs de combo d'osu! quand le skin n'en donne pas
 let obOsk = null;  // {name, img: {clé: {bm, x2}}, cols, border, track, overlap, snd, kit}
@@ -2000,6 +2212,16 @@ function obTint(bm, col) {  // l'image en gris teintée de la couleur du combo (
   return c;
 }
 const obOskCol = n => { const C = rh?.info?.osu?.cols?.length ? rh.info.osu.cols : obOsk.cols?.length ? obOsk.cols : OSK_COLS; return C[(n.col || 0) % C.length]; };  // celles de la map d'abord, comme dans osu!
+// le compteur de touches du skin : son cadre (inputoverlay-background, couché à la verticale) et ses touches, comme dans osu!
+function obOskKeys(K, held) {
+  const kb = obOsk.img['inputoverlay-key'], bg = obOsk.img['inputoverlay-background'], s = 14 / kb.bm.width, x = W - 15;
+  if (bg) { K.save(); K.translate(x, 92 + 30); K.rotate(Math.PI / 2); const w = bg.bm.width * s, h = bg.bm.height * s; K.drawImage(bg.bm, -w / 2 + 6, -h / 2, w, h); K.restore(); }
+  ['K1', 'K2', 'M1', 'M2'].forEach((k, i) => {
+    const y = 92 + i * 15 + 6, on = held[k], z = on ? .85 : 1, w = kb.bm.width * s * z, h = kb.bm.height * s * z;
+    K.drawImage(on ? obTint(kb.bm, k[0] === 'K' ? '#ffde00' : '#f800ff') : kb.bm, x - w / 2, y - h / 2, w, h);
+    K.font = 'bold 6px sans-serif'; K.textAlign = 'center'; K.textBaseline = 'middle'; K.fillStyle = on ? '#000000' : '#ffffff'; K.fillText(rh.kc[k] ? String(rh.kc[k]) : k, x, y + .5);
+  });
+}
 function obOskImg(K, k, x, y, r, tint, rot) {  // une image du skin à la taille d'osu! : 128 pixels (256 en @2x) pour un cercle de rayon r
   const e = obOsk.img[k]; if (!e) return false; const s = r / 64 / (e.x2 ? 2 : 1), w = e.bm.width * s, h = e.bm.height * s, src = tint ? obTint(e.bm, tint) : e.bm;
   if (rot) { K.save(); K.translate(x, y); K.rotate(rot); K.drawImage(src, -w / 2, -h / 2, w, h); K.restore(); } else K.drawImage(src, x - w / 2, y - h / 2, w, h);
@@ -2069,6 +2291,7 @@ function obHi() {  // la couche nette, posée exactement sur le terrain : on y r
 }
 function obHiEnd(K) {  // le reste (le HUD, les écrans) recopié par-dessus, puis le curseur du skin tout en haut
   const c = obHiC; K.setTransform(1, 0, 0, 1, 0, 0); K.imageSmoothingEnabled = false; K.drawImage(cv, 0, 0, c.width, c.height); K.imageSmoothingEnabled = true; K.setTransform(c.width / W, 0, 0, c.height / H, 0, 0);
+  if (rh.skKeys) { obOskKeys(K, rh.skKeys); rh.skKeys = null; }
   if (rh.mode !== 'play' || !obOsk.img.cursor) return;
   const sz = (+$('obCurSize').value || 1) * 64 * H / 768;  // le curseur à sa taille d'osu! (écran de 768 de haut)
   if (obOsk.img.cursortrail) rh.trail.forEach(([x, y], i) => { K.globalAlpha = (i + 1) / rh.trail.length * .8; obOskImg(K, 'cursortrail', x, y, sz); });
@@ -2115,7 +2338,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     if (rh.noSave) return;
     const c = rh.counts, e0 = rh.errs.map(x => x[1] * 1000), mu = e0.length ? e0.reduce((a, b) => a + b, 0) / e0.length : 0;
     rh.ur = e0.length ? Math.sqrt(e0.reduce((a, b) => a + (b - mu) ** 2, 0) / e0.length) * 10 : 0;
-    rh.pp = rh.failed ? 0 : obPP(rh.sx, {acc: rh.acc, n300: c.PARFAIT, n100: c.BIEN, n50: c.OK, miss: c['RATÉ'], combo: rh.maxCombo, fc: rh.fc, n: rh.notes.length, od: rh.ob.od, ar: rh.ob.ar, rate: rh.rate, mods: rh.mods.match(/../g) || []});
+    rh.pp = rh.failed ? 0 : obPP(rh.sx, {acc: rh.acc, n300: c.PARFAIT, n100: c.BIEN, n50: c.OK, miss: c['RATÉ'], combo: rh.maxCombo, fc: rh.fc, od: rh.ob.od, ar: rh.ob.ar, rate: rh.rate, mods: rh.mods.match(/../g) || []});
     const H = gstore('orbeHist', []), a = Math.round(rh.acc * 10000) / 100, played = ((rh.failed ? rh.failNow : rh.lastEnd) - rh.first) / rh.rate;
     const am = rh.aim.length >= 8 ? Math.round(rh.aim.reduce((s0, q) => s0 + q[0], 0) / rh.aim.length * 100) : null;
     H.push({ai: am, d: Date.now(), k: obKey(), n: rh.info.name, df: RH_DIFFS[rh.diff] || rh.info.ver || 'Perso', s: rh.score, a, ur: Math.round(rh.ur), pp: rh.pp, g: rh.failed ? 'F' : rh.grade, m: rh.mods, f: rh.failed ? 1 : 0, t: Math.max(0, Math.round(played)), c: rh.maxCombo, st: Math.round(rh.stars * 100) / 100, F: !rh.failed && !c['RATÉ'] && rh.maxCombo >= rh.fc ? 1 : 0, sy: rh.ob.st.name, cl: Object.values(rh.kc).reduce((x, y) => x + y, 0)});
@@ -2155,7 +2378,7 @@ function obPrep() {
   rh.first = ns[0]?.t ?? 0; rh.lastEnd = end; rh.skipTo = rh.first > 6 ? rh.first - Math.max(2, rh.pre + 1) : 0;
   const drain = Math.max(1, rh.lastEnd - rh.first - rh.breaks.reduce((a, b) => a + b.e - b.s, 0));
   rh.dm = Math.max(1, Math.round((rh.ob.hp + rh.ob.cs + rh.ob.od + obClamp(ns.length / drain * 8, 0, 16)) / 38 * 5));
-  rh.sx = obStarsX(ns.map(n => ({...n, r})), rh.ob.od, rh.rate); rh.stars = rh.sx.stars;  // les étoiles avec les mods (taille, OD, vitesse)
+  rh.sx = obStarsX(ns.map(n => ({...n, r})), rh.ob.od, rh.rate, {cs: rh.info?.osu ? rh.ob.cs : undefined, ar: rh.ob.ar, beat: beat * 1000, mods: rh.mods.match(/../g) || []}); rh.stars = rh.sx.stars;  // les étoiles avec les mods (taille, OD, vitesse)
   rh.fc = ns.reduce((a, n) => a + 1 + (n.parts?.length || 0), 0);  // le combo d'une partie parfaite
 }
 const obBreak = now => rh.breaks?.find(b => now >= b.s && now <= b.e);
@@ -2310,34 +2533,62 @@ function obAutoPos(now) {
   }
   rh.cx = OB.X0 + x; rh.cy = OB.Y0 + y;
 }
-// les points de performance (pp), calculés comme osu! (version de 2023) : la visée, la vitesse et la précision, selon les étoiles de la map avec les mods.
-// Les ratés « effectifs » comptent aussi les combos cassés sur les glissières ; AR et OD sont pris après HR/EZ et la vitesse (DT/HT) ;
-// Relax, Pilote et Auto ne donnent rien. o : n300, n100, n50, miss, combo, fc (le combo maximal), n (objets), od, ar, rate, mods
+// les points de performance (pp), traduits du code d'osu! (ppy/osu, version 20260706) : la visée, la vitesse, la précision, la lecture et la Lampe,
+// selon les étoiles de la map avec les mods. Comme pour une partie d'osu! stable (précision « classique » des glissières), les ratés « effectifs »
+// sont estimés d'après le combo ; AR et OD sont pris après HR/EZ et la vitesse (DT/HT). Auto ne donne rien.
+// shortcut: sans l'estimation des ratés par le score d'osu! stable (Orbe n'a pas ce score), celle par le combo est prise
+// o : n300, n100, n50, miss, combo, fc (le combo maximal d'Orbe), od, ar, rate, mods
 function obPP(sx, o) {
-  const has = m => o.mods.includes(m); if (!sx || has('RX') || has('AP') || has('AT')) return 0;
-  const N = Math.max(1, o.n), rate = o.rate || 1, sl = sx.nS || 0, circ = sx.nC ?? N;
-  const od = (80 - (80 - 6 * o.od) / rate) / 6, pre = (o.ar < 5 ? 1800 - 120 * o.ar : 1200 - 150 * (o.ar - 5)) / rate, ar = pre > 1200 ? (1800 - pre) / 120 : 5 + (1200 - pre) / 150;
-  const acc = (o.n300 * 6 + o.n100 * 2 + o.n50) / (N * 6);
-  let em = o.miss; if (sl) { const thr = o.fc - .1 * sl; if (o.combo < thr) em = Math.max(em, Math.min(thr / Math.max(1, o.combo), o.n100 + o.n50 + o.miss)); }
-  const len = .95 + .4 * Math.min(1, N / 2000) + (N > 2000 ? Math.log10(N / 2000) * .5 : 0), cmb = o.fc > 0 ? Math.min(1, o.combo ** .8 / o.fc ** .8) : 1;
-  let aim = obBasePerf(sx.aim) * len;
-  if (em > 0) aim *= .97 * (1 - (em / N) ** .775) ** em;
-  aim *= cmb * (1 + (ar > 10.33 ? .3 * (ar - 10.33) : ar < 8 ? .05 * (8 - ar) : 0) * len); if (has('HD')) aim *= 1 + .04 * (12 - ar);
-  if (sl) { const ed = sl * .15, drop = obClamp(Math.min(o.n100 + o.n50 + o.miss, o.fc - o.combo), 0, ed); aim *= (1 - sx.sf) * (1 - drop / ed) ** 3 + sx.sf; }
-  aim *= acc * (.98 + od * od / 2500);
-  if (has('FL')) aim *= 1 + .35 * Math.min(1, N / 200) + (N > 200 ? .3 * Math.min(1, (N - 200) / 300) : 0);  // osu! a une compétence « flashlight » à part : ici, un bonus sur la visée
-  let speed = obBasePerf(sx.speed) * len;
-  if (em > 0) speed *= .97 * (1 - (em / N) ** .775) ** (em ** .875);
-  speed *= cmb * (1 + (ar > 10.33 ? .3 * (ar - 10.33) : 0) * len); if (has('HD')) speed *= 1 + .04 * (12 - ar);
-  const rt = N - (sx.sn || 0), r3 = Math.max(0, o.n300 - rt), r1 = Math.max(0, o.n100 - Math.max(0, rt - o.n300)), r5 = Math.max(0, o.n50 - Math.max(0, rt - o.n300 - o.n100)), ra = sx.sn ? (r3 * 6 + r1 * 2 + r5) / (sx.sn * 6) : 0;
-  speed *= (.95 + od * od / 750) * ((acc + ra) / 2) ** ((14.5 - Math.max(od, 8)) / 2) * .99 ** (o.n50 < N / 500 ? 0 : o.n50 - N / 500);
-  const better = circ ? obClamp(((o.n300 - (N - circ)) * 6 + o.n100 * 2 + o.n50) / (circ * 6), 0, 1) : 0;
-  const accV = 1.52163 ** od * better ** 24 * 2.83 * Math.min(1.15, (circ / 1000) ** .3) * (has('HD') ? 1.08 : 1) * (has('FL') ? 1.02 : 1);
-  const mult = 1.14 * (has('NF') ? Math.max(.9, 1 - .02 * em) : 1);
-  return Math.round((aim ** 1.1 + speed ** 1.1 + accV ** 1.1) ** (1 / 1.1) * mult);
+  const has = m => o.mods.includes(m), g = o.n300, ok = o.n100, meh = o.n50, cm = o.miss, tot = g + ok + meh + cm, imp = ok + meh + cm;
+  if (!sx || has('AT') || !tot) return 0;
+  const MC = sx.mc, combo = oCl(Math.round(o.fc > 0 ? o.combo / o.fc * MC : MC), 0, MC), acc = (300 * g + 100 * ok + 50 * meh) / (300 * tot), rate = o.rate || 1;
+  const gw = (Math.floor(80 - 6 * o.od) - .5) / rate, okw = (Math.floor(140 - 8 * o.od) - .5) / rate, mw = (Math.floor(200 - 10 * o.od) - .5) / rate, od = (79.5 - gw) / 6;
+  let em = cm;  // les ratés effectifs : un combo cassé sur une glissière compte aussi
+  if (sx.nS > 0) {
+    const thr = MC - Math.min(4 + (.04 + .06 * Math.min(sx.aimSF, 1) ** 2) * sx.nS, sx.nS); if (combo < thr) em = thr / Math.max(1, combo);
+    em = Math.min(em, imp); const mx = Math.min(sx.nS, Math.trunc((MC - combo) / 2)); if (em - cm > mx) em = cm + mx;
+  }
+  em = Math.max(0, Math.min(tot, Math.max(cm, em)));
+  const brk = f => { const nm = ok + meh; if (!nm) return 0; const e = Math.min(nm, em * f); return e * oSm(em, 1, 2) * (nm - e + 4.5) / (nm + 4) * oLogi(1 - combo / MC, .33, 15); };
+  const aSB = em > 0 ? brk(sx.aimSF) : 0, sSB = em > 0 ? brk(sx.speedSF) : 0, pen = (m, n) => .93 / (m / (4 * Math.log(Math.max(1, n))) + 1);
+  let mult = 1.12; if (has('NF')) mult *= Math.max(.9, 1 - .02 * em); if (has('SO')) mult *= 1 - (sx.nSp / tot) ** .85;
+  if (has('RX')) em = Math.min(em + ok * .75 * Math.max(0, od > 0 ? 1 - od / 13.33 : 1) + meh * Math.max(0, od > 0 ? 1 - (od / 13.33) ** 5 : 1), tot);
+  // l'écart type des frappes sur les notes « de vitesse », estimé d'après les 300, 100 et 50
+  let dev = null;
+  if (g + ok + meh) {
+    const sn = sx.sn + (tot - sx.sn) * .1, rm = Math.min(cm, sn), r5 = Math.min(meh, sn - rm), r1 = Math.min(ok, sn - rm - r5), r3 = Math.max(0, sn - rm - r5 - r1);
+    if (r3 + r1 + r5 > 0) {
+      const n = Math.max(1, r3 + r1), p = r3 / n, z = 2.32634787404, pl = Math.min(p, (n * p + z * z / 2) / (n + z * z) - z / (n + z * z) * Math.sqrt(n * p * (1 - p) + z * z / 4));
+      if (pl > .01) { dev = gw / (Math.SQRT2 * oErfInv(pl)); dev *= Math.sqrt(1 - Math.sqrt(2 / Math.PI) * okw * Math.exp(-.5 * (okw / dev) ** 2) / (dev * oErf(okw / (Math.SQRT2 * dev)))); }
+      else dev = okw / Math.sqrt(3);
+      dev = Math.sqrt(((r3 + r1) * dev * dev + r5 * (mw * mw + okw * mw + okw * okw) / 3) / (r3 + r1 + r5));
+    }
+  }
+  let aim = 0;
+  if (!has('AP')) {
+    let ad = sx.aim;
+    if (sx.nS > 0 && sx.aimHard > 0) ad *= (1 - sx.sf) * (1 - oCl(Math.min(imp, MC - combo), 0, sx.aimHard) / sx.aimHard) ** 3 + sx.sf;
+    aim = 4 * ad ** 3 * (.95 + .35 * Math.min(1, tot / 2000) + (tot > 2000 ? Math.log10(tot / 2000) * .5 : 0));
+    if (em > 0) aim *= pen(Math.min(em + aSB, imp), sx.aimN);
+    aim *= acc;
+  }
+  let speed = 0;
+  if (!has('RX') && dev != null) {
+    const sv = 4 * sx.speed ** 3; speed = sv; if (em > 0) speed *= pen(Math.min(em + sSB, imp), sx.speedN);
+    const cut = 100 + 220 * (22 / dev) ** 6.5;
+    if (sv > cut) { const adj = 50 * (Math.log((sv - cut) / 50 + 1) + cut / 50); speed *= oLerp(adj, sv, 1 - oRL(dev, 22, 27)) / sv; }
+    speed *= oErf(20 * (4 / sx.speed) ** .35 / dev) ** 2;
+  }
+  let accV = 0;
+  if (!has('RX')) { const nA = sx.nC, b = nA > 0 ? Math.max(0, ((g - Math.max(tot - nA, 0)) * 6 + ok * 2 + meh) / (nA * 6)) : 0; accV = 1.52163 ** od * b ** 24 * 2.83 * (nA / 1000) ** (nA < 1000 ? .3 : .1); }
+  const read = 4 * sx.read ** 3 * (em > 0 ? pen(em + aSB, sx.readN) : 1) * acc ** 3;
+  let fl = 0;
+  if (has('FL')) { fl = 25 * sx.fl ** 2; if (em > 0) fl *= .97 * (1 - (em / tot) ** .775) ** (em ** .875); fl *= (MC <= 0 ? 1 : Math.min(combo ** .8 / MC ** .8, 1)) * (.5 + acc / 2); }
+  return Math.round(oNorm(1.1, aim, speed, accV, oCog(read, fl)) * mult);
 }
-{ const sx = {aim: 2.6, speed: 1.8, sf: .95, sn: 300, nC: 400, nS: 100, nSp: 0}, P = (acc, miss, mods = []) => obPP(sx, {n300: Math.round(500 * acc), n100: 500 - Math.round(500 * acc), n50: 0, miss, combo: miss ? 200 : 700, fc: 700, n: 500, od: 8, ar: 9, mods});
-  console.assert(P(1, 0) > 120 && P(1, 0) < 400 && P(.95, 0) < P(1, 0) && P(1, 3) < P(1, 0) && P(1, 0, ['HD']) > P(1, 0) && P(1, 0, ['RX']) === 0, 'obPP', P(1, 0)); }
+{ const sx = {aim: 2.6, speed: 1.8, read: 1.2, fl: 0, sf: .95, aimHard: 40, aimN: 300, speedN: 250, readN: 200, sn: 300, aimSF: .1, speedSF: .05, mc: 700, nC: 400, nS: 100, nSp: 0},
+    P = (acc, miss, mods = []) => obPP(sx, {n300: Math.round(500 * acc) - miss, n100: 500 - Math.round(500 * acc), n50: 0, miss, combo: miss ? 200 : 700, fc: 700, od: 8, ar: 9, rate: 1, mods});
+  console.assert(P(1, 0) > 100 && P(1, 0) < 400 && P(.95, 0) < P(1, 0) && P(1, 3) < P(1, 0) && P(1, 0, ['AT']) === 0 && P(1, 3, ['NF']) < P(1, 3), 'obPP', P(1, 0), P(.95, 0), P(1, 3)); }
 // le profil, comme dans osu! : le total de pp (ta meilleure partie de chaque niveau, la 1re comptant en entier, puis 95 %, 90 %…, plus un petit bonus
 // par niveau joué) et la précision pondérée de la même façon
 function obProfile() {
@@ -2879,6 +3130,12 @@ function obArrow(x, y, ang, s, col) { for (const k of [-.7, .7]) obLine(x, y, x 
 const obMark = (ok, x, y) => ok ? (obLine(x - 9, y, x - 3, y + 7, '#7ee07a', 3), obLine(x - 3, y + 7, x + 10, y - 8, '#7ee07a', 3)) : (obLine(x - 8, y - 8, x + 8, y + 8, '#ff4a5a', 3), obLine(x + 8, y - 8, x - 8, y + 8, '#ff4a5a', 3));
 // le fond de la map (ou du thème), flouté au réglage « Flou du fond » ; gardé tant que l'image et le réglage ne changent pas
 let obBgC = null;
+// les maps osu! vont jusqu'aux bords du terrain : la toile s'élargit (400 × 240), le terrain reste au milieu et le compteur de touches s'en éloigne
+function obWide(on) {
+  const w = on ? 400 : 320; if (W === w) return;
+  W = w; cv.width = W; g.imageSmoothingEnabled = false; cv.style.aspectRatio = W + '/' + H; cv.classList.toggle('wide', on); OB.X0 = (W - OB.PW) / 2;
+  try { obBgs.clear(); obBgC = null; } catch {}  // au démarrage, ces caches ne sont peut-être pas encore déclarés
+}
 function obBgPic() {
   const b = rh.info?.bg || obBg(rh.theme || OB_THEMES[0]), v = +$('obBlur').value; if (!v) return b;
   if (obBgC?.b !== b || obBgC.v !== v) obBgC = {b, v, c: cnv(W, H, q => { q.filter = 'blur(' + v + 'px)'; q.drawImage(b, -2 * v, -2 * v, W + 4 * v, H + 4 * v); })};
@@ -2990,7 +3247,8 @@ function obHud(now, brk) {
   if (rec.length) { const m = rec.slice(-10).reduce((s, e) => s + e[1], 0) / Math.min(10, rec.length), mx = cx + Math.round(obClamp(m, -lw[2], lw[2]) * sc); px(g, '#ffffff', mx - 2, by - 10, 5, 1); px(g, '#ffffff', mx - 1, by - 9, 3, 1); px(g, '#ffffff', mx, by - 8, 1, 1); }
   // les touches : K1, K2 (tes touches), M1, M2 (les boutons de la souris), allumées quand on appuie, avec le nombre d'appuis
   const held = {K1: rh.keys.has(OB.KEYS[0]) || rh.keys.has(OB.KEYS[2]), K2: rh.keys.has(OB.KEYS[1]) || rh.keys.has(OB.KEYS[3]), M1: rh.keys.has('m0'), M2: rh.keys.has('m2')};
-  ['K1', 'K2', 'M1', 'M2'].forEach((k, i) => { const y = 92 + i * 15, on = held[k]; px(g, '#05010b', W - 29, y - 1, 28, 14); px(g, on ? '#ffd84a' : '#1e1834', W - 28, y, 26, 12); pxFont(g, rh.kc[k] ? String(rh.kc[k]) : k, W - 15, y + 10, on ? '#1e1834' : '#e8e0ff', 6, 'center'); });
+  rh.skKeys = obOskOn() && obOsk.img['inputoverlay-key'] ? held : null;  // le skin a ses touches : dessinées nettes par obHiEnd
+  if (!rh.skKeys) ['K1', 'K2', 'M1', 'M2'].forEach((k, i) => { const y = 92 + i * 15, on = held[k]; px(g, '#05010b', W - 29, y - 1, 28, 14); px(g, on ? '#ffd84a' : '#1e1834', W - 28, y, 26, 12); pxFont(g, rh.kc[k] ? String(rh.kc[k]) : k, W - 15, y + 10, on ? '#1e1834' : '#e8e0ff', 6, 'center'); });
   if (rh.mode === 'play' && rh.skipTo && now < rh.skipTo && (t / 400 | 0) % 2) pxFont(g, 'ESPACE : PASSER L\'INTRO', W - 6, H - 16, '#ffffff', 8, 'right');
   if (brk) {  // une pause du morceau : le temps qui reste, la vie bonne ou non au début, des flèches juste avant la reprise
     const left = brk.e - now, f = obClamp(left / (brk.e - brk.s), 0, 1);
