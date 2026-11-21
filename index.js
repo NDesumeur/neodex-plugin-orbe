@@ -3786,7 +3786,7 @@ const OB_EX = {jumps: 'Sauts de plus en plus grands', flow: 'Flux (orbes en cour
 function obExercise(kind, bpm, min, opt = {}) {
   const beat = 60 / bpm, R = seeded(bpm * 31 + min * 7 + kind.length), notes = [], end = min * 60, cx = OB.PW / 2, cy = OB.PH / 2, clampX = v => obClamp(v, 18, OB.PW - 18), clampY = v => obClamp(v, 18, OB.PH - 18);
   let t = 2, combo = 0, col = 0, ang = 0;
-  const add = (x, y, nc) => { if (nc || combo >= 8) { combo = 0; col++; } notes.push({t, kind: 'circle', x: clampX(x), y: clampY(y), combo: ++combo, col, len: 0}); };
+  const add = (x, y, nc) => { if (nc || combo >= 8) { combo = 0; col++; } notes.push({t, kind: 'circle', x: clampX(x), y: clampY(y), combo: ++combo, col: col % OB.COLS.length, len: 0}); };  // les couleurs tournent (au-delà, rien à dessiner)
   if (kind === 'stream') {
     const N = opt.n || 16;
     while (t < end) { const a0 = R() * 2 * Math.PI, rad = 30 + R() * 25, x0 = cx + Math.cos(a0) * 40, y0 = cy + Math.sin(a0) * 30;
@@ -3805,7 +3805,7 @@ function obExercise(kind, bpm, min, opt = {}) {
   return {notes, events, len: end + 2, step: beat / 4};
 }
 { const e = obExercise('stream', 180, 1, {n: 16}), j = obExercise('jumps', 150, 1), d = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-  console.assert(e.notes.length > 100 && e.notes.every((n, i) => !i || n.t > e.notes[i - 1].t) && e.notes.every(n => n.x >= 0 && n.x <= OB.PW && n.y >= 0 && n.y <= OB.PH) && d(j.notes.at(-2), j.notes.at(-1)) > d(j.notes[0], j.notes[1]) * 2, 'obExercise'); }
+  console.assert(e.notes.length > 100 && e.notes.every((n, i) => !i || n.t > e.notes[i - 1].t) && e.notes.every(n => n.x >= 0 && n.x <= OB.PW && n.y >= 0 && n.y <= OB.PH) && d(j.notes.at(-2), j.notes.at(-1)) > d(j.notes[0], j.notes[1]) * 2 && [...e.notes, ...j.notes].every(n => n.col < OB.COLS.length), 'obExercise'); }
 function obTrainCards() {
   const p = gstore('rhythmPrefs', {}), sel = (id, opts, v) => { const s = el('select', 'f gSel'); s.id = id; for (const [val, t] of opts) { const o = el('option', '', t); o.value = val; s.append(o); } s.value = v; return s; };
   const k = sel('obExK', Object.entries(OB_EX), p.obExK || 'jumps'), b = sel('obExBpm', Array.from({length: 15}, (_, i) => [String(120 + i * 10), (120 + i * 10) + ' BPM']), p.obExBpm || '160');
