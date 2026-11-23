@@ -24,7 +24,7 @@ On the right, the **map list**, as in osu!: one long list you scroll with the wh
 
 **With the keyboard**, as in osu!: **Up** and **Down** go to the next card (the level loads when you stop), **Left** and **Right** to the other difficulty of the same song, **Enter** plays, **F2** picks a random song, **Page Up** and **Page Down** jump to the previous or next star category. To move fast through the list: the wheel scrolls three times faster, and **holding the right click** goes straight to that place in the list (top for the start, bottom for the end), as in osu!. The **Without the game songs** filter hides Orbe's songs and keeps only your music and your osu! maps. Your music is sorted with the rest as soon as it is imported, with estimated stars (≈) until its first game.
 
-Above the list: a title **search**, **filters** (map style, stars, tempo, length), the **order** (title, tempo, length, best grade) and **RANDOM**, which picks a song among those shown. The star filter computes them as needed, bit by bit. **Options** and **help** open with their buttons, below the list.
+Above the list: a title **search**, **filters** (map style, stars, tempo, length), the **order** (title, tempo, length, best grade) and **RANDOM**, which picks a song among those shown. The star filter computes them as needed, bit by bit. **Options** and **help** open with their buttons, below the list. Filters are kept from one time to the next: when they hide maps, the list says so ("N maps hidden by your filters") with a **SHOW ALL** button; after an import they are reset so the new map shows up.
 
 ## Accuracy and points
 

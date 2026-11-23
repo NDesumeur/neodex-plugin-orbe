@@ -881,5 +881,8 @@
  "Copie du storyboard et de la vidéo…": "Copying the storyboard and video…",
  "Variables": "Variables",
  "Events": "Events",
- "Sprite": "Sprite"
+ "Sprite": "Sprite",
+ "maps cachées par tes filtres.": "maps hidden by your filters.",
+ "Une map cachée par tes filtres.": "One map hidden by your filters.",
+ "TOUT AFFICHER": "SHOW ALL"
 }

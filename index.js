@@ -1170,6 +1170,12 @@ function rhPager(order) {  // 1200 chansons : 50 par page (sinon la liste est tr
     r.append(a, el('span', 'hint', (rhPage * 50 + 1) + '–' + Math.min(order.length, rhPage * 50 + 50) + ' / ' + order.length), b); return r;
   };
 }
+// remet la recherche et les filtres de la liste à zéro (gardé dans les réglages du jeu)
+function obClearFilters() {
+  $('obSearch').value = ''; const P = gstore('rhythmPrefs', {});
+  for (const id of ['obFSrc', 'obFStyle', 'obFStars', 'obFBpm', 'obFLen']) { $(id).value = ''; P[id] = ''; }
+  saveGames();
+}
 function rhList() {
   $('rhTabSongs').classList.toggle('main', rhTab === 'songs'); $('rhTabMine').classList.toggle('main', rhTab === 'mine'); $('rhTabStats')?.classList.toggle('main', rhTab === 'stats'); $('rhTabTrain')?.classList.toggle('main', rhTab === 'train'); if ($('obBrowse')) $('obBrowse').style.display = rhTab === 'mine' ? '' : 'none';
   $('rhTabMine').textContent = 'IMPORTER · ' + (rhImports().length + obOsuSets().length); $('rhImport').style.display = rhTab === 'mine' ? '' : 'none';
@@ -1180,7 +1186,10 @@ function rhList() {
   if (rhTab === 'songs') {
     const res = games?.rhythm || {}, {L, rows} = obOrder(), all = obItems();
     $('rhTabSongs').textContent = 'MAPS · ' + all.filter(o => res[o.res]).length + ' / ' + all.length;
-    const msg = $('obScanMsg'); msg.hidden = !!L.length; msg.textContent = 'Aucune map ne correspond à ces filtres.';
+    // 1.4.3 : les filtres sont gardés d'une fois sur l'autre ; une map cachée par eux semblait disparue (une map de 4 min avec « Moins de 2 min »)
+    const msg = $('obScanMsg'), hid = all.length - L.length;
+    msg.hidden = !hid; msg.replaceChildren(!L.length ? 'Aucune map ne correspond à ces filtres.' : hid > 1 ? hid + ' ' + 'maps cachées par tes filtres.' : 'Une map cachée par tes filtres.', ' ');
+    if (hid) { const b = el('button', 'f', 'TOUT AFFICHER'); b.onclick = () => { obClearFilters(); rhList(); }; msg.append(b); }
     return obCarousel(rows);
   }
   const list = rhImports(), osu = obOsuCards();
@@ -2172,7 +2181,7 @@ async function obOszImport(f) {
   diffs.sort((a, b) => a.st - b.st);
   const L = obOsuSets(), e = {id, name: (m0.artist ? m0.artist + ' - ' : '') + m0.title, creator: m0.creator, set: m0.set, audio: id + '-audio.' + ext, bg, ...(sbv.sb ? {sb: 1} : {}), ...(sbv.vid ? {vid: sbv.vid} : {}), bpm: m0.bpm, preview: m0.preview, diffs, d: Date.now()};
   const old = L.findIndex(x => x.id === id); if (old >= 0) L[old] = e; else L.push(e);
-  obOsuCache.delete(id); saveGames(); rhTab = 'songs'; rhList();
+  obOsuCache.delete(id); obClearFilters(); saveGames(); rhTab = 'songs'; rhList();  // la map importée se voit toujours dans la liste
   msg('« ' + e.name + ' » : ' + diffs.length + ' difficulté' + (diffs.length > 1 ? 's' : '') + ' importée' + (diffs.length > 1 ? 's' : '') + '.');
   toast($('rhImpMsg').textContent);
   await rhSelect(id, 'O' + Math.max(0, diffs.findLastIndex(d => d.st < 6)));

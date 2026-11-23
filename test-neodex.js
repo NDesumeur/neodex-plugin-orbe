@@ -143,6 +143,12 @@ module.exports = async ({ pj, sleep }) => {
   const imp = await pj(`[...document.querySelectorAll('#rhSongs .obCard > .hint')].map(h => /osu!|ta musique/.test(h.textContent) ? 1 : 0).join('')`);
   await pj(`(s => { s.value = ''; s.dispatchEvent(new Event('change')); })(document.getElementById('obFSrc')), 0`); await sleep(500);
   if (!imp || /0/.test(imp)) throw new Error('filtre sans les chansons du jeu : ' + imp);
+  // 1.4.3 : un filtre gardé cache des maps : le compte s'affiche et TOUT AFFICHER remet tout
+  await pj(`(s => { s.value = '0-2'; s.dispatchEvent(new Event('change')); })(document.getElementById('obFLen')), 0`); await sleep(500);
+  const hidMsg = await pj(`(m => m.hidden ? 'caché' : m.textContent)(document.getElementById('obScanMsg'))`);
+  await pj(`document.querySelector('#obScanMsg button').click(), 0`); await sleep(500);
+  const shown = await pj(`[document.getElementById('obFLen').value, document.getElementById('obScanMsg').hidden].join()`);
+  if (!/cachée?s? par tes filtres|Aucune map/.test(hidMsg) || shown !== ',true') throw new Error('maps cachées par les filtres : ' + hidMsg + ' / ' + shown);
   await sleep(500); await shot('osu-pret');
   await pj(`document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true })), 0`); await sleep(4500); await pj(pilot); await sleep(3500); await shot('osu-jeu');
   await pj(`clearInterval(__auto), (g => g.__rh.finish(g.__rh.st().hist || []))(document.getElementById('gc')), document.exitFullscreen?.().catch(() => {}), 0`); await sleep(1500);
