@@ -1,7 +1,7 @@
 {
   "id": "neodex.orbe",
   "name": "Orbe",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "author": "NDesumeur",
   "description": "Jeu de rythme à la souris : des orbes numérotés apparaissent sur le terrain, un cercle se resserre sur chacun ; vise et clique (ou W / X) quand il le touche, suis les glissières bouton enfoncé et fais tourner les toupies. Les 1200 morceaux de Rythme notés de 1 à 10 étoiles, ou des niveaux créés depuis ta musique ou NeoMusic. Les sensations d'osu! : 300, 100 et 50, barre de vie, mods (EZ, NF, HT, HR, DT, HD, FL, SD, PF, RX, AP, Auto), hitsounds, barre d'erreur, glissières avec tics et retours, notes de SS à D, pp et classement de chaque niveau. Des maps variées inspirées d'osu!, avec d'autres variantes au choix, et un onglet de statistiques. Plein écran, compte à rebours et décalage réglé tout seul. Un menu façon osu! : carrousel des chansons à la molette et au clavier, ta meilleure note, recherche, filtres, au hasard, refrain en aperçu, rang, médailles bronze, argent et or, carte de joueur, ta visée et l'écart avec ton record en partie, trois volumes, écran de fin animé. Dix thèmes de terrain selon le morceau. Replays (revoir, ralenti, export .osr), carte des erreurs, boucle sur un passage raté, exercices d'entraînement, paliers de pp, amis, navigateur de maps osu!, mods NC et DC, sons de chaque note et storyboard des maps osu!.",
   "icon": "icon.png",
@@ -10,7 +10,10 @@
   "neobase": ">=4.1.0",
   "type": "app",
   "category": "Jeux",
-  "compatibility": ["windows", "linux"],
+  "compatibility": [
+    "windows",
+    "linux"
+  ],
   "syncMode": "progression",
   "syncInfo": "Scores et notes par niveau, réglages.",
   "mobile": false,
@@ -26,5 +29,688 @@
     "network:catboy.best",
     "network:osu.direct",
     "network:*.osu.direct"
+  ],
+  "succes": [
+    {
+      "id": "first",
+      "nom": "Premier pas",
+      "texte": "Finir un niveau"
+    },
+    {
+      "id": "grade-1",
+      "nom": "Belles notes · Bronze",
+      "texte": "Une note A"
+    },
+    {
+      "id": "grade-2",
+      "nom": "Belles notes · Argent",
+      "texte": "Une note S"
+    },
+    {
+      "id": "grade-3",
+      "nom": "Belles notes · Or",
+      "texte": "Une note SS"
+    },
+    {
+      "id": "fc-1",
+      "nom": "Full combo · Bronze",
+      "texte": "1 niveau sans casser le combo"
+    },
+    {
+      "id": "fc-2",
+      "nom": "Full combo · Argent",
+      "texte": "10 niveaux sans casser le combo"
+    },
+    {
+      "id": "fc-3",
+      "nom": "Full combo · Or",
+      "texte": "50 niveaux sans casser le combo"
+    },
+    {
+      "id": "stars-1",
+      "nom": "Étoiles · Bronze",
+      "texte": "Finir un niveau de 3★"
+    },
+    {
+      "id": "stars-2",
+      "nom": "Étoiles · Argent",
+      "texte": "Finir un niveau de 5★"
+    },
+    {
+      "id": "stars-3",
+      "nom": "Étoiles · Or",
+      "texte": "Finir un niveau de 7★"
+    },
+    {
+      "id": "acc-1",
+      "nom": "Précision · Bronze",
+      "texte": "95 % sur un niveau"
+    },
+    {
+      "id": "acc-2",
+      "nom": "Précision · Argent",
+      "texte": "98 % sur un niveau"
+    },
+    {
+      "id": "acc-3",
+      "nom": "Précision · Or",
+      "texte": "99.5 % sur un niveau"
+    },
+    {
+      "id": "combo-1",
+      "nom": "Combo · Bronze",
+      "texte": "Un combo de 500"
+    },
+    {
+      "id": "combo-2",
+      "nom": "Combo · Argent",
+      "texte": "Un combo de 1000"
+    },
+    {
+      "id": "combo-3",
+      "nom": "Combo · Or",
+      "texte": "Un combo de 2000"
+    },
+    {
+      "id": "pp-1",
+      "nom": "Performance · Bronze",
+      "texte": "50 pp en une partie"
+    },
+    {
+      "id": "pp-2",
+      "nom": "Performance · Argent",
+      "texte": "100 pp en une partie"
+    },
+    {
+      "id": "pp-3",
+      "nom": "Performance · Or",
+      "texte": "200 pp en une partie"
+    },
+    {
+      "id": "hd-1",
+      "nom": "Caché · Bronze",
+      "texte": "Finir un niveau de 2★ en HD"
+    },
+    {
+      "id": "hd-2",
+      "nom": "Caché · Argent",
+      "texte": "Finir un niveau de 4★ en HD"
+    },
+    {
+      "id": "hd-3",
+      "nom": "Caché · Or",
+      "texte": "Finir un niveau de 6★ en HD"
+    },
+    {
+      "id": "hr-1",
+      "nom": "Dur · Bronze",
+      "texte": "Finir un niveau de 2★ en HR"
+    },
+    {
+      "id": "hr-2",
+      "nom": "Dur · Argent",
+      "texte": "Finir un niveau de 4★ en HR"
+    },
+    {
+      "id": "hr-3",
+      "nom": "Dur · Or",
+      "texte": "Finir un niveau de 6★ en HR"
+    },
+    {
+      "id": "dt-1",
+      "nom": "Accéléré · Bronze",
+      "texte": "Finir un niveau de 2★ en DT"
+    },
+    {
+      "id": "dt-2",
+      "nom": "Accéléré · Argent",
+      "texte": "Finir un niveau de 4★ en DT"
+    },
+    {
+      "id": "dt-3",
+      "nom": "Accéléré · Or",
+      "texte": "Finir un niveau de 6★ en DT"
+    },
+    {
+      "id": "fl-1",
+      "nom": "Lampe · Bronze",
+      "texte": "Finir un niveau de 2★ en FL"
+    },
+    {
+      "id": "fl-2",
+      "nom": "Lampe · Argent",
+      "texte": "Finir un niveau de 4★ en FL"
+    },
+    {
+      "id": "fl-3",
+      "nom": "Lampe · Or",
+      "texte": "Finir un niveau de 6★ en FL"
+    },
+    {
+      "id": "levels-1",
+      "nom": "Voyageur · Bronze",
+      "texte": "10 niveaux différents finis"
+    },
+    {
+      "id": "levels-2",
+      "nom": "Voyageur · Argent",
+      "texte": "50 niveaux différents finis"
+    },
+    {
+      "id": "levels-3",
+      "nom": "Voyageur · Or",
+      "texte": "200 niveaux différents finis"
+    },
+    {
+      "id": "games-1",
+      "nom": "Habitué · Bronze",
+      "texte": "50 parties"
+    },
+    {
+      "id": "games-2",
+      "nom": "Habitué · Argent",
+      "texte": "200 parties"
+    },
+    {
+      "id": "games-3",
+      "nom": "Habitué · Or",
+      "texte": "1000 parties"
+    },
+    {
+      "id": "time-1",
+      "nom": "Endurance · Bronze",
+      "texte": "1 h de jeu"
+    },
+    {
+      "id": "time-2",
+      "nom": "Endurance · Argent",
+      "texte": "5 h de jeu"
+    },
+    {
+      "id": "time-3",
+      "nom": "Endurance · Or",
+      "texte": "20 h de jeu"
+    },
+    {
+      "id": "ss-1",
+      "nom": "Perfection · Bronze",
+      "texte": "1 note SS"
+    },
+    {
+      "id": "ss-2",
+      "nom": "Perfection · Argent",
+      "texte": "10 notes SS"
+    },
+    {
+      "id": "ss-3",
+      "nom": "Perfection · Or",
+      "texte": "50 notes SS"
+    },
+    {
+      "id": "sgr-1",
+      "nom": "Série de S · Bronze",
+      "texte": "5 notes S ou mieux"
+    },
+    {
+      "id": "sgr-2",
+      "nom": "Série de S · Argent",
+      "texte": "25 notes S ou mieux"
+    },
+    {
+      "id": "sgr-3",
+      "nom": "Série de S · Or",
+      "texte": "100 notes S ou mieux"
+    },
+    {
+      "id": "fcst-1",
+      "nom": "Combo étoilé · Bronze",
+      "texte": "Un full combo sur un niveau de 3★"
+    },
+    {
+      "id": "fcst-2",
+      "nom": "Combo étoilé · Argent",
+      "texte": "Un full combo sur un niveau de 5★"
+    },
+    {
+      "id": "fcst-3",
+      "nom": "Combo étoilé · Or",
+      "texte": "Un full combo sur un niveau de 7★"
+    },
+    {
+      "id": "ssst-1",
+      "nom": "SS étoilé · Bronze",
+      "texte": "Un SS sur un niveau de 2★"
+    },
+    {
+      "id": "ssst-2",
+      "nom": "SS étoilé · Argent",
+      "texte": "Un SS sur un niveau de 4★"
+    },
+    {
+      "id": "ssst-3",
+      "nom": "SS étoilé · Or",
+      "texte": "Un SS sur un niveau de 6★"
+    },
+    {
+      "id": "accst-1",
+      "nom": "Tireur d'élite · Bronze",
+      "texte": "98 % sur un niveau de 3★"
+    },
+    {
+      "id": "accst-2",
+      "nom": "Tireur d'élite · Argent",
+      "texte": "98 % sur un niveau de 5★"
+    },
+    {
+      "id": "accst-3",
+      "nom": "Tireur d'élite · Or",
+      "texte": "98 % sur un niveau de 7★"
+    },
+    {
+      "id": "legend-1",
+      "nom": "Légende · Bronze",
+      "texte": "Finir un niveau de 8★"
+    },
+    {
+      "id": "legend-2",
+      "nom": "Légende · Argent",
+      "texte": "Finir un niveau de 9★"
+    },
+    {
+      "id": "legend-3",
+      "nom": "Légende · Or",
+      "texte": "Finir un niveau de 10★"
+    },
+    {
+      "id": "ur-1",
+      "nom": "Métronome · Bronze",
+      "texte": "Un UR sous 150 sur un niveau fini"
+    },
+    {
+      "id": "ur-2",
+      "nom": "Métronome · Argent",
+      "texte": "Un UR sous 100 sur un niveau fini"
+    },
+    {
+      "id": "ur-3",
+      "nom": "Métronome · Or",
+      "texte": "Un UR sous 80 sur un niveau fini"
+    },
+    {
+      "id": "ez-1",
+      "nom": "Facile · Bronze",
+      "texte": "Finir un niveau de 2★ en EZ"
+    },
+    {
+      "id": "ez-2",
+      "nom": "Facile · Argent",
+      "texte": "Finir un niveau de 4★ en EZ"
+    },
+    {
+      "id": "ez-3",
+      "nom": "Facile · Or",
+      "texte": "Finir un niveau de 6★ en EZ"
+    },
+    {
+      "id": "ht-1",
+      "nom": "Ralenti · Bronze",
+      "texte": "Finir un niveau de 2★ en HT"
+    },
+    {
+      "id": "ht-2",
+      "nom": "Ralenti · Argent",
+      "texte": "Finir un niveau de 4★ en HT"
+    },
+    {
+      "id": "ht-3",
+      "nom": "Ralenti · Or",
+      "texte": "Finir un niveau de 6★ en HT"
+    },
+    {
+      "id": "sd-1",
+      "nom": "Mort subite · Bronze",
+      "texte": "Finir un niveau de 2★ en SD"
+    },
+    {
+      "id": "sd-2",
+      "nom": "Mort subite · Argent",
+      "texte": "Finir un niveau de 4★ en SD"
+    },
+    {
+      "id": "sd-3",
+      "nom": "Mort subite · Or",
+      "texte": "Finir un niveau de 6★ en SD"
+    },
+    {
+      "id": "pf-1",
+      "nom": "Sans faute · Bronze",
+      "texte": "Finir un niveau de 2★ en PF"
+    },
+    {
+      "id": "pf-2",
+      "nom": "Sans faute · Argent",
+      "texte": "Finir un niveau de 4★ en PF"
+    },
+    {
+      "id": "pf-3",
+      "nom": "Sans faute · Or",
+      "texte": "Finir un niveau de 6★ en PF"
+    },
+    {
+      "id": "mods-1",
+      "nom": "Cocktail · Bronze",
+      "texte": "Finir un niveau avec 2 mods parmi HD, HR, DT et FL"
+    },
+    {
+      "id": "mods-2",
+      "nom": "Cocktail · Argent",
+      "texte": "Finir un niveau avec 3 mods parmi HD, HR, DT et FL"
+    },
+    {
+      "id": "mods-3",
+      "nom": "Cocktail · Or",
+      "texte": "Finir un niveau avec 4 mods parmi HD, HR, DT et FL"
+    },
+    {
+      "id": "osu-1",
+      "nom": "Importateur · Bronze",
+      "texte": "1 map osu! finie"
+    },
+    {
+      "id": "osu-2",
+      "nom": "Importateur · Argent",
+      "texte": "10 maps osu! finies"
+    },
+    {
+      "id": "osu-3",
+      "nom": "Importateur · Or",
+      "texte": "50 maps osu! finies"
+    },
+    {
+      "id": "mine-1",
+      "nom": "Ta musique · Bronze",
+      "texte": "1 niveau de tes musiques fini"
+    },
+    {
+      "id": "mine-2",
+      "nom": "Ta musique · Argent",
+      "texte": "5 niveaux de tes musiques finis"
+    },
+    {
+      "id": "mine-3",
+      "nom": "Ta musique · Or",
+      "texte": "20 niveaux de tes musiques finis"
+    },
+    {
+      "id": "styles-1",
+      "nom": "Polyvalent · Bronze",
+      "texte": "Finir des niveaux de 3 styles différents"
+    },
+    {
+      "id": "styles-2",
+      "nom": "Polyvalent · Argent",
+      "texte": "Finir des niveaux de 5 styles différents"
+    },
+    {
+      "id": "styles-3",
+      "nom": "Polyvalent · Or",
+      "texte": "Finir des niveaux de 6 styles différents"
+    },
+    {
+      "id": "streams-1",
+      "nom": "Streamer · Bronze",
+      "texte": "Finir un niveau Streams de 3★"
+    },
+    {
+      "id": "streams-2",
+      "nom": "Streamer · Argent",
+      "texte": "Finir un niveau Streams de 5★"
+    },
+    {
+      "id": "streams-3",
+      "nom": "Streamer · Or",
+      "texte": "Finir un niveau Streams de 7★"
+    },
+    {
+      "id": "jumps-1",
+      "nom": "Sauteur · Bronze",
+      "texte": "Finir un niveau Sauts de 3★"
+    },
+    {
+      "id": "jumps-2",
+      "nom": "Sauteur · Argent",
+      "texte": "Finir un niveau Sauts de 5★"
+    },
+    {
+      "id": "jumps-3",
+      "nom": "Sauteur · Or",
+      "texte": "Finir un niveau Sauts de 7★"
+    },
+    {
+      "id": "tech-1",
+      "nom": "Technicien · Bronze",
+      "texte": "Finir un niveau Technique de 3★"
+    },
+    {
+      "id": "tech-2",
+      "nom": "Technicien · Argent",
+      "texte": "Finir un niveau Technique de 5★"
+    },
+    {
+      "id": "tech-3",
+      "nom": "Technicien · Or",
+      "texte": "Finir un niveau Technique de 7★"
+    },
+    {
+      "id": "slide-1",
+      "nom": "Glisseur · Bronze",
+      "texte": "Finir un niveau Glissières de 3★"
+    },
+    {
+      "id": "slide-2",
+      "nom": "Glisseur · Argent",
+      "texte": "Finir un niveau Glissières de 5★"
+    },
+    {
+      "id": "slide-3",
+      "nom": "Glisseur · Or",
+      "texte": "Finir un niveau Glissières de 7★"
+    },
+    {
+      "id": "prec-1",
+      "nom": "Orfèvre · Bronze",
+      "texte": "Finir un niveau Précision de 3★"
+    },
+    {
+      "id": "prec-2",
+      "nom": "Orfèvre · Argent",
+      "texte": "Finir un niveau Précision de 5★"
+    },
+    {
+      "id": "prec-3",
+      "nom": "Orfèvre · Or",
+      "texte": "Finir un niveau Précision de 7★"
+    },
+    {
+      "id": "expert-1",
+      "nom": "Expert · Bronze",
+      "texte": "10 niveaux Expert finis"
+    },
+    {
+      "id": "expert-2",
+      "nom": "Expert · Argent",
+      "texte": "50 niveaux Expert finis"
+    },
+    {
+      "id": "expert-3",
+      "nom": "Expert · Or",
+      "texte": "200 niveaux Expert finis"
+    },
+    {
+      "id": "all4-1",
+      "nom": "Collectionneur · Bronze",
+      "texte": "1 chanson finie dans ses 4 difficultés"
+    },
+    {
+      "id": "all4-2",
+      "nom": "Collectionneur · Argent",
+      "texte": "10 chansons finies dans ses 4 difficultés"
+    },
+    {
+      "id": "all4-3",
+      "nom": "Collectionneur · Or",
+      "texte": "50 chansons finies dans ses 4 difficultés"
+    },
+    {
+      "id": "songs-1",
+      "nom": "Discothèque · Bronze",
+      "texte": "25 chansons différentes finies"
+    },
+    {
+      "id": "songs-2",
+      "nom": "Discothèque · Argent",
+      "texte": "100 chansons différentes finies"
+    },
+    {
+      "id": "songs-3",
+      "nom": "Discothèque · Or",
+      "texte": "400 chansons différentes finies"
+    },
+    {
+      "id": "retry-1",
+      "nom": "Persévérant · Bronze",
+      "texte": "Jouer 10 fois le même niveau"
+    },
+    {
+      "id": "retry-2",
+      "nom": "Persévérant · Argent",
+      "texte": "Jouer 25 fois le même niveau"
+    },
+    {
+      "id": "retry-3",
+      "nom": "Persévérant · Or",
+      "texte": "Jouer 50 fois le même niveau"
+    },
+    {
+      "id": "fails-1",
+      "nom": "Tenace · Bronze",
+      "texte": "Perdre 10 parties (et revenir)"
+    },
+    {
+      "id": "fails-2",
+      "nom": "Tenace · Argent",
+      "texte": "Perdre 50 parties (et revenir)"
+    },
+    {
+      "id": "fails-3",
+      "nom": "Tenace · Or",
+      "texte": "Perdre 200 parties (et revenir)"
+    },
+    {
+      "id": "long-1",
+      "nom": "Marathon · Bronze",
+      "texte": "Finir une partie de 3 min"
+    },
+    {
+      "id": "long-2",
+      "nom": "Marathon · Argent",
+      "texte": "Finir une partie de 5 min"
+    },
+    {
+      "id": "long-3",
+      "nom": "Marathon · Or",
+      "texte": "Finir une partie de 8 min"
+    },
+    {
+      "id": "score-1",
+      "nom": "Score total · Bronze",
+      "texte": "10 000 000 points en tout"
+    },
+    {
+      "id": "score-2",
+      "nom": "Score total · Argent",
+      "texte": "100 000 000 points en tout"
+    },
+    {
+      "id": "score-3",
+      "nom": "Score total · Or",
+      "texte": "1 000 000 000 points en tout"
+    },
+    {
+      "id": "clicks-1",
+      "nom": "Cliqueur · Bronze",
+      "texte": "10 000 clics"
+    },
+    {
+      "id": "clicks-2",
+      "nom": "Cliqueur · Argent",
+      "texte": "100 000 clics"
+    },
+    {
+      "id": "clicks-3",
+      "nom": "Cliqueur · Or",
+      "texte": "1 000 000 clics"
+    },
+    {
+      "id": "days-1",
+      "nom": "Assidu · Bronze",
+      "texte": "Jouer 7 jours différents"
+    },
+    {
+      "id": "days-2",
+      "nom": "Assidu · Argent",
+      "texte": "Jouer 30 jours différents"
+    },
+    {
+      "id": "days-3",
+      "nom": "Assidu · Or",
+      "texte": "Jouer 100 jours différents"
+    },
+    {
+      "id": "streak-1",
+      "nom": "Semaine de feu · Bronze",
+      "texte": "Jouer 3 jours de suite"
+    },
+    {
+      "id": "streak-2",
+      "nom": "Semaine de feu · Argent",
+      "texte": "Jouer 7 jours de suite"
+    },
+    {
+      "id": "streak-3",
+      "nom": "Semaine de feu · Or",
+      "texte": "Jouer 30 jours de suite"
+    },
+    {
+      "id": "night",
+      "nom": "Oiseau de nuit",
+      "texte": "Finir un niveau entre minuit et 5 h"
+    },
+    {
+      "id": "dawn",
+      "nom": "Lève-tôt",
+      "texte": "Finir un niveau entre 5 h et 8 h"
+    }
+  ],
+  "records": [
+    {
+      "id": "pp",
+      "nom": "Performance",
+      "sens": "haut",
+      "format": "nombre",
+      "unite": "pp"
+    },
+    {
+      "id": "combo",
+      "nom": "Plus long combo",
+      "sens": "haut",
+      "format": "nombre"
+    },
+    {
+      "id": "precision",
+      "nom": "Meilleure précision",
+      "sens": "haut",
+      "format": "pourcent"
+    }
   ]
 }

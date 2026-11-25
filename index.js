@@ -399,6 +399,13 @@ export default async function (ctx) {
   const saveGames = () => { clearTimeout(gamesTimer); gamesTimer = setTimeout(() => { gamesTimer = null; folder.write('games', games).catch(() => {}); }, 500); };
   const best = (k, v) => { const b = games.best[k]; if (b == null || v > b) { games.best[k] = v; saveGames(); return true; } return false; };
   const gstore = (k, init) => (games[k] ??= init);
+  // la page Trophées de NeoDex (3.4.8) : chaque palier de médaille est un succès ; un NeoDex plus ancien n'a pas ctx.games
+  const obTrophies = async H => {
+    if (!ctx.games) return; const had = (await ctx.games.get().catch(() => null))?.succes || {};
+    for (const m of obMedals(H)) for (let t = 1; t <= m.tier; t++) { const id = m.tiers.length > 1 ? m.id + '-' + t : m.id; if (!had[id]) ctx.games.unlock(id, true).catch(() => {}); }
+    const fin = obFin(H), rec = [['pp', Math.round(obProfile().pp)], ['combo', obMax(H, h => h.c)], ['precision', obMax(fin, h => h.a)]];
+    for (const [k, v] of rec) if (v > 0) ctx.games.record(k, v).catch(() => {});
+  };
 function gameLoop(st, appKey, update, draw) {
   cancelAnimationFrame(st.raf);
   const STEP = 1000 / 60; let acc = 0, last = performance.now();
@@ -2417,7 +2424,7 @@ const RHG = {key: 'orbe', factor: .9, color: '#3fe0ff',
     const pp0 = obProfile().pp, H = gstore('orbeHist', []), a = Math.round(rh.acc * 10000) / 100, played = ((rh.failed ? rh.failNow : rh.lastEnd) - rh.first) / rh.rate;
     const am = rh.aim.length >= 8 ? Math.round(rh.aim.reduce((s0, q) => s0 + q[0], 0) / rh.aim.length * 100) : null;
     H.push({ai: am, d: Date.now(), k: obKey(), n: rh.info.name, df: RH_DIFFS[rh.diff] || rh.info.ver || 'Perso', s: rh.score, a, ur: Math.round(rh.ur), pp: rh.pp, g: rh.failed ? 'F' : rh.grade, m: rh.mods, f: rh.failed ? 1 : 0, t: Math.max(0, Math.round(played)), c: rh.maxCombo, st: Math.round(rh.stars * 100) / 100, F: !rh.failed && !c['RATÉ'] && rh.maxCombo >= rh.fc ? 1 : 0, sy: rh.ob.st.name, cl: Object.values(rh.kc).reduce((x, y) => x + y, 0)});
-    { const had = new Map(obMedals(H.slice(0, -1)).map(m => [m.id, m.tier])); for (const m of obMedals(H)) if (m.tier > (had.get(m.id) || 0)) { toast('Médaille : ' + m.name + ' · ' + OB_TIER[m.tiers.length > 1 ? m.tier - 1 : 2][0] + ' · ' + m.desc(m.tiers[m.tier - 1])); setTimeout(() => obUi('medal'), 2200); } }
+    { const had = new Map(obMedals(H.slice(0, -1)).map(m => [m.id, m.tier])); for (const m of obMedals(H)) if (m.tier > (had.get(m.id) || 0)) { toast('Médaille : ' + m.name + ' · ' + OB_TIER[m.tiers.length > 1 ? m.tier - 1 : 2][0] + ' · ' + m.desc(m.tiers[m.tier - 1])); setTimeout(() => obUi('medal'), 2200); } obTrophies(H); }
     if (H.length > 1000) H.splice(0, H.length - 1000);
     if (!rh.failed) { const L = (gstore('orbeTop', {})[obKey()] ??= []), e = {s: rh.score, a, g: rh.grade, c: rh.maxCombo, x: c['RATÉ'], m: rh.mods, pp: rh.pp, d: Date.now()};
       L.push(e); L.sort((p, q) => q.s - p.s); L.length = Math.min(L.length, 10); rh.rank = L.indexOf(e) + 1;
@@ -3938,7 +3945,7 @@ async function obBrowse() {
 }
 cv.__rh = {analyse: buf => rhAnalyse(buf), beatMap: a => rhBeatMap(a), st: () => rh, now: () => rhNow(), ball: (n, t) => obBall(n, t), themes: () => OB_THEMES.map(t => t.name), skins: () => OB_SKINS.map(k => k.name), rpLoad: d => obRpLoad(d), osr: (R, md5) => obOsr(R, md5, 'Test').length, sec: (a, b) => obSecStart(a, b), code: () => obMyCode(), finish: hist => { rh.hist = hist; rh.mode = 'play'; rhCheckEnd(1e9); }};
 console.assert(new Set(RH_SONGS.slice(0, 60).map(s => obTheme(rhCompose(s).len).name)).size >= 4, 'orbe : thèmes variés');
-ctx.onOpen(() => rhOpen());
+ctx.onOpen(() => { rhOpen(); obTrophies(games.orbeHist || []); });
 
 }
 
